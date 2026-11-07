@@ -1,0 +1,14 @@
+{
+  "artifact_count": 610,
+  "artifacts_identical": true,
+  "combined_sha256": [
+    "fc1707667b1e3a23bd8c9634060d56042e8cdaf00fa213db41327f2b034a2670",
+    "fc1707667b1e3a23bd8c9634060d56042e8cdaf00fa213db41327f2b034a2670"
+  ],
+  "dr_seeds": "0-199",
+  "elapsed_s": 124.65387566699064,
+  "episode_seeds": "0-99",
+  "mismatches": [],
+  "runs": 2,
+  "schema": "isaac_starter_lab.determinism.v1"
+}

@@ -5,7 +5,7 @@ RUFF := $(PYTHON) -m ruff
 SEEDS ?= 0-199
 EPISODE_SEEDS ?= 0-99
 
-.PHONY: install lint test scene dr episode eval lab-headless check results clean docker-lab
+.PHONY: install lint test scene dr episode eval lab-headless determinism guide-commands check results clean docker-lab
 
 install:
 	$(PYTHON) -m pip install -r requirements.lock.txt
@@ -15,7 +15,10 @@ lint:
 	$(RUFF) check .
 
 test:
-	$(PYTEST) --cov=isaac_starter_lab --cov-report=term-missing --cov-fail-under=85
+	mkdir -p results
+	$(PYTEST) --cov=isaac_starter_lab --cov-report=term-missing \
+		--cov-report=json:results/coverage.json --cov-fail-under=85 \
+		--junitxml=results/pytest.xml
 
 scene:
 	mkdir -p artifacts
@@ -42,6 +45,13 @@ check:
 	mkdir -p results
 	$(LAB) check all --root . --json-out results/labcheck.json
 
+determinism:
+	mkdir -p results
+	$(PYTHON) scripts/check_determinism.py
+
+guide-commands:
+	$(PYTHON) scripts/extract_guide_commands.py
+
 results:
 	mkdir -p results
 	$(PYTHON) scripts/collect_results.py
@@ -50,5 +60,6 @@ docker-lab:
 	docker build -f docker/Dockerfile.lab -t isaac-starter-lab:local .
 
 clean:
-	rm -rf artifacts datasets/dr/images datasets/dr/labels .pytest_cache .ruff_cache htmlcov .coverage
+	rm -rf artifacts .pytest_cache .ruff_cache htmlcov .coverage
+	find datasets/dr/images datasets/dr/labels -type f ! -name .gitkeep -delete 2>/dev/null || true
 	find . -type d -name __pycache__ -prune -exec rm -rf {} +

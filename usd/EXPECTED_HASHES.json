@@ -2,7 +2,8 @@
   "scenes": {
     "tabletop_seed7": {
       "file": "tabletop_seed7.usda",
-      "hash": "ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04",
+      "hash": "af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40",
+      "hash_algorithm": "sha256-flattened-usda-canonical-floats-9",
       "n_cubes": 5,
       "prim_count": 46,
       "seed": 7

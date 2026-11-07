@@ -1,0 +1,77 @@
+name: Lab feedback
+description: Report a cold-run failure, ambiguity, or broken command in the lab guide
+title: "[lab feedback] "
+labels: ["learner-testing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing the lab. Please paste exact terminal text; do not
+        retype it from memory. Do not include API keys or personal data.
+  - type: input
+    id: tester
+    attributes:
+      label: Tester alias
+      description: A name or alias you consent to publish in TESTERS.md
+    validations:
+      required: true
+  - type: input
+    id: background
+    attributes:
+      label: Background
+      description: One line, e.g. "Python developer, new to ROS 2"
+    validations:
+      required: true
+  - type: dropdown
+    id: track
+    attributes:
+      label: Track
+      options:
+        - CPU fresh venv
+        - CPU fresh clone
+        - Docker image
+        - GPU Isaac Sim
+    validations:
+      required: true
+  - type: input
+    id: step
+    attributes:
+      label: Guide step
+      placeholder: Exercise 2, "Check your detector"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What the guide said would happen
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+      description: Include the exact command and output.
+    validations:
+      required: true
+  - type: textarea
+    id: confusion
+    attributes:
+      label: Points of confusion
+      description: Anything ambiguous even if it did not fail.
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Blocker — cannot continue
+        - Major — wrong result or misleading step
+        - Minor — typo or unclear wording
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Consent
+      options:
+        - label: I consent to my alias and feedback being published in this repository.
+          required: true

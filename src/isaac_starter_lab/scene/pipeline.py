@@ -10,7 +10,7 @@ from pxr import Usd
 
 from ..config import CameraIntrinsics, SceneConfig
 from .build_scene import CubePlacement, build_stage, sample_cube_layout
-from .hashing import stage_hash
+from .hashing import HASH_ALGORITHM, stage_hash
 
 __all__ = ["run_scene_command"]
 
@@ -32,6 +32,7 @@ def write_meta(
         "schema": "isaac_starter_lab.scene_meta.v1",
         "seed": seed,
         "hash": digest,
+        "hash_algorithm": HASH_ALGORITHM,
         "prim_count": prim_count,
         "n_cubes": cfg.n_cubes,
         "cube_size": cfg.cube_size,

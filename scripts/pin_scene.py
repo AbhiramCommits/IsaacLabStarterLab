@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from isaac_starter_lab.config import CameraIntrinsics, SceneConfig  # noqa: E402
 from isaac_starter_lab.scene.build_scene import build_stage, sample_cube_layout  # noqa: E402
-from isaac_starter_lab.scene.hashing import stage_hash  # noqa: E402
+from isaac_starter_lab.scene.hashing import HASH_ALGORITHM, stage_hash  # noqa: E402
 
 
 def main() -> int:
@@ -42,6 +42,7 @@ def main() -> int:
         "schema": "isaac_starter_lab.scene_meta.v1",
         "seed": seed,
         "hash": digest,
+        "hash_algorithm": HASH_ALGORITHM,
         "prim_count": prim_count,
         "n_cubes": cfg.n_cubes,
         "cube_size": cfg.cube_size,
@@ -63,6 +64,7 @@ def main() -> int:
                 "seed": seed,
                 "file": out.name,
                 "hash": digest,
+                "hash_algorithm": HASH_ALGORITHM,
                 "prim_count": prim_count,
                 "n_cubes": cfg.n_cubes,
             }

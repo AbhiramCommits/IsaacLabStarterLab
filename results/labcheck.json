@@ -120,14 +120,14 @@
       "step": "ex1"
     },
     {
-      "detail": "meta hash=ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04",
+      "detail": "meta hash=af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40",
       "hint": "Run: lab-scene --seed 7 --out artifacts/scene_seed7.usda --force",
       "name": "meta_hash",
       "passed": true,
       "step": "ex1"
     },
     {
-      "detail": "hash=ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04 expected=ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04",
+      "detail": "hash=af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40 expected=af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40",
       "hint": "Hash mismatch. Regenerate with --force; never hand-edit the .usda.",
       "name": "stage_hash",
       "passed": true,

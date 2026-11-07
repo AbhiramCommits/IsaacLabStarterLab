@@ -61,7 +61,7 @@ Executed on the build machine:
 
 ```
 lab-scene --seed 7 --out artifacts/scene_seed7.usda
-hash: ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04
+hash: af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40
 prims: 46
 ```
 
@@ -124,3 +124,32 @@ tested. The Isaac backend remains GPU-gated.
 The guide's troubleshooting entries were produced by deliberately triggering
 each error during this build; the exact messages are quoted from those runs.
 The GPU exercise is documentation only and was not executed.
+
+## Full pipeline, determinism and Docker evidence (Step 6)
+
+| Check | Result |
+| --- | --- |
+| `make lab-headless` (native) | PASS, 51.823 s total: scene 0.095, DR 4.514, episode 0.353, perception eval 12.492, episode sweep 33.702, labcheck 0.667 |
+| `make test` | 145 passed, 88.20% statement coverage (threshold 85%), 154.75 s including the full determinism test |
+| `scripts/check_determinism.py` (full 200-seed / 100-episode run twice) | 610 artifacts compared, hashes identical, 124.65 s |
+| `scripts/extract_guide_commands.py` | all 15 marked guide blocks passed, 75.51 s |
+| `make lint` / `make check` | clean / PASS 45 checks |
+| Docker lab image (`linux/amd64` under emulation) | build succeeded; full `make lab-headless` passed in 949.704 s (scene 0.888, DR 65.051, episode 5.670, perception eval 355.152, episode sweep 513.961, labcheck 8.981) |
+
+The Docker run exposed a real portability bug: the same seed exported
+translations with a last-bit difference on Linux, so the pinned scene hash did
+not match. `scene/hashing.py` now canonicalises floating-point literals to nine
+decimal places before hashing (`sha256-flattened-usda-canonical-floats-9`). The
+rebuilt image produces the same scene hash as the host:
+`af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40`.
+
+The **dataset** hash remains environment-specific (`9f14c038...` native,
+`f868fa8b...` in the Docker image) because PNG bytes and full-precision label
+floats differ between platforms; every perception metric is identical. This
+scope is stated in the guide and the README results are labelled as build-machine
+measurements. `labcheck ex4` recomputes against the manifest in the current
+environment rather than a hardcoded dataset hash.
+
+The GitHub Actions workflow is syntactically valid and parsed locally, but the
+jobs were not executed on GitHub from this machine. Its `gpu-isaac` job is a
+documented, skipped placeholder for a self-hosted NVIDIA runner.

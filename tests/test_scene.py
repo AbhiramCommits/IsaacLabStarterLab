@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 import pytest
-from pxr import Usd, UsdGeom, UsdPhysics
+from pxr import Gf, Usd, UsdGeom, UsdPhysics
 
 from isaac_starter_lab.config import CameraIntrinsics, SceneConfig
 from isaac_starter_lab.scene.build_scene import (
@@ -139,6 +139,18 @@ def test_documentation_and_comments_do_not_change_hash():
     stage.GetPrimAtPath("/World").SetDocumentation("a timestamp-free comment")
     stage.GetRootLayer().comment = "layer level comment"
     assert stage_hash(stage) == base
+
+
+def test_tiny_float_noise_does_not_change_hash():
+    """Cross-platform last-bit float differences must not change the pin."""
+    stage = build_stage(SceneConfig(), 7)
+    baseline = stage_hash(stage)
+    prim = stage.GetPrimAtPath("/World/Cubes/Cube_00")
+    translate = prim.GetAttribute("xformOp:translate").Get()
+    prim.GetAttribute("xformOp:translate").Set(
+        Gf.Vec3d(translate[0] + 1e-12, translate[1] - 1e-12, translate[2] + 1e-12)
+    )
+    assert stage_hash(stage) == baseline
 
 
 def test_sampling_is_deterministic_and_colour_unique():

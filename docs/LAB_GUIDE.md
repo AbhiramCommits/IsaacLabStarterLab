@@ -146,7 +146,7 @@ Expected output includes:
 ```text
 scene: .../artifacts/scene_seed7.usda
 seed: 7
-hash: ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04
+hash: af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40
 prims: 46
 cubes: 5
 ```
@@ -219,8 +219,12 @@ cat usd/EXPECTED_HASHES.json
 ```
 
 The hash is sha256 over the flattened `.usda` text after stripping comments,
-`doc`/`documentation`/`comment` metadata and blank-line noise. That is why the
-hash is identical across machines and why editing the file by hand breaks it.
+`doc`/`documentation`/`comment` metadata and blank-line noise. Floating-point
+literals are canonicalised to nine decimal places before hashing: the same seed
+printed translations ending `...935` on macOS and `...94` on Linux, a last-bit
+difference with no physical meaning. Without that normalisation the pin was not
+portable; the Docker cold run found it. The pinned hash is now identical on the
+build machine and inside the `linux/amd64` image (verified with `lab-scene`).
 
 <!-- test:run -->
 ```bash
@@ -228,7 +232,7 @@ labcheck ex1
 ```
 
 Expected: `RESULT: PASS` with 8 checks. The hash must be exactly
-`ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04` and the
+`af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40` and the
 prim count 46. A seed-8 scene gives a different hash (`b651ddd7...`) and fails.
 
 ## Exercise 2 — render a frame and write `detect_cubes`
@@ -396,6 +400,15 @@ dataset_hash: 9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96
 Four sample pairs (`seed_0000` … `seed_0003`) are committed; the bulk 200 images
 and labels are gitignored and regenerated from the pinned code and seeds.
 
+The **dataset hash is a self-consistency hash, not a cross-platform constant**:
+PNG bytes (compressor version) and full-precision label floats (libm) can differ
+between macOS and Linux even when every rendered pixel and every measured metric
+is identical. The value above is from the build machine; the Docker cold run
+produced `f868fa8b7403e44fcb42e5dc4b5dee6542e9eabd43c716c34025571471d0f490`
+with the same 1.058 px / 3.577 px perception result. `labcheck ex4` recomputes the
+hash from the manifest in **your** environment, so it passes on both. The scene
+hash is the cross-machine pin.
+
 Now score perception across all 200 frames:
 
 <!-- test:run -->
@@ -492,7 +505,7 @@ machine. The GPU track has no expected numbers because it was not executed.
 
 | Artifact | Expected | Checked by |
 | --- | --- | --- |
-| Scene hash (seed 7) | `ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04` | `labcheck ex1`, `tests/test_scene.py` |
+| Scene hash (seed 7) | `af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40` | `labcheck ex1`, `tests/test_scene.py` |
 | Scene prim count | 46 | `labcheck ex1` |
 | Canonical scene | `usd/tabletop_seed7.usda` | test suite |
 | Frame size | 640x480 RGB | `labcheck ex2` |
@@ -679,7 +692,7 @@ lab normally; `lab-scene --render` writes a PNG headlessly.
 **Message:**
 
 ```text
-ex1   FAIL    stage_hash                   hash=e1c2f4eeeb1c7494b6877960538a0bce434ac93d55b3655440d806833299b134 expected=ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04
+ex1   FAIL    stage_hash                   hash=c17faf4b71d0c6d3922206478b72a3f72df658ef56026de1cc61f0aa6c553929 expected=af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40
              FIX:    Hash mismatch. Regenerate with --force; never hand-edit the .usda.
 ```
 

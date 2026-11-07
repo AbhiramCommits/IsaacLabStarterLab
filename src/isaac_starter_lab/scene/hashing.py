@@ -22,7 +22,14 @@ from pathlib import Path
 
 from pxr import Usd
 
-__all__ = ["canonical_stage_text", "stage_hash", "stage_hash_from_file"]
+__all__ = [
+    "HASH_ALGORITHM",
+    "canonical_stage_text",
+    "stage_hash",
+    "stage_hash_from_file",
+]
+
+HASH_ALGORITHM = "sha256-flattened-usda-canonical-floats-9"
 
 _DOC_BLOCK = re.compile(
     r'(?ms)^[ \t]*(?:doc|documentation|comment)[ \t]*=[ \t]*""".*?"""[ \t]*\n?'
@@ -30,6 +37,21 @@ _DOC_BLOCK = re.compile(
 _DOC_LINE = re.compile(r'^[ \t]*(?:doc|documentation|comment)[ \t]*=.*$', re.MULTILINE)
 _EMPTY_METADATA = re.compile(r"[ \t]*\(\s*\)[ \t]*\n")
 _BARE_LAYER_COMMENT = re.compile(r'^[ \t]*"(?:[^"\\]|\\.)*"[ \t]*\n', re.MULTILINE)
+# Last-bit floating-point text differs between NumPy/CPU implementations (the
+# same seed produced translations ending ...935 on macOS and ...94 on Linux).
+# Nine decimal places are nanometre resolution for this scene, far below any
+# physical meaning, and make the canonical text portable across machines.
+_FLOAT = re.compile(
+    r"(?<![\w.])[-+]?(?:\d+\.\d*|\.\d+|\d+(?:\.\d*)?[eE][-+]?\d+)(?![\w.])"
+)
+
+
+def _canonical_float(match: re.Match[str]) -> str:
+    value = float(match.group(0))
+    if value == 0.0:
+        return "0"
+    text = f"{value:.9f}".rstrip("0").rstrip(".")
+    return "0" if text in ("-0", "") else text
 
 
 def canonical_stage_text(stage: Usd.Stage) -> str:
@@ -37,6 +59,7 @@ def canonical_stage_text(stage: Usd.Stage) -> str:
     flattened = stage.Flatten()
     layer = flattened.GetRootLayer() if isinstance(flattened, Usd.Stage) else flattened
     text = layer.ExportToString()
+    text = _FLOAT.sub(_canonical_float, text)
     text = _DOC_BLOCK.sub("", text)
     text = _DOC_LINE.sub("", text)
     # ``Layer.comment`` is exported as a bare quoted string in the metadata block.
