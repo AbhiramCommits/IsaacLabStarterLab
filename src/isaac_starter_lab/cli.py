@@ -39,6 +39,7 @@ def build_scene_parser() -> argparse.ArgumentParser:
     p.add_argument("--seed", type=int, default=DEFAULT_SEED, help="teaching seed (default: 7)")
     p.add_argument("--out", default=None, help="output .usda path")
     p.add_argument("--n-cubes", type=int, default=None, help="override the number of cubes")
+    p.add_argument("--render", default=None, help="also write a 640x480 PNG of the scene")
     p.add_argument("--force", action="store_true", help="overwrite an existing output file")
     _add_common(p)
     return p

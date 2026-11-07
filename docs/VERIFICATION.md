@@ -69,3 +69,23 @@ prims: 46
 seeds, different hashes for different seeds, cube non-overlap and containment,
 prim types and the camera-intrinsics round-trip. The committed canonical stage
 `usd/tabletop_seed7.usda` hashes to the pinned value above.
+
+## Backend and renderer evidence (Step 3)
+
+Executed on the build machine (CPU only):
+
+| Check | Result |
+| --- | --- |
+| `pytest tests/test_kinematic.py tests/test_render.py tests/test_isaac_adapters.py` | 30 passed |
+| Forward kinematics hand-computed poses | matches to 1e-9 |
+| Analytic IK round-trip at four tabletop targets | error < 1e-9 m |
+| Two 180-tick command sequences from seed 7 | identical joint states, cube positions and message dicts |
+| `project_point` / `backproject_to_plane` round-trip | pixel error < 1e-6, 3D error < 1e-6 m |
+| Software render | 640x480 uint8, ~16 ms/frame on this CPU |
+| Isolated cube rendered centroid vs projected centre | < 1 px |
+| `IsaacSimBackend.start()` without Isaac Sim | raises `IsaacUnavailableError` naming the container, `--gpus all`, and `LAB_BACKEND=isaac` |
+| Isaac Lab dataclass config | validated on CPU; no Isaac Lab import at module load |
+
+`IsaacSimBackend`, the ROS 2 bridge and the Isaac Lab environment remain
+GPU/ROS-gated and were not executed. Their import guards and configuration
+validation are covered by tests.

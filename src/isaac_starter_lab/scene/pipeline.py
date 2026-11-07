@@ -75,6 +75,23 @@ def run_scene_command(args: argparse.Namespace) -> int:
 
     meta_path = write_meta(out, args.seed, cfg, intrinsics, placements, digest, prim_count)
 
+    if getattr(args, "render", None):
+        from PIL import Image
+
+        from ..render.pinhole import render_scene
+
+        frame_path = Path(args.render)
+        if not frame_path.is_absolute():
+            frame_path = root / frame_path
+        frame_path.parent.mkdir(parents=True, exist_ok=True)
+        image = render_scene(
+            cubes=[(p.position, p.rgb) for p in placements],
+            scene=cfg,
+            intrinsics=intrinsics,
+        )
+        Image.fromarray(image).save(frame_path)
+        print(f"frame: {frame_path}")
+
     print(f"scene: {out}")
     print(f"seed: {args.seed}")
     print(f"hash: {digest}")
