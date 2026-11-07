@@ -1,0 +1,12 @@
+{
+  "scenes": {
+    "tabletop_seed7": {
+      "file": "tabletop_seed7.usda",
+      "hash": "ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04",
+      "n_cubes": 5,
+      "prim_count": 46,
+      "seed": 7
+    }
+  },
+  "schema": "isaac_starter_lab.expected_hashes.v1"
+}

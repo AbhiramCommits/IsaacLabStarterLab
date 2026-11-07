@@ -54,3 +54,18 @@ GitHub Actions (`ubuntu-latest`); the Docker cold run is recorded in
 No performance, success-rate or accuracy number in this repository comes from
 the GPU path. Every measured number is produced by the CPU headless path and
 stored under `results/`.
+
+## Scene determinism evidence (Step 2)
+
+Executed on the build machine:
+
+```
+lab-scene --seed 7 --out artifacts/scene_seed7.usda
+hash: ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04
+prims: 46
+```
+
+`tests/test_scene.py` (33 tests) confirms identical hashes for identical
+seeds, different hashes for different seeds, cube non-overlap and containment,
+prim types and the camera-intrinsics round-trip. The committed canonical stage
+`usd/tabletop_seed7.usda` hashes to the pinned value above.

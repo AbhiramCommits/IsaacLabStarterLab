@@ -1,0 +1,439 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    custom double lab:cubeSize = 0.05
+    custom int lab:seed = 7
+
+    def Xform "Lights"
+    {
+        def DomeLight "DomeLight"
+        {
+            color3f inputs:color = (1, 1, 1)
+            float inputs:intensity = 1000
+            custom double3 lab:lightDirection = (0.3, 0.4, 0.85)
+            custom double lab:normalizedIntensity = 1
+        }
+    }
+
+    def Cube "Table" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        custom double[] lab:aabb = [-0.55, -0.45, 0.71, 0.55, 0.45, 0.75]
+        custom double3 lab:tableColor = (0.47058823529411764, 0.47058823529411764, 0.49019607843137253)
+        color3f[] primvars:displayColor = [(0.47058824, 0.47058824, 0.49019608)]
+        double size = 1
+        float3 xformOp:scale = (1.1, 0.9, 0.04)
+        double3 xformOp:translate = (0, 0, 0.73)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Xform "Bin"
+    {
+        custom double[] lab:aabb = [0.13, 0.02, 0.75, 0.37, 0.26, 0.83]
+        custom double3 lab:binColor = (0.27450980392156865, 0.2901960784313726, 0.3137254901960784)
+        custom double[] lab:innerAABB = [0.14200000000000002, 0.032, 0.75, 0.358, 0.248, 0.83]
+        custom double lab:wallHeight = 0.07999999999999996
+
+        def Cube "Wall_north" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(70, 74, 80)]
+            double size = 1
+            float3 xformOp:scale = (0.24, 0.012, 0.08)
+            double3 xformOp:translate = (0.25, 0.254, 0.79)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Wall_south" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(70, 74, 80)]
+            double size = 1
+            float3 xformOp:scale = (0.24, 0.012, 0.08)
+            double3 xformOp:translate = (0.25, 0.026000000000000002, 0.79)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Wall_east" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(70, 74, 80)]
+            double size = 1
+            float3 xformOp:scale = (0.012, 0.24, 0.08)
+            double3 xformOp:translate = (0.364, 0.14, 0.79)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Wall_west" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(70, 74, 80)]
+            double size = 1
+            float3 xformOp:scale = (0.012, 0.24, 0.08)
+            double3 xformOp:translate = (0.136, 0.14, 0.79)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "Cubes"
+    {
+        def Cube "Cube_00" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom string lab:colorName = "magenta"
+            rel material:binding = </World/Materials/Magenta>
+            float physics:mass = 0.05
+            color3f[] primvars:displayColor = [(0.78431374, 0.15686275, 0.78431374)]
+            double size = 1
+            float3 xformOp:scale = (0.05, 0.05, 0.05)
+            double3 xformOp:translate = (0.04728608637656412, 0.052759780553192935, 0.775)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Cube_01" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom string lab:colorName = "green"
+            rel material:binding = </World/Materials/Green>
+            float physics:mass = 0.05
+            color3f[] primvars:displayColor = [(0.11764706, 0.7058824, 0.23529412)]
+            double size = 1
+            float3 xformOp:scale = (0.05, 0.05, 0.05)
+            double3 xformOp:translate = (0.10420919091268314, -0.05341726398148648, 0.775)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Cube_02" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom string lab:colorName = "blue"
+            rel material:binding = </World/Materials/Blue>
+            float physics:mass = 0.05
+            color3f[] primvars:displayColor = [(0.15686275, 0.3137255, 0.8627451)]
+            double size = 1
+            float3 xformOp:scale = (0.05, 0.05, 0.05)
+            double3 xformOp:translate = (-0.07553714430355679, 0.049021444372609385, 0.775)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Cube_03" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom string lab:colorName = "yellow"
+            rel material:binding = </World/Materials/Yellow>
+            float physics:mass = 0.05
+            color3f[] primvars:displayColor = [(0.9019608, 0.78431374, 0.078431375)]
+            double size = 1
+            float3 xformOp:scale = (0.05, 0.05, 0.05)
+            double3 xformOp:translate = (-0.18700971487421275, 0.04075409010447708, 0.775)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Cube_04" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom string lab:colorName = "red"
+            rel material:binding = </World/Materials/Red>
+            float physics:mass = 0.05
+            color3f[] primvars:displayColor = [(0.8627451, 0.11764706, 0.11764706)]
+            double size = 1
+            float3 xformOp:scale = (0.05, 0.05, 0.05)
+            double3 xformOp:translate = (-0.07445374266229948, -0.04500875328807781, 0.775)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def "Materials"
+    {
+        def Material "Red"
+        {
+            token outputs:surface.connect = </World/Materials/Red/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8627451, 0.11764706, 0.11764706)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.55
+                token outputs:surface
+            }
+        }
+
+        def Material "Green"
+        {
+            token outputs:surface.connect = </World/Materials/Green/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.11764706, 0.7058824, 0.23529412)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.55
+                token outputs:surface
+            }
+        }
+
+        def Material "Blue"
+        {
+            token outputs:surface.connect = </World/Materials/Blue/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.15686275, 0.3137255, 0.8627451)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.55
+                token outputs:surface
+            }
+        }
+
+        def Material "Yellow"
+        {
+            token outputs:surface.connect = </World/Materials/Yellow/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.9019608, 0.78431374, 0.078431375)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.55
+                token outputs:surface
+            }
+        }
+
+        def Material "Magenta"
+        {
+            token outputs:surface.connect = </World/Materials/Magenta/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.78431374, 0.15686275, 0.78431374)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.55
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "Robot"
+    {
+        custom string[] lab:jointAxes = ["Z", "Y", "Y", "Y", "X"]
+        custom string[] lab:jointNames = ["joint_base_yaw", "joint_shoulder", "joint_elbow", "joint_wrist_pitch", "joint_wrist_roll"]
+
+        def Xform "base" (
+            prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+        )
+        {
+            float physics:mass = 5
+            double3 xformOp:translate = (0, -0.32, 0.75)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+            def Cube "Column" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+            )
+            {
+                color3f[] primvars:displayColor = [(60, 60, 66)]
+                double size = 1
+                float3 xformOp:scale = (0.07, 0.07, 0.35)
+                double3 xformOp:translate = (0, 0, 0.175)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Xform "link0" (
+                prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            )
+            {
+                float physics:mass = 1.5
+                double3 xformOp:translate = (0, 0, 0.35)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                def Xform "link1" (
+                    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+                )
+                {
+                    float physics:mass = 1
+
+                    def Cube "Visual" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    )
+                    {
+                        color3f[] primvars:displayColor = [(240, 150, 40)]
+                        double size = 1
+                        float3 xformOp:scale = (0.3, 0.045, 0.045)
+                        double3 xformOp:translate = (0.15, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                    }
+
+                    def Xform "link2" (
+                        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+                    )
+                    {
+                        float physics:mass = 0.8
+                        double3 xformOp:translate = (0.3, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                        def Cube "Visual" (
+                            prepend apiSchemas = ["PhysicsCollisionAPI"]
+                        )
+                        {
+                            color3f[] primvars:displayColor = [(240, 170, 60)]
+                            double size = 1
+                            float3 xformOp:scale = (0.3, 0.04, 0.04)
+                            double3 xformOp:translate = (0.15, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                        }
+
+                        def Xform "wrist" (
+                            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+                        )
+                        {
+                            float physics:mass = 0.4
+                            double3 xformOp:translate = (0.3, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                            def Xform "gripper" (
+                                prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+                            )
+                            {
+                                float physics:mass = 0.2
+                                double3 xformOp:translate = (0.06, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                                def Cube "FingerLeft" (
+                                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                                )
+                                {
+                                    color3f[] primvars:displayColor = [(80, 80, 85)]
+                                    double size = 1
+                                    float3 xformOp:scale = (0.06, 0.012, 0.03)
+                                    double3 xformOp:translate = (0.03, -0.02, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                                }
+
+                                def Cube "FingerRight" (
+                                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                                )
+                                {
+                                    color3f[] primvars:displayColor = [(80, 80, 85)]
+                                    double size = 1
+                                    float3 xformOp:scale = (0.06, 0.012, 0.03)
+                                    double3 xformOp:translate = (0.03, 0.02, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        def Xform "Joints"
+        {
+            def PhysicsRevoluteJoint "joint_base_yaw"
+            {
+                custom string lab:jointName = "joint_base_yaw"
+                uniform token physics:axis = "Z"
+                rel physics:body0 = </World/Robot/base>
+                rel physics:body1 = </World/Robot/base/link0>
+                point3f physics:localPos0 = (0, 0, 0.35)
+                point3f physics:localPos1 = (0, 0, 0)
+                quatf physics:localRot0 = (1, 0, 0, 0)
+                quatf physics:localRot1 = (1, 0, 0, 0)
+                float physics:lowerLimit = -166.15776
+                float physics:upperLimit = 166.15776
+            }
+
+            def PhysicsRevoluteJoint "joint_shoulder"
+            {
+                custom string lab:jointName = "joint_shoulder"
+                uniform token physics:axis = "Y"
+                rel physics:body0 = </World/Robot/base/link0>
+                rel physics:body1 = </World/Robot/base/link0/link1>
+                point3f physics:localPos0 = (0, 0, 0)
+                point3f physics:localPos1 = (0, 0, 0)
+                quatf physics:localRot0 = (1, 0, 0, 0)
+                quatf physics:localRot1 = (1, 0, 0, 0)
+                float physics:lowerLimit = -97.402824
+                float physics:upperLimit = 97.402824
+            }
+
+            def PhysicsRevoluteJoint "joint_elbow"
+            {
+                custom string lab:jointName = "joint_elbow"
+                uniform token physics:axis = "Y"
+                rel physics:body0 = </World/Robot/base/link0/link1>
+                rel physics:body1 = </World/Robot/base/link0/link1/link2>
+                point3f physics:localPos0 = (0.3, 0, 0)
+                point3f physics:localPos1 = (0, 0, 0)
+                quatf physics:localRot0 = (1, 0, 0, 0)
+                quatf physics:localRot1 = (1, 0, 0, 0)
+                float physics:lowerLimit = -148.96902
+                float physics:upperLimit = 2.864789
+            }
+
+            def PhysicsRevoluteJoint "joint_wrist_pitch"
+            {
+                custom string lab:jointName = "joint_wrist_pitch"
+                uniform token physics:axis = "Y"
+                rel physics:body0 = </World/Robot/base/link0/link1/link2>
+                rel physics:body1 = </World/Robot/base/link0/link1/link2/wrist>
+                point3f physics:localPos0 = (0.3, 0, 0)
+                point3f physics:localPos1 = (0, 0, 0)
+                quatf physics:localRot0 = (1, 0, 0, 0)
+                quatf physics:localRot1 = (1, 0, 0, 0)
+                float physics:lowerLimit = -166.15776
+                float physics:upperLimit = 166.15776
+            }
+
+            def PhysicsRevoluteJoint "joint_wrist_roll"
+            {
+                custom string lab:jointName = "joint_wrist_roll"
+                uniform token physics:axis = "X"
+                rel physics:body0 = </World/Robot/base/link0/link1/link2/wrist>
+                rel physics:body1 = </World/Robot/base/link0/link1/link2/wrist/gripper>
+                point3f physics:localPos0 = (0.06, 0, 0)
+                point3f physics:localPos1 = (0, 0, 0)
+                quatf physics:localRot0 = (1, 0, 0, 0)
+                quatf physics:localRot1 = (1, 0, 0, 0)
+                float physics:lowerLimit = -174.75212
+                float physics:upperLimit = 174.75212
+            }
+        }
+    }
+
+    def Camera "Camera"
+    {
+        float2 clippingRange = (0.01, 100)
+        float focalLength = 24
+        float focusDistance = 1
+        float fStop = 4
+        float horizontalAperture = 36
+        custom double3 lab:lookAt = (0.02, 0.02, 0.77)
+        float verticalAperture = 27
+        matrix4d xformOp:transform = ( (0.9995920864606949, -0.028559773898876994, 0, 0), (0.009602216165773463, 0.3360775658020712, 0.9417853615390614, 0), (-0.026897176986827708, -0.9414011945389699, 0.33621471233534633, 0), (0, -0.68, 1.02, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+
+    def Xform "LabMetadata"
+    {
+        custom string[] lab:placements = ["Cube_00:magenta:0.047286,0.052760", "Cube_01:green:0.104209,-0.053417", "Cube_02:blue:-0.075537,0.049021", "Cube_03:yellow:-0.187010,0.040754", "Cube_04:red:-0.074454,-0.045009"]
+    }
+}
+

@@ -1,0 +1,95 @@
+{
+  "camera": {
+    "cx": 319.5,
+    "cy": 239.5,
+    "focal_length_mm": 24.0,
+    "fx": 426.6666666666667,
+    "fy": 426.6666666666667,
+    "height": 480,
+    "horizontal_aperture_mm": 36.0,
+    "vertical_aperture_mm": 27.0,
+    "width": 640
+  },
+  "cube_poses": [
+    {
+      "color": "magenta",
+      "name": "Cube_00",
+      "position": [
+        0.04728608637656412,
+        0.052759780553192935,
+        0.775
+      ],
+      "rgb": [
+        200,
+        40,
+        200
+      ]
+    },
+    {
+      "color": "green",
+      "name": "Cube_01",
+      "position": [
+        0.10420919091268314,
+        -0.05341726398148648,
+        0.775
+      ],
+      "rgb": [
+        30,
+        180,
+        60
+      ]
+    },
+    {
+      "color": "blue",
+      "name": "Cube_02",
+      "position": [
+        -0.07553714430355679,
+        0.049021444372609385,
+        0.775
+      ],
+      "rgb": [
+        40,
+        80,
+        220
+      ]
+    },
+    {
+      "color": "yellow",
+      "name": "Cube_03",
+      "position": [
+        -0.18700971487421275,
+        0.04075409010447708,
+        0.775
+      ],
+      "rgb": [
+        230,
+        200,
+        20
+      ]
+    },
+    {
+      "color": "red",
+      "name": "Cube_04",
+      "position": [
+        -0.07445374266229948,
+        -0.04500875328807781,
+        0.775
+      ],
+      "rgb": [
+        220,
+        30,
+        30
+      ]
+    }
+  ],
+  "cube_size": 0.05,
+  "hash": "ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04",
+  "meters_per_unit": 1.0,
+  "n_cubes": 5,
+  "prim_count": 46,
+  "scene_file": "tabletop_seed7.usda",
+  "schema": "isaac_starter_lab.scene_meta.v1",
+  "seed": 7,
+  "table_top": 0.75,
+  "up_axis": "Z"
+}

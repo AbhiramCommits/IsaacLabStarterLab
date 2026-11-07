@@ -156,7 +156,9 @@ def _print_resolved(command: str, args: argparse.Namespace) -> int:
 
 
 def run_scene(args: argparse.Namespace) -> int:
-    return _print_resolved("scene", args)
+    from .scene.pipeline import run_scene_command
+
+    return run_scene_command(args)
 
 
 def run_dr(args: argparse.Namespace) -> int:
