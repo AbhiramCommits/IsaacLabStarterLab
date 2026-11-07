@@ -1,0 +1,325 @@
+{
+  "checks": [
+    {
+      "detail": "Python 3.11.14",
+      "hint": "Install Python 3.10, 3.11 or 3.12 and recreate the venv.",
+      "name": "python_version",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "usd-core: imported",
+      "hint": "",
+      "name": "import_pxr",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "numpy: 2.2.6",
+      "hint": "",
+      "name": "import_numpy",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "pillow: 12.0.0",
+      "hint": "",
+      "name": "import_PIL",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "PyYAML: 6.0.3",
+      "hint": "",
+      "name": "import_yaml",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "matplotlib: 3.10.8",
+      "hint": "",
+      "name": "import_matplotlib",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "pyproject.toml",
+      "hint": "Restore pyproject.toml from the repository (are you inside the repo root?).",
+      "name": "file_pyproject.toml",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "requirements.lock.txt",
+      "hint": "Restore requirements.lock.txt from the repository (are you inside the repo root?).",
+      "name": "file_requirements.lock.txt",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "usd/EXPECTED_HASHES.json",
+      "hint": "Restore usd/EXPECTED_HASHES.json from the repository (are you inside the repo root?).",
+      "name": "file_usd/EXPECTED_HASHES.json",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "usd/tabletop_seed7.usda",
+      "hint": "Restore usd/tabletop_seed7.usda from the repository (are you inside the repo root?).",
+      "name": "file_usd/tabletop_seed7.usda",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "lab/knowledge_checks.yaml",
+      "hint": "Restore lab/knowledge_checks.yaml from the repository (are you inside the repo root?).",
+      "name": "file_lab/knowledge_checks.yaml",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "docs/VERIFICATION.md",
+      "hint": "Restore docs/VERIFICATION.md from the repository (are you inside the repo root?).",
+      "name": "file_docs/VERIFICATION.md",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "5-DOF KinematicSim instantiated",
+      "hint": "",
+      "name": "kinematic_backend",
+      "passed": true,
+      "step": "env"
+    },
+    {
+      "detail": "/Users/abhiramkasireddi/IsaacLabStarterLab/artifacts/scene_seed7.usda",
+      "hint": "Run: lab-scene --seed 7 --out artifacts/scene_seed7.usda --force",
+      "name": "file_scene_seed7.usda",
+      "passed": true,
+      "step": "ex1"
+    },
+    {
+      "detail": "/Users/abhiramkasireddi/IsaacLabStarterLab/artifacts/scene_seed7.meta.json",
+      "hint": "Run: lab-scene --seed 7 --out artifacts/scene_seed7.usda --force",
+      "name": "file_scene_seed7.meta.json",
+      "passed": true,
+      "step": "ex1"
+    },
+    {
+      "detail": "isaac_starter_lab.scene_meta.v1",
+      "hint": "Regenerate the metadata with lab-scene.",
+      "name": "meta_schema",
+      "passed": true,
+      "step": "ex1"
+    },
+    {
+      "detail": "seed=7",
+      "hint": "The teaching seed is 7. Regenerate with --seed 7.",
+      "name": "seed",
+      "passed": true,
+      "step": "ex1"
+    },
+    {
+      "detail": "meta hash=ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04",
+      "hint": "Run: lab-scene --seed 7 --out artifacts/scene_seed7.usda --force",
+      "name": "meta_hash",
+      "passed": true,
+      "step": "ex1"
+    },
+    {
+      "detail": "hash=ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04 expected=ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04",
+      "hint": "Hash mismatch. Regenerate with --force; never hand-edit the .usda.",
+      "name": "stage_hash",
+      "passed": true,
+      "step": "ex1"
+    },
+    {
+      "detail": "prims=46 expected=46",
+      "hint": "Run: lab-scene --seed 7 --out artifacts/scene_seed7.usda --force",
+      "name": "prim_count",
+      "passed": true,
+      "step": "ex1"
+    },
+    {
+      "detail": "5 cube poses",
+      "hint": "Run: lab-scene --seed 7 --out artifacts/scene_seed7.usda --force",
+      "name": "cube_poses",
+      "passed": true,
+      "step": "ex1"
+    },
+    {
+      "detail": "640x480",
+      "hint": "Render a 640x480 PNG with lab-scene --render.",
+      "name": "frame_size",
+      "passed": true,
+      "step": "ex2"
+    },
+    {
+      "detail": "17 unique colours",
+      "hint": "The frame looks blank; re-render it.",
+      "name": "frame_not_blank",
+      "passed": true,
+      "step": "ex2"
+    },
+    {
+      "detail": "1 detections",
+      "hint": "The reference frame contains exactly one cube of the target colour.",
+      "name": "detection_count",
+      "passed": true,
+      "step": "ex2"
+    },
+    {
+      "detail": "0.375 px (threshold 2.0)",
+      "hint": "Project the centroid, not the bounding-box centre. Threshold hue/saturation first.",
+      "name": "pixel_error",
+      "passed": true,
+      "step": "ex2"
+    },
+    {
+      "detail": "1.519 mm (threshold 20.0)",
+      "hint": "Back-project to z = table_top + cube_size/2.",
+      "name": "error_3d",
+      "passed": true,
+      "step": "ex2"
+    },
+    {
+      "detail": "present",
+      "hint": "Run: lab-episode --seed 7 --backend kinematic --bridge localbus --out artifacts/episodes/seed_7",
+      "name": "file_summary.json",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "present",
+      "hint": "Run: lab-episode --seed 7 --backend kinematic --bridge localbus --out artifacts/episodes/seed_7",
+      "name": "file_trajectory.jsonl",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "present",
+      "hint": "Run: lab-episode --seed 7 --backend kinematic --bridge localbus --out artifacts/episodes/seed_7",
+      "name": "file_frame_000.png",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "present",
+      "hint": "Run: lab-episode --seed 7 --backend kinematic --bridge localbus --out artifacts/episodes/seed_7",
+      "name": "file_frame_final.png",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "isaac_starter_lab.episode_summary.v1",
+      "hint": "Stale episode artifact. Delete artifacts/episodes/seed_7 and rerun.",
+      "name": "schema",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "success=True state=DONE reason=None",
+      "hint": "Inspect the failure reason, rerun lab-episode and check frame_final.png.",
+      "name": "success",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "ticks=294",
+      "hint": "Run: lab-episode --seed 7 --backend kinematic --bridge localbus --out artifacts/episodes/seed_7",
+      "name": "ticks",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "4.9 s",
+      "hint": "Run: lab-episode --seed 7 --backend kinematic --bridge localbus --out artifacts/episodes/seed_7",
+      "name": "cycle_time",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "294 lines, summary ticks=294",
+      "hint": "The trajectory is stale or truncated. Rerun the episode.",
+      "name": "trajectory_lines",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "Cube_01 at [0.24652107987287636, 0.13703087060543656, 0.775]",
+      "hint": "The cube did not land inside the bin. Check TRANSFER/RELEASE targets.",
+      "name": "cube_in_bin",
+      "passed": true,
+      "step": "ex3"
+    },
+    {
+      "detail": "isaac_starter_lab.dr_dataset.v1",
+      "hint": "Run: make dr (or lab-dr --seeds 0-199 --out datasets/dr --overwrite)",
+      "name": "schema",
+      "passed": true,
+      "step": "ex4"
+    },
+    {
+      "detail": "count=200 entries=200",
+      "hint": "Generate at least 200 seeds.",
+      "name": "count",
+      "passed": true,
+      "step": "ex4"
+    },
+    {
+      "detail": "200 unique seeds",
+      "hint": "Delete the dataset and regenerate; duplicate seed entries mean a corrupt manifest.",
+      "name": "unique_seeds",
+      "passed": true,
+      "step": "ex4"
+    },
+    {
+      "detail": "computed=9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96 manifest=9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96",
+      "hint": "The manifest was edited or files changed. Regenerate with --overwrite.",
+      "name": "dataset_hash",
+      "passed": true,
+      "step": "ex4"
+    },
+    {
+      "detail": "200/200 pairs present",
+      "hint": "The bulk images are gitignored by design. Run make dr to regenerate them.",
+      "name": "files_present",
+      "passed": true,
+      "step": "ex4"
+    },
+    {
+      "detail": "200/200 hashes match",
+      "hint": "Image or label changed after manifest generation. Regenerate with --overwrite.",
+      "name": "file_hashes",
+      "passed": true,
+      "step": "ex4"
+    },
+    {
+      "detail": "mean=1.058 px p95=3.577 px",
+      "hint": "Improve detect_cubes or regenerate the dataset, then rerun lab-eval perception.",
+      "name": "perception_pixel",
+      "passed": true,
+      "step": "ex4"
+    },
+    {
+      "detail": "recall=0.9611 precision=0.8693",
+      "hint": "Check hue separation and occlusion handling; rerun lab-eval perception.",
+      "name": "perception_recall_precision",
+      "passed": true,
+      "step": "ex4"
+    },
+    {
+      "detail": "label schema=isaac_starter_lab.dr_label.v1 image=(640, 480)",
+      "hint": "Run: make dr (or lab-dr --seeds 0-199 --out datasets/dr --overwrite)",
+      "name": "label_schema",
+      "passed": true,
+      "step": "ex4"
+    }
+  ],
+  "count": 45,
+  "failed": 0,
+  "passed": true,
+  "root": "/Users/abhiramkasireddi/IsaacLabStarterLab",
+  "schema": "isaac_starter_lab.labcheck.v1",
+  "step": "all"
+}

@@ -1,0 +1,51 @@
+^D
+== 00:00 IsaacLabStarterLab — version and scope ==
+isaac_starter_lab 0.1.0
+OpenUSD (0, 25, 11)
+
+== 00:20 Environment self-check ==
+env   PASS    kinematic_backend            5-DOF KinematicSim instantiated
+----------------------------------------------------------------------------------------------------
+RESULT: PASS (13 checks)
+report: /Users/abhiramkasireddi/IsaacLabStarterLab/results/labcheck.json
+
+== 00:40 Deterministic OpenUSD scene ==
+frame: /Users/abhiramkasireddi/IsaacLabStarterLab/demo/frames/scene_seed7.png
+scene: /Users/abhiramkasireddi/IsaacLabStarterLab/artifacts/scene_seed7.usda
+seed: 7
+hash: ea579b2f4ed56d1b68134217e1645aac5602d6b883f4bb8c25bffa72f3587f04
+prims: 46
+cubes: 5
+meta: /Users/abhiramkasireddi/IsaacLabStarterLab/artifacts/scene_seed7.meta.json
+status: wrote stage
+
+== 01:05 Perception -> controller episode ==
+episode seed=7 backend=kinematic bridge=localbus
+  target: green (Cube_01)
+  SUCCESS in 4.900 s / 294 ticks
+  summary: /Users/abhiramkasireddi/IsaacLabStarterLab/artifacts/episodes/seed_7/summary.json
+
+== 01:30 Perception evaluation across 200 DR seeds ==
+perception dataset=/Users/abhiramkasireddi/IsaacLabStarterLab/datasets/dr seeds=200
+  pixel error mean=1.058 px p95=3.577 px
+  3D error mean=3.607 mm p95=12.885 mm
+  recall=0.9611 precision=0.8693
+  wrote /Users/abhiramkasireddi/IsaacLabStarterLab/results/perception_eval.json
+
+== 01:55 Episode sweep ==
+episodes count=10 backend=kinematic bridge=localbus
+  success_rate=1.0000 (10/10)
+  cycle mean=5.152 s p95=5.407 s
+  failures={}
+  wrote /Users/abhiramkasireddi/IsaacLabStarterLab/results/walkthrough_episode_sweep.json
+
+== 02:15 Grade every artifact ==
+ex4   PASS    perception_pixel             mean=1.058 px p95=3.577 px
+ex4   PASS    perception_recall_precision  recall=0.9611 precision=0.8693
+ex4   PASS    label_schema                 label schema=isaac_starter_lab.dr_label.v1 image=(640, 480)
+----------------------------------------------------------------------------------------------------
+RESULT: PASS (45 checks)
+report: /Users/abhiramkasireddi/IsaacLabStarterLab/results/labcheck.json
+
+== 02:30 Done ==
+Artifacts: artifacts/, datasets/dr/manifest.json, results/

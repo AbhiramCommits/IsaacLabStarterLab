@@ -1,0 +1,39 @@
+flowchart TD
+    WORLD["/World<br/>Xform, Z up, metersPerUnit = 1"]
+    TABLE["/World/Table<br/>Cube + PhysicsCollisionAPI"]
+    BIN["/World/Bin<br/>Xform + lab:aabb"]
+    WALL_N["Wall_north<br/>Cube"]
+    WALL_S["Wall_south<br/>Cube"]
+    WALL_E["Wall_east<br/>Cube"]
+    WALL_W["Wall_west<br/>Cube"]
+    CUBES["/World/Cubes<br/>Xform"]
+    CUBE_00["Cube_00<br/>RigidBody + Mass + displayColor"]
+    CUBE_NN["Cube_NN<br/>RigidBody + Mass + displayColor"]
+    ROBOT["/World/Robot<br/>Xform"]
+    BASE["base<br/>ArticulationRootAPI"]
+    LINK0["link0<br/>revolute Z: base yaw"]
+    LINK1["link1<br/>revolute Y: shoulder"]
+    LINK2["link2<br/>revolute Y: elbow"]
+    WRIST["wrist<br/>revolute Y: wrist pitch"]
+    GRIPPER["gripper<br/>revolute X: wrist roll"]
+    CAMERA["/World/Camera<br/>UsdGeom.Camera 24 mm / 36 mm"]
+    DOME["/World/Lights/DomeLight<br/>normalized intensity"]
+
+    WORLD --> TABLE
+    WORLD --> BIN
+    BIN --> WALL_N
+    BIN --> WALL_S
+    BIN --> WALL_E
+    BIN --> WALL_W
+    WORLD --> CUBES
+    CUBES --> CUBE_00
+    CUBES --> CUBE_NN
+    WORLD --> ROBOT
+    ROBOT --> BASE
+    BASE --> LINK0
+    LINK0 --> LINK1
+    LINK1 --> LINK2
+    LINK2 --> WRIST
+    WRIST --> GRIPPER
+    WORLD --> CAMERA
+    WORLD --> DOME

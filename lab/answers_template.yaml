@@ -1,0 +1,13 @@
+# Fill in your answers and run:
+#   lab-quiz --answers lab/answers_template.yaml
+# Multiple choice: answer with the letter (A, B, C or D).
+# Short answer: a few words, matched case-insensitively after normalisation.
+answers:
+  q1: ""
+  q2: ""
+  q3: ""
+  q4: ""
+  q5: ""
+  q6: ""
+  q7: ""
+  q8: ""

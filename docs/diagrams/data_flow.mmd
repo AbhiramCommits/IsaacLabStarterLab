@@ -1,0 +1,16 @@
+flowchart LR
+    SIM["Simulator<br/>KinematicSim or IsaacSimBackend"]
+    BRIDGE["Bridge<br/>LocalBus or Ros2Bridge"]
+    PER["Perception<br/>detect_cubes"]
+    CTL["Controller<br/>PickPlaceController"]
+    EPI["Episode runner<br/>60 Hz loop"]
+    FILES["Episode artifacts<br/>trajectory + frames + summary"]
+
+    SIM -->|"/lab/joint_states /lab/cube_poses /lab/rgb"| BRIDGE
+    BRIDGE -->|"frames + poses"| PER
+    PER -->|"3D grasp pose"| CTL
+    CTL -->|"/lab/cmd_joint /lab/gripper_cmd"| BRIDGE
+    BRIDGE -->|"velocity + closure commands"| SIM
+    EPI -->|"/lab/status"| BRIDGE
+    EPI --> FILES
+    SIM --> EPI

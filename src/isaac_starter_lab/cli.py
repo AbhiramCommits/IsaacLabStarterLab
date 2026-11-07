@@ -181,11 +181,15 @@ def run_eval(args: argparse.Namespace) -> int:
 
 
 def run_check(args: argparse.Namespace) -> int:
-    return _print_resolved("check", args)
+    from .grading import run_check_command
+
+    return run_check_command(args)
 
 
 def run_quiz(args: argparse.Namespace) -> int:
-    return _print_resolved("quiz", args)
+    from .quiz import run_quiz_command
+
+    return run_quiz_command(args)
 
 
 def scene_main(argv: Sequence[str] | None = None) -> int:

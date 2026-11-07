@@ -1,0 +1,22 @@
+flowchart LR
+    USD["OpenUSD scene<br/>usd/tabletop_seed7.usda"]
+    KIN["KinematicSim<br/>deterministic CPU, 60 Hz"]
+    ISAAC["IsaacSimBackend<br/>Isaac Sim 4.5, GPU"]
+    LB["LocalBus<br/>in-process pub/sub"]
+    ROS["Ros2Bridge<br/>rclpy transport"]
+    PER["detect_cubes<br/>HSV + connected components"]
+    CTL["PickPlaceController<br/>10-state machine + analytic IK"]
+    ART["artifacts/<br/>trajectory.jsonl, frames, summary.json"]
+    RES["results/<br/>perception + episode JSONs"]
+
+    USD --> KIN
+    USD --> ISAAC
+    KIN --> LB
+    ISAAC --> ROS
+    LB --> PER
+    ROS --> PER
+    PER --> CTL
+    CTL --> LB
+    CTL --> ROS
+    CTL --> ART
+    ART --> RES

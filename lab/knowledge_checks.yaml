@@ -1,0 +1,96 @@
+schema: isaac_starter_lab.knowledge_checks.v1
+normalization: lowercase, collapse whitespace, strip surrounding punctuation; MC answers
+  are letters (A-D)
+questions:
+- id: q1
+  type: multiple_choice
+  prompt: Which of these is a valid OpenUSD prim path for the table prim?
+  choices:
+    A: /World/Table
+    B: World.Table
+    C: table.usda
+    D: UsdGeom.Cube
+  answer_sha256:
+  - ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
+  explanation: Prim paths are absolute slash-separated paths rooted at the pseudo-root;
+    /World/Table names the table prim.
+- id: q2
+  type: multiple_choice
+  prompt: What does Usd.Stage.Flatten() produce?
+  choices:
+    A: A new stage with all layers composed into one layer
+    B: A PNG screenshot of the viewport
+    C: A copy of the root layer only
+    D: A physics collider mesh
+  answer_sha256:
+  - ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
+  explanation: Flattening composes the layer stack and references into a single layer,
+    which is why the lab can hash the flattened scene text.
+- id: q3
+  type: multiple_choice
+  prompt: With CameraIntrinsics(width, height, focal_length_mm, horizontal_aperture_mm),
+    which expression gives the horizontal pixel focal length fx?
+  choices:
+    A: focal_length_mm * horizontal_aperture_mm / width
+    B: horizontal_aperture_mm * width / focal_length_mm
+    C: focal_length_mm * width / horizontal_aperture_mm
+    D: width / height * cy
+  answer_sha256:
+  - 2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6
+  explanation: fx = f_mm / aperture_mm * width_px. The camera keeps square pixels,
+    so fy = fx.
+- id: q4
+  type: short_answer
+  prompt: Name the helper that converts a pixel centroid back to a 3D point on a horizontal
+    plane.
+  answer_sha256:
+  - c71fe14721861766d5feb19c560de4d047a2af718251745e7fe314c9cc51f73f
+  - 58f60e94d6b29f16f7639e0a47a49a4334613af12705a2158ea858d8c4b7da7f
+  explanation: backproject_to_plane builds the camera ray through the pixel, intersects
+    z = constant, and returns the world point.
+- id: q5
+  type: multiple_choice
+  prompt: In ROS 2, what characterises a topic?
+  choices:
+    A: Asynchronous publish/subscribe with many possible publishers and subscribers
+    B: A synchronous request/response pair
+    C: A persisted parameter store
+    D: A one-to-one blocking RPC
+  answer_sha256:
+  - ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
+  explanation: Topics decouple publishers from subscribers; the lab uses them for
+    joint states, images, commands and status.
+- id: q6
+  type: multiple_choice
+  prompt: Which combination makes the OpenUSD stage hash reproducible across machines?
+  choices:
+    A: Using wall-clock timestamps in the layer metadata
+    B: Saving a PNG next to the stage
+    C: Hashing the .usda binary blob without normalising it
+    D: Seeded RNG for every random choice plus stripping comments, docs and timestamps
+      before hashing
+  answer_sha256:
+  - 18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4
+  explanation: Deterministic sampling removes sample variance; normalising the flattened
+    text removes metadata that differs by machine or export time.
+- id: q7
+  type: multiple_choice
+  prompt: Why does the synthetic-data exercise randomise cube pose, colour, light
+    intensity, camera yaw and table colour?
+  choices:
+    A: To make every run irreproducible
+    B: To widen the training distribution and reduce overfitting to one appearance/pose
+      so perception transfers better
+    C: To increase the number of pixels in the image
+    D: Because Isaac Sim cannot render a fixed scene
+  answer_sha256:
+  - 3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d
+  explanation: Domain randomisation teaches robustness to variation the real world
+    will present; the manifest keeps every random draw auditable.
+- id: q8
+  type: short_answer
+  prompt: Which controller state follows GRASP in the ten-state pick-and-place machine?
+  answer_sha256:
+  - 5364b92e50b1944f33d10f662b1c90a18a004ed8da1434376c41cde8f920aede
+  explanation: After the gripper closes, LIFT raises the grasped cube before TRANSFER
+    moves it over the bin.
