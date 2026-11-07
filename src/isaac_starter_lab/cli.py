@@ -163,15 +163,21 @@ def run_scene(args: argparse.Namespace) -> int:
 
 
 def run_dr(args: argparse.Namespace) -> int:
-    return _print_resolved("dr", args)
+    from .datasets.dr import run_dr_command
+
+    return run_dr_command(args)
 
 
 def run_episode(args: argparse.Namespace) -> int:
-    return _print_resolved("episode", args)
+    from .episode import run_episode_command
+
+    return run_episode_command(args)
 
 
 def run_eval(args: argparse.Namespace) -> int:
-    return _print_resolved("eval", args)
+    from .evaluation import run_eval_command
+
+    return run_eval_command(args)
 
 
 def run_check(args: argparse.Namespace) -> int:

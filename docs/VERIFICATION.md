@@ -89,3 +89,22 @@ Executed on the build machine (CPU only):
 `IsaacSimBackend`, the ROS 2 bridge and the Isaac Lab environment remain
 GPU/ROS-gated and were not executed. Their import guards and configuration
 validation are covered by tests.
+
+## ROS 2, perception, controller and DR evidence (Step 4)
+
+All CPU-track numbers below were produced by the commands shown on the build
+machine and stored under `results/`.
+
+| Command | Observed |
+| --- | --- |
+| `make dr` (200 seeds) | 200 images + labels, dataset hash `9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96`, 4.8 s |
+| `lab-eval perception` | 200 seeds / 1000 cubes; pixel error mean 1.058 px, p95 3.577 px; 3D error mean 3.607 mm, p95 12.885 mm; recall 0.9611, precision 0.8693 |
+| `lab-eval episodes` (100 seeds) | 100/100 success; mean 5.165 s, p95 5.467 s; no failure reasons |
+| `pytest -q` | 87 passed |
+| `ruff check .` | clean |
+
+The `localbus` transport, `kinematic` backend, `detect_cubes` and the full
+`PickPlaceController` state machine were executed. The ROS 2 `rclpy` transport
+and the `starter_lab` ament_package were **not** executed: this machine has no
+ROS 2 installation. Only the missing-`rclpy` guard and package-file structure are
+tested. The Isaac backend remains GPU-gated.

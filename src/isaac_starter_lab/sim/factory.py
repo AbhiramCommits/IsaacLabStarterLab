@@ -38,6 +38,9 @@ def make_backend(
     if resolved == "kinematic":
         from .kinematic import KinematicSim
 
+        kwargs.pop("usda_path", None)
+        kwargs.pop("headless", None)
+        kwargs.pop("enable_ros2", None)
         return KinematicSim(scene=scene, arm=arm, seed=seed, **kwargs)
     from .isaac_backend import IsaacSimBackend
 

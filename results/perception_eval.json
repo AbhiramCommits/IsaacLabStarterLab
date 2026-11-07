@@ -1,0 +1,60 @@
+{
+  "cubes_evaluated": 1000,
+  "dataset": "/Users/abhiramkasireddi/IsaacLabStarterLab/datasets/dr",
+  "dataset_hash": "9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96",
+  "detections": 979,
+  "elapsed_s": 11.568798749998678,
+  "error_3d_mm": {
+    "count": 840,
+    "max": 29.5952638717007,
+    "mean": 3.606955303982105,
+    "p95": 12.88542558845835
+  },
+  "false_negatives": 34,
+  "false_positives": 128,
+  "pixel_error": {
+    "count": 840,
+    "max": 4.990311869929114,
+    "mean": 1.0577881379599667,
+    "p95": 3.576671743283856
+  },
+  "pixel_threshold": 5.0,
+  "precision": 0.8692543411644535,
+  "recall": 0.9610983981693364,
+  "schema": "isaac_starter_lab.perception_eval.v1",
+  "seeds": 200,
+  "true_positives": 840,
+  "visible_cubes": 874,
+  "worst_seeds": [
+    {
+      "matched_visible": 4,
+      "mean_pixel_error": 2.4390417622858958,
+      "seed": 25,
+      "visible_cubes": 5
+    },
+    {
+      "matched_visible": 5,
+      "mean_pixel_error": 2.3856191980781984,
+      "seed": 191,
+      "visible_cubes": 5
+    },
+    {
+      "matched_visible": 5,
+      "mean_pixel_error": 2.3145273911426214,
+      "seed": 81,
+      "visible_cubes": 5
+    },
+    {
+      "matched_visible": 3,
+      "mean_pixel_error": 2.1985325396997193,
+      "seed": 16,
+      "visible_cubes": 3
+    },
+    {
+      "matched_visible": 5,
+      "mean_pixel_error": 1.9999120915959274,
+      "seed": 100,
+      "visible_cubes": 5
+    }
+  ]
+}
