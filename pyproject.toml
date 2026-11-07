@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools==84.2.1", "wheel==0.48.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "isaac-starter-lab"
+version = "0.1.0"
+description = "A reproducible tabletop pick-and-place teaching lab for OpenUSD, Isaac Sim/Isaac Lab and ROS 2"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = "Apache-2.0"
+authors = [{ name = "IsaacLabStarterLab contributors" }]
+keywords = ["openusd", "isaac-sim", "isaac-lab", "ros2", "robotics", "education"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "usd-core==25.11",
+  "numpy==2.2.6",
+  "pillow==12.0.0",
+  "PyYAML==6.0.3",
+  "matplotlib==3.10.8",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.4.2",
+  "pytest-cov==7.0.0",
+  "ruff==0.14.14",
+]
+
+[project.scripts]
+lab-scene = "isaac_starter_lab.cli:scene_main"
+lab-dr = "isaac_starter_lab.cli:dr_main"
+lab-episode = "isaac_starter_lab.cli:episode_main"
+lab-eval = "isaac_starter_lab.cli:eval_main"
+labcheck = "isaac_starter_lab.cli:check_main"
+lab-quiz = "isaac_starter_lab.cli:quiz_main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+isaac_starter_lab = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+  "slow: full end-to-end lab runs",
+  "docker: requires a working Docker daemon",
+]
+
+[tool.coverage.run]
+source = ["isaac_starter_lab"]
+branch = false
+omit = [
+  "src/isaac_starter_lab/sim/isaac_backend.py",
+  "src/isaac_starter_lab/isaac_lab/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [".venv", "build", "dist", "artifacts", "ros2_ws/build", "ros2_ws/install"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"solutions/*" = ["F401", "E402"]
+"ros2_ws/*" = ["I001"]

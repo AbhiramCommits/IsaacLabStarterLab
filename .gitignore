@@ -1,0 +1,38 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Lab outputs (regenerated; results/ is deliberately tracked)
+artifacts/
+
+# Domain-randomization bulk data. The manifest and four sample pairs are committed.
+datasets/dr/images/*
+datasets/dr/labels/*
+!datasets/dr/images/.gitkeep
+!datasets/dr/labels/.gitkeep
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# ROS 2 build products
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Omniverse caches (GPU host only)
+.ov/

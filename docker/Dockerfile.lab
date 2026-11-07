@@ -1,0 +1,29 @@
+# CPU headless lab image.
+#
+# usd-core publishes manylinux wheels for x86_64 only, so the base platform is
+# pinned to linux/amd64.  On an Apple Silicon machine Docker runs it through
+# emulation; GitHub Actions and Linux learners run it natively.
+FROM --platform=linux/amd64 python:3.11-slim
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    LAB_BACKEND=kinematic \
+    LAB_BRIDGE=localbus
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends make \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /lab
+
+COPY requirements.lock.txt ./
+RUN python -m pip install --no-cache-dir -r requirements.lock.txt
+
+COPY . .
+RUN python -m pip install --no-cache-dir --no-deps -e . \
+    && mkdir -p artifacts datasets/dr results
+
+# The default command is the complete CPU headless lab: scene -> DR -> episode
+# -> evaluation -> labcheck, with per-stage timings in results/timings.json.
+CMD ["make", "lab-headless"]
