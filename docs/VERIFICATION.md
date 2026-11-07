@@ -153,3 +153,31 @@ environment rather than a hardcoded dataset hash.
 The GitHub Actions workflow is syntactically valid and parsed locally, but the
 jobs were not executed on GitHub from this machine. Its `gpu-isaac` job is a
 documented, skipped placeholder for a self-hosted NVIDIA runner.
+
+## Cold-run and feedback evidence (Step 7)
+
+Three cold reproduction runs were performed from fresh directories. They are
+recorded in `learner-testing/cold_runs/` and are the build agent's runs, not
+external human testers.
+
+| Run | Environment | Initial failure | After fixes | Issue(s) |
+| --- | --- | --- | --- | --- |
+| 1 | fresh clone, CPython 3.10.19, fresh venv | `requirements.lock.txt` could not resolve `contourpy==1.3.3` (requires Python ≥ 3.11) | fixed install 10 s, exercises 56 s, `labcheck all` PASS 45 | ISSUE-002, ISSUE-004 |
+| 2 | fresh clone, CPython 3.11.14, fresh venv | none at install | install 7.484 s, exercises 58 s, `labcheck all` PASS 45 | ISSUE-004 |
+| 3 | Docker `linux/amd64` image, emulated | one-shot CMD exited; `cd IsaacLabStarterLab` failed (ISSUE-005) | 15 guide blocks in 896.66 s; `labcheck all` PASS 45 | ISSUE-001, ISSUE-003, ISSUE-005 |
+
+The lock fix was verified by installing `requirements.lock.txt` in fresh
+CPython 3.10.19, 3.11.14 and 3.12 environments. The final native runs after the
+fix measured 145 tests at 88.20% coverage (101.60 s) and `make lab-headless` at
+46.619 s (scene 0.060, DR 4.365, episode 0.328, perception 11.203, episode sweep
+30.163, labcheck 0.500).
+
+Five issues were filed and fixed; every 0.2.0 CHANGELOG entry links to its issue.
+External human testers remain pending, as stated in `learner-testing/TESTERS.md`.
+
+## Final status
+
+The repository is self-contained on the CPU track: the scene, renderer, dataset,
+evaluation, grader, tests, guide commands, Docker image and walkthrough all run.
+The GPU Isaac Sim path, the `rclpy` transport and the Isaac Lab environment
+remain unexecuted and are labelled as such everywhere they appear.

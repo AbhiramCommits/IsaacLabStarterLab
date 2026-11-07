@@ -62,7 +62,7 @@ def _learner_testing() -> dict:
     fixed = 0
     for issue in issues:
         text = issue.read_text(encoding="utf-8", errors="ignore").lower()
-        if re.search(r"status:\s*fixed|status:\s*\*\*fixed\*\*", text):
+        if re.search(r"status:\s*\**\s*fixed", text):
             fixed += 1
     return {"cold_runs": cold_runs, "issues_filed": len(issues), "issues_fixed": fixed}
 

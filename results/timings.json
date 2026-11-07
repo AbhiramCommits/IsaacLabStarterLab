@@ -309,33 +309,33 @@
     {
       "name": "scene",
       "ok": true,
-      "seconds": 0.09486045900848694
+      "seconds": 0.05983237500186078
     },
     {
       "name": "dr",
       "ok": true,
-      "seconds": 4.513910292007495
+      "seconds": 4.364742041012505
     },
     {
       "name": "episode",
       "ok": true,
-      "seconds": 0.3526514999975916
+      "seconds": 0.32819820899749175
     },
     {
       "name": "perception_eval",
       "ok": true,
-      "seconds": 12.492277167009888
+      "seconds": 11.20335120902746
     },
     {
       "name": "episode_eval",
       "ok": true,
-      "seconds": 33.70243608299643
+      "seconds": 30.162791084003402
     },
     {
       "name": "labcheck",
       "ok": true,
-      "seconds": 0.6666998330038041
+      "seconds": 0.49987095801043324
     }
   ],
-  "total_s": 51.822835334023694
+  "total_s": 46.61878587605315
 }

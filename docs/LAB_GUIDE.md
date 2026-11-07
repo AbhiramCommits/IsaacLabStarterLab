@@ -54,11 +54,12 @@ reading and writing the detector/controller.
 
 | Command | Measured on the build machine |
 | --- | --- |
-| `make dr` (200 seeds) | 4.8 s |
-| `lab-eval perception` (200 seeds) | 12.2 s |
-| `lab-eval episodes` (100 seeds) | 30.8 s |
-| `pytest -q` | 2.6 s |
-| full `labcheck all` | under 1 s |
+| `make dr` (200 seeds) | 4.4 s |
+| `lab-eval perception` (200 seeds) | 11.2 s |
+| `lab-eval episodes` (100 seeds) | 30.2 s |
+| `make lab-headless` (all stages) | 46.6 s |
+| `pytest -q` (includes two full determinism runs) | 101.6 s |
+| full `labcheck all` | 0.5 s |
 
 ## Prerequisites and version matrix
 
@@ -119,15 +120,27 @@ Expected: a PASS table ending in `RESULT: PASS`. If you see a FAIL, use the
 `FIX:` line under it; the troubleshooting table at the end lists the errors this
 build actually produced.
 
-Docker alternative (no local venv; Linux containers via `linux/amd64`):
+Docker alternative (no local venv; Linux containers via `linux/amd64`). There
+are two distinct modes, and they are easy to confuse:
 
 ```bash
+# One-shot: the image CMD runs scene -> DR -> episode -> eval -> labcheck.
 docker build -f docker/Dockerfile.lab -t isaac-starter-lab:local .
-docker run --rm -it isaac-starter-lab:local
+docker run --rm isaac-starter-lab:local
+
+# Guided shell: for following this guide exercise by exercise.
+docker run --rm -it isaac-starter-lab:local bash
+# inside the container the working directory is /lab (not IsaacLabStarterLab),
+# the package is already installed, and `make` is available:
+cd /lab
+labcheck env
 ```
 
-The image's default command runs the complete CPU lab. On Apple Silicon Docker
-emulates `linux/amd64` because `usd-core` ships x86_64 Linux wheels.
+Do **not** create another venv or run `make install` inside the image; the
+pinned environment is already installed. Inside the guided shell, replace
+`cd IsaacLabStarterLab` in the exercise text with the container's `/lab`.
+On Apple Silicon Docker emulates `linux/amd64` because `usd-core` ships x86_64
+Linux wheels, so commands are correct but noticeably slower.
 
 ## Exercise 1 — generate and inspect the OpenUSD scene
 
@@ -233,7 +246,7 @@ labcheck ex1
 
 Expected: `RESULT: PASS` with 8 checks. The hash must be exactly
 `af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40` and the
-prim count 46. A seed-8 scene gives a different hash (`b651ddd7...`) and fails.
+prim count 46. A seed-8 scene gives a different hash (`01214d7b...`) and fails.
 
 ## Exercise 2 — render a frame and write `detect_cubes`
 
@@ -262,9 +275,15 @@ The detector you write must:
 5. back-project to the plane `z = table_top + cube_size / 2 = 0.775 m`.
 
 The starter stub is `exercises/ex2_perception_stub.py`; the target function is
-`detect_cubes` in `src/isaac_starter_lab/perception.py`. The shipped function is
-the tested reference, so you can compare against it after you finish. Do not
-submit a detector that has been special-cased to the five seed-7 pixel positions.
+`detect_cubes` in `src/isaac_starter_lab/perception.py`. Do not submit a detector
+that has been special-cased to the five seed-7 pixel positions.
+
+> **Authorship note.** The repository ships the tested reference implementation
+> so CI and the measured results are reproducible. That means `labcheck ex2`
+> already passes on a fresh clone before you write any code — it grades behavior,
+> not authorship. For credit, replace `detect_cubes` with your own implementation
+> (start from the stub) and keep the reference open only for comparison after
+> you finish. Explain your HSV thresholds and component filter in your submission.
 
 Check your detector on the reference frame and print its grasp poses:
 
@@ -628,7 +647,7 @@ ex3   FAIL    schema                       isaac_starter_lab.episode_summary.v0
 ```text
 ex1   FAIL    seed                         seed=8
              FIX:    The teaching seed is 7. Regenerate with --seed 7.
-ex1   FAIL    stage_hash                   hash=b651ddd7... expected=ea579b2f...
+ex1   FAIL    stage_hash                   hash=01214d7bc6a681e1f22268b8d8c43ccb6ad36e6ad49e82389b6eb7b24893d72a expected=af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40
 ```
 
 **Cause:** `lab-scene --seed 8` wrote a valid but different scene under the

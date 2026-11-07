@@ -10,11 +10,11 @@
 | Detection recall / precision | 96.11% / 86.93% |
 | Episode success (100 seeds) | 100/100 (100.00%); failures: none |
 | Cycle time | mean 5.165 s, p95 5.467 s |
-| Per-stage timings | scene 0.09 s, dr 4.51 s, episode 0.35 s, perception_eval 12.49 s, episode_eval 33.70 s, labcheck 0.67 s |
+| Per-stage timings | scene 0.06 s, dr 4.36 s, episode 0.33 s, perception_eval 11.20 s, episode_eval 30.16 s, labcheck 0.50 s |
 | Determinism | 2 runs, 610 artifacts, hashes identical |
 | Test suite | 145 tests, 0 failures, 88.20% statement coverage |
 | CI jobs | test, lab, determinism, docker, gpu-isaac |
 | Labcheck | PASS, 45 checks |
-| Learner testing | 0 cold runs, 0 issues filed, 0 fixed |
+| Learner testing | 3 cold runs, 5 issues filed, 5 fixed |
 
 All values are read from the JSON files under `results/` and the committed dataset manifest by `scripts/collect_results.py`; the GPU track is not included.
