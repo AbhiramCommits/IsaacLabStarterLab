@@ -70,8 +70,9 @@ opens the stage and renders: `APP_OK`, `PXR_OK`, `Camera.get_rgba()` returns
 - RTX artifacts (start/final frames, trajectory, summary) are committed under
   `results/gpu/seed_7/`; the episode failed at APPROACH, not at startup.
 
-**Cost.** Pod 1 (4.5) ~55 min, pod 2 (5.1) ~13 min, pod 3 (6.0, the long run)
-~2 h at $0.89/hr: roughly **$2.30** including disk. All pods terminated.
+**Cost.** Pod 1 (4.5) ~56 min, pod 2 (5.1) ~13 min, pod 3 (6.0) ~111 min at
+$0.89/hr: roughly **$2.70** including disk. The MCP billing view showed $1.38
+for 2026-11-12 and can lag. All pods terminated; `list-pods` is empty.
 
 ## Environment facts
 
