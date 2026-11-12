@@ -90,7 +90,7 @@ no Isaac Sim are needed to complete Exercises 0–4.
 Bash blocks marked `<!-- test:run -->` are executed in order by
 `scripts/extract_guide_commands.py` in CI; a stale command fails the build.
 Environment bootstrap (creating the venv and installing wheels) is validated by
-the three cold runs in `learner-testing/cold_runs/` instead, because it is
+the owner's cold run in `learner-testing/cold_runs/` instead, because it is
 host-specific. Every expected hash and threshold below is checked by `labcheck`
 and by the test suite.
 

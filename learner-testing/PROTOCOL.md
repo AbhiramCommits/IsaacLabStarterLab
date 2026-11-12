@@ -1,7 +1,7 @@
 # Cold-run testing protocol
 
 The purpose of this round is to find places where the lab guide or code fails a
-learner who has **no help from the author**. The build agent's own cold runs are
+learner who has **no help from the author**. The repository owner's cold run is
 recorded in `cold_runs/`; external human testers are still needed and are tracked
 in `TESTERS.md`.
 

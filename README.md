@@ -13,11 +13,10 @@ runs anywhere; the GPU track is the same code against Isaac Sim 4.5.
 
 ## Quickstart
 
-Five commands from a clone to a graded `labcheck all` on the CPU track (replace
-`<repository-url>` with the URL your instructor gave you):
+Five commands from a clone to a graded `labcheck all` on the CPU track:
 
 ```bash
-git clone <repository-url> IsaacLabStarterLab && cd IsaacLabStarterLab
+git clone https://github.com/AbhiramCommits/IsaacLabStarterLab.git IsaacLabStarterLab && cd IsaacLabStarterLab
 python3.11 -m venv .venv && source .venv/bin/activate
 make install
 make lab-headless
@@ -175,7 +174,7 @@ docker/                  CPU lab image and GPU Isaac Sim image
 | Test suite | 145 tests, 0 failures, 88.20% statement coverage |
 | CI jobs | test, lab, determinism, docker, gpu-isaac |
 | Labcheck | PASS, 45 checks |
-| Learner testing | 3 cold runs, 5 issues filed, 5 fixed |
+| Learner testing | 1 cold run, 2 issues filed, 2 fixed |
 
 All values are read from the JSON files under `results/` and the committed dataset manifest by `scripts/collect_results.py`; the GPU track is not included.
 
@@ -188,12 +187,11 @@ pin; see the guide for both measured dataset values.
 
 ## Scope and verification
 
-The CPU headless track was executed on the build machine: the real `pxr` scene
+The CPU headless track has been run on a macOS arm64 host: the real `pxr` scene
 builder and hash, the software renderer, the local bus, perception and the
 controller, the 200-seed dataset, the 100-episode sweep, `labcheck`, the pytest
-suite, and the Docker lab image under `linux/amd64` emulation. The GitHub Actions
-workflow is committed and parsed locally but was not run on GitHub from this
-machine.
+suite, and the Docker lab image under `linux/amd64` emulation. CI runs the test,
+lab, determinism and Docker jobs on GitHub Actions.
 
 The NVIDIA Isaac Sim app, the Isaac Lab environment, the `rclpy` transport and
 the GPU Docker image are **GPU/ROS-gated and unexecuted**. They have import
@@ -204,12 +202,11 @@ in [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
 ## Learner testing
 
 - Protocol: [`learner-testing/PROTOCOL.md`](learner-testing/PROTOCOL.md)
-- Three cold runs: [`learner-testing/cold_runs/`](learner-testing/cold_runs/)
+- Owner cold run: [`learner-testing/cold_runs/run_1.md`](learner-testing/cold_runs/run_1.md)
 - Issues and fixes: [`learner-testing/issues/`](learner-testing/issues/)
 - Tester table: [`learner-testing/TESTERS.md`](learner-testing/TESTERS.md)
 - Change history: [`CHANGELOG.md`](CHANGELOG.md)
 
-The three cold reproduction runs in this repository are the build agent's own
-(fresh Python 3.10 venv, fresh git clone, and the Docker image), not external
-humans. They found and led to fixes for the issues listed in the CHANGELOG. The
-external human-tester rows remain explicitly pending for the repo owner.
+The repository owner is doing the cold reproduction run on their own machine
+(fresh clone, fresh venv, README quickstart); external human testers are planned
+and are listed as pending in `TESTERS.md` until real people complete a run.

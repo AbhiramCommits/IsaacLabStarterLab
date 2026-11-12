@@ -212,7 +212,8 @@ def render_markdown(summary: dict) -> str:
         ),
         (
             "Learner testing",
-            f"{learner.get('cold_runs', 0)} cold runs, "
+            f"{learner.get('cold_runs', 0)} cold "
+            f"{'run' if learner.get('cold_runs', 0) == 1 else 'runs'}, "
             f"{learner.get('issues_filed', 0)} issues filed, "
             f"{learner.get('issues_fixed', 0)} fixed",
         ),

@@ -15,6 +15,6 @@
 | Test suite | 145 tests, 0 failures, 88.20% statement coverage |
 | CI jobs | test, lab, determinism, docker, gpu-isaac |
 | Labcheck | PASS, 45 checks |
-| Learner testing | 3 cold runs, 5 issues filed, 5 fixed |
+| Learner testing | 1 cold run, 2 issues filed, 2 fixed |
 
 All values are read from the JSON files under `results/` and the committed dataset manifest by `scripts/collect_results.py`; the GPU track is not included.

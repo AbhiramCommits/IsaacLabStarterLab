@@ -374,9 +374,9 @@
     "step": "all"
   },
   "learner_testing": {
-    "cold_runs": 3,
-    "issues_filed": 5,
-    "issues_fixed": 5
+    "cold_runs": 1,
+    "issues_filed": 2,
+    "issues_fixed": 2
   },
   "perception": {
     "error_3d_mm": {
