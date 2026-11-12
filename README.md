@@ -1,10 +1,11 @@
 # IsaacLabStarterLab
 
 A tabletop pick-and-place teaching lab built on a real OpenUSD scene.
-A deterministic CPU track runs anywhere; a GPU track targets Isaac Sim 4.5,
+A deterministic CPU track runs anywhere; a GPU track targets Isaac Sim 6.0,
 Isaac Lab and ROS 2 through the same message schema.
-The CPU track is tested and measured; the GPU and ROS 2 tracks are specified
-below but were not run (see [Validated vs not validated](#validated-vs-not-validated)).
+The CPU track is tested and measured; the GPU track starts and runs a real
+7-DOF PhysX arm but has not completed a pick; ROS 2 was not run (see
+[Validated vs not validated](#validated-vs-not-validated)).
 
 Built and tested on macOS arm64 with CPython 3.11; the test host has no NVIDIA
 GPU and no ROS 2 installation.
@@ -67,14 +68,14 @@ Validated on the CPU track:
 
 Not validated:
 
-- `IsaacSimBackend` against Isaac Sim 4.5 on a GPU. A Secure RTX 4090 pod was
-  created on 2026-11-12; Isaac Sim started, opened the stage and ran PhysX, but
-  the RTX renderer segfaulted with host driver 595.91.07. Isaac Sim 5.1 could
-  not be used on that host (the image is non-root and has no sshd/rsync/sudo).
-- PhysX contact and friction on the canonical arm. Its rigid bodies are nested
-  and its joints sit outside the articulation root, so PhysX sees 0 DOF; a
-  gripper DOF is also absent. A runtime physics arm is the approved fix and is
-  not built.
+- A complete Isaac Sim pick. Isaac Sim 6.0 starts on a Secure RTX 4090
+  (driver 595.91.07), renders RTX frames and runs a real 7-DOF runtime PhysX
+  arm; HOME and LOCATE pass, but APPROACH times out because the RTX camera
+  pose and the CPU look-at disagree, so back-projection sends the arm to the
+  wrong point. The failure and artifacts are in `results/gpu/seed_7/` and
+  [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
+- A successful PhysX grasp. The runtime arm has contact, friction and
+  prismatic fingers, but the episode never reaches GRASP.
 - The Isaac Lab `ManagerBasedRLEnv` task, 64-environment throughput and PPO.
 - The `rclpy` transport, the ROS 2 nodes and the Isaac Sim ROS 2 bridge.
 - RTX-frame perception and the pinhole-to-RTX gap.
@@ -88,7 +89,7 @@ The quickstart above is the whole CPU track. `docs/LAB_GUIDE.md` walks through
 the scene, the detector, the controller, the dataset and the grader.
 `docs/LAB_GUIDE.md` and `docs/WALKTHROUGH.md` are the reading path.
 
-### GPU track (not run here)
+### GPU track (partially run)
 
 Both routes use the same code. The Docker route:
 
@@ -104,7 +105,7 @@ docker run --rm -it --gpus all --network host \
   isaac-starter-lab:gpu
 ```
 
-The no-Docker route, inside an Isaac Sim 4.5 container or pod:
+The no-Docker route, inside an Isaac Sim 6.0 container or pod:
 
 ```bash
 bash scripts/setup_isaac_nodocker.sh
@@ -124,9 +125,9 @@ Python, without dependencies, so it does not replace Isaac Sim's `pxr` or
   logic check, not a camera result.
 - The dataset hash is a same-environment self-consistency hash. The scene hash is
   the cross-machine pin.
-- The GPU, Isaac Lab and ROS 2 paths have no measured results: the RTX renderer
-  failed on the pod's driver and the 5.1 image could not be equipped with SSH.
-  The exact errors are recorded in [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
+- The GPU track reaches APPROACH but not a pick; Isaac Lab and ROS 2 have no
+  measured results. The exact errors and the 6.0 pod setup are recorded in
+  [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
 - External human testers have not run the lab. The owner cold run is the only
   completed one.
 

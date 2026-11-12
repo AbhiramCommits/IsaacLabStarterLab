@@ -1,13 +1,13 @@
-# GPU-host-only Isaac Sim track. Build on an NVIDIA host with the NVIDIA
-# Container Toolkit installed:
+# GPU-host-only Isaac Sim track (Isaac Sim 6.0, driver >= 580.65.06).
+#
+# The stock 6.0 image runs as uid 1234 (isaac-sim) with no sudo, sshd or rsync,
+# so this image sets USER root and installs them. Build on an NVIDIA host:
 #
 #   docker build -f docker/Dockerfile.isaac -t isaac-starter-lab:gpu .
 #
-# Run it with the GPU visible and the Omniverse caches mounted so shader and
-# extension caches survive container restarts:
+# Run it with the GPU visible and the Omniverse caches mounted:
 #
-#   docker run --rm -it --gpus all \
-#     --network host \
+#   docker run --rm -it --gpus all --network host \
 #     -e ACCEPT_EULA=Y -e PRIVACY_CONSENT=Y \
 #     -e LAB_BACKEND=isaac -e LAB_BRIDGE=ros2 \
 #     -v "$HOME/.cache/ov:/root/.cache/ov" \
@@ -17,20 +17,22 @@
 #     -v "$PWD/artifacts:/lab/artifacts" \
 #     isaac-starter-lab:gpu
 #
-# Isaac Sim 4.5.0 requires an NVIDIA driver >= 535.129.03 (see the version
-# matrix in docs/LAB_GUIDE.md) and a GPU with >= 16 GB VRAM for this scene.
-#
 # Do NOT install requirements.lock.txt here: it pins usd-core and numpy, which
 # would replace the pxr and numpy that Isaac Sim ships and break Omniverse.
 # Only the two runtime dependencies the lab adds are installed, without deps.
 
-FROM nvcr.io/nvidia/isaac-sim:4.5.0
-
+FROM nvcr.io/nvidia/isaac-sim:6.0.0
+USER root
 ENV ACCEPT_EULA=Y \
     PRIVACY_CONSENT=Y \
     LAB_BACKEND=isaac \
     LAB_BRIDGE=ros2 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends openssh-server rsync && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /lab
 

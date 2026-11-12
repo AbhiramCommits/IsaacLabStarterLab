@@ -38,52 +38,45 @@ is exercised by the Docker image and by GitHub Actions (`ubuntu-latest`).
 | Docker lab image | `docker/Dockerfile.lab` | executed (amd64 emulation) |
 | CI workflow | `.github/workflows/ci.yml` | green on GitHub Actions (run 42359023945, `main`) |
 
-## GPU-gated and unexecuted
+## GPU track status
 
-| Component | Path | Why it did not run |
+The GPU track was exercised on a Secure RTX 4090 pod (driver 595.91.07,
+75 GB disk; 100 GB was unavailable). It is **partially executed**:
+
+| Component | Path | Status |
 | --- | --- | --- |
-| Isaac Sim backend | `src/isaac_starter_lab/sim/isaac_backend.py` | requires NVIDIA GPU + `nvcr.io/nvidia/isaac-sim:4.5.0`; only the import guard and message mapping are tested |
-| Isaac Lab task config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | requires Isaac Lab on a GPU host; dataclass validation is tested on CPU |
-| `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | requires a ROS 2 installation; only the missing-`rclpy` error path is tested |
-| ROS 2 ament package build | `ros2_ws/src/starter_lab/` | requires ROS 2 Humble/Jazzy; source only |
-| GPU Isaac Sim image | `docker/Dockerfile.isaac` | GPU-host-only; never built |
+| Isaac Sim backend | `src/isaac_starter_lab/sim/isaac_backend.py` | executed to APPROACH on Isaac Sim 6.0; runtime 7-DOF arm, RTX frames, HOME and LOCATE pass |
+| Isaac Lab task config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | unexecuted; dataclass validation is tested on CPU |
+| `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | unexecuted; only the missing-`rclpy` error path is tested |
+| ROS 2 ament package | `ros2_ws/src/starter_lab/` | unexecuted |
+| GPU image | `docker/Dockerfile.isaac` | built and pushed as `madridista23/isaac-sim-60-root:latest`; starts on this driver |
 
-### GPU attempt, 2026-11-12
+### What failed, in order
 
-A Secure RTX 4090 pod was created in EU-RO-1 (driver 595.91.07, 75 GB disk;
-100 GB was unavailable). The Isaac Sim 4.5 image started, opened
-`usd/tabletop_seed7.usda` and ran PhysX, but the RTX renderer did not work:
+- **Isaac Sim 4.5** segfaulted in `omni.usdphysics.ui` overlays with driver
+  595.91.07. With the overlay patched and the main viewport disabled, the app
+  started and PhysX worked (minimal articulation DOF 1), but camera frames were
+  empty and the canonical arm reported 0 DOF.
+- **Isaac Sim 5.1** (stock image) runs as uid 1234 with no `sudo`, `sshd` or
+  `rsync`; `apt-get` fails with
+  `E: List directory /var/lib/apt/lists/partial is missing - Acquire (13: Permission denied)`.
+  5.1 via pip inside the 4.5 container segfaulted in `libomni.usd.so`.
+- **Isaac Sim 6.0** starts and renders on driver 595.91.07. The canonical arm
+  reports 5 DOF but is unstable under drives (nested rigid bodies), so the
+  backend now builds a flat runtime arm (`/World/RobotIsaac`): fixed base, five
+  revolute links, two prismatic fingers, self-collision off, 240 Hz physics.
+  HOME and LOCATE pass; APPROACH times out because the RTX camera pose and the
+  CPU look-at disagree (the USD camera quaternion has a large spurious yaw), so
+  the detected cube's back-projected 3D point is wrong. No pick completed.
 
-- The default app segfaulted in `omni.usdphysics.ui` immediate-mode overlays
-  inside `_wait_for_viewport`.
-- Patching that overlay and the file-menu stage handler, and disabling the main
-  viewport window, let the app start and step physics; a minimal articulation
-  reported DOF 1.
-- With the viewport enabled, `app.update()` still segfaulted on driver
-  595.91.07. With it disabled, `Camera.get_rgba()` returned an empty array and
-  `rep.orchestrator.step()` hung, so no RTX frame was produced.
-- The canonical arm reported 0 DOF at `/World/Robot` and `/World/Robot/base`:
-  the rigid bodies are nested and the joints sit outside the articulation root.
-
-A second pod with the Isaac Sim 5.1 image could not be used: it runs as uid 1234
-(`isaac-sim`) with no `sudo`, `sshd` or `rsync`, and `apt-get` fails with
-`E: List directory /var/lib/apt/lists/partial is missing - Acquire (13: Permission denied)`.
-A user-space OpenSSH install did not serve SSH. Installing Isaac Sim 5.1 from pip
-inside the 4.5 container completed, but `SimulationApp` segfaulted in
-`libomni.usd.so` at startup because the 5.1 libraries were mixed with the 4.5
-container's USD/Kit libraries.
-
-Both pods were terminated; `list-pods` is empty. No GPU number was produced.
-The remaining path is a custom 5.1 image with `USER root` and openssh/rsync, or
-a host with an R580 production driver for 4.5.
+RTX artifacts from the seed-7 run (start/final frame, trajectory, summary) are
+committed under `results/gpu/seed_7/`; `summary.json` records
+`failure_reason: TIMEOUT_APPROACH`.
 
 The Docker and no-Docker install paths were updated (`docker/Dockerfile.isaac`,
 `scripts/setup_isaac_nodocker.sh`) so they do not replace Isaac Sim's bundled
-`pxr`/`numpy`, but neither was executed.
-
-No success-rate or accuracy number in this repository comes from the GPU path.
-Every measured number is produced by the CPU headless path and stored under
-`results/`.
+`pxr`/`numpy`. The root/SSH 6.0 image that ran is published at
+`madridista23/isaac-sim-60-root:latest`.
 
 ## Scene determinism evidence
 
@@ -133,7 +126,7 @@ The `localbus` transport, `kinematic` backend, `detect_cubes` and the full
 `PickPlaceController` state machine were executed. The ROS 2 `rclpy` transport
 and the `starter_lab` ament package were **not** executed on the Mac: there is no
 ROS 2 installation there. Only the missing-`rclpy` guard and package-file
-structure are tested. The Isaac backend remains GPU-gated.
+structure are tested. The Isaac backend is partially executed (see above).
 
 ## Guide tooling evidence
 
@@ -200,6 +193,6 @@ External human testers remain pending, as stated in
 
 The repository is self-contained on the CPU track: the scene, renderer, dataset,
 evaluation, grader, tests, guide commands, Docker image and walkthrough all run.
-The GPU Isaac Sim path, the `rclpy` transport, the Isaac Lab environment and RTX
-perception are unexecuted: Runpod had no GPU capacity for the planned run. They
-are labelled as unexecuted in the README, the guide and this file.
+The GPU Isaac Sim path now starts, renders and runs a real 7-DOF PhysX arm but
+stops at APPROACH; the `rclpy` transport, Isaac Lab and RTX perception remain
+unexecuted. They are labelled accordingly in the README, the guide and this file.

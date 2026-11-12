@@ -1,18 +1,22 @@
-"""Isaac Sim 4.5 backend (GPU-host path).
+"""Isaac Sim 6.0 backend (GPU-host path).
 
-This adapter is **not executed on the build machine** (no NVIDIA GPU, no Isaac
-Sim install).  It is guarded so importing this module is always safe: the heavy
-Omniverse imports happen lazily inside :meth:`IsaacSimBackend.start`, and a
-missing runtime raises :class:`IsaacUnavailableError` with the exact container
-and ``docker run`` command to use.
+The CPU scene's robot is a visual chain: its rigid bodies are nested and its
+joints sit outside the articulation root, so PhysX cannot simulate it.  This
+adapter keeps the canonical stage (table, bin, cubes, camera) and builds a
+clean, flat articulation at runtime under ``/World/RobotIsaac`` from the same
+:class:`~isaac_starter_lab.config.ArmConfig` dimensions and joint names.  The
+canonical file and its pinned hash are untouched.
 
-It emits the same :mod:`isaac_starter_lab.sim.schema` messages as
-:class:`~isaac_starter_lab.sim.kinematic.KinematicSim`, so learner perception and
-controller code is unchanged between the CPU and GPU tracks.
+The runtime arm has five revolute joints plus two prismatic finger joints.  It
+is position-controlled: the controller's velocity commands are integrated into
+position targets each tick, and the cubes are moved only by PhysX contact and
+friction.  ``grasped`` is a state estimate (fingers closed and a cube at the
+tool tip); the cube's motion is never attached to the gripper.
 """
 
 from __future__ import annotations
 
+import math
 import os
 from collections.abc import Sequence
 from pathlib import Path
@@ -25,7 +29,7 @@ from .schema import CubePoseArray, JointState, RgbFrame
 
 __all__ = ["IsaacSimBackend", "IsaacUnavailableError"]
 
-CONTAINER_IMAGE = "nvcr.io/nvidia/isaac-sim:4.5.0"
+CONTAINER_IMAGE = "nvcr.io/nvidia/isaac-sim:6.0.0"
 DOCKER_RUN = (
     "docker run --rm -it --gpus all --network host "
     "-e ACCEPT_EULA=Y -e PRIVACY_CONSENT=Y "
@@ -37,6 +41,16 @@ DOCKER_RUN = (
     "isaac-starter-lab:gpu"
 )
 
+ARM_ROOT = "/World/RobotIsaac"
+CANONICAL_ROBOT = "/World/Robot"
+GRIPPER_OPEN = 0.004  # metres of travel per finger
+LINK_MASSES = (0.1, 0.02, 0.02, 0.01, 0.01)
+FINGER_Y = 0.032
+FINGER_THICKNESS = 0.008
+DRIVE_KP = 5.0e4
+DRIVE_KD = 1.0e2
+MAX_TARGET_STEP = 0.01
+
 
 class IsaacUnavailableError(RuntimeError):
     """Raised when the Isaac Sim runtime is not importable on this host."""
@@ -47,14 +61,14 @@ def _unavailable(detail: str) -> IsaacUnavailableError:
         "Isaac Sim is not available on this machine "
         f"({detail}).\n"
         f"Required container: {CONTAINER_IMAGE}\n"
-        "Required host: NVIDIA GPU + driver >= 535.129.03 + NVIDIA Container Toolkit.\n"
+        "Required host: NVIDIA GPU (RTX) + driver >= 580.65.06 + NVIDIA Container Toolkit.\n"
         f"Run: {DOCKER_RUN}\n"
         "Then set LAB_BACKEND=isaac (and LAB_BRIDGE=ros2)."
     )
 
 
 def _import_simulation_app():
-    try:  # Isaac Sim 4.5 Python package
+    try:  # Isaac Sim 4.x/5.x/6.x Python package
         from isaacsim import SimulationApp  # type: ignore[import-not-found]
 
         return SimulationApp
@@ -69,10 +83,7 @@ def _import_simulation_app():
 
 
 class IsaacSimBackend:
-    """Thin, real-API adapter around ``isaacsim.SimulationApp``.
-
-    Construction never imports Omniverse.  Call :meth:`start` on the GPU host.
-    """
+    """Real-API adapter around ``isaacsim.SimulationApp`` plus a runtime arm."""
 
     def __init__(
         self,
@@ -81,7 +92,7 @@ class IsaacSimBackend:
         seed: int = LAB_SEED,
         usda_path: str | Path = "usd/tabletop_seed7.usda",
         headless: bool = True,
-        enable_ros2: bool = True,
+        enable_ros2: bool = False,
     ) -> None:
         self.scene = scene or SceneConfig()
         self.arm = arm or ArmConfig()
@@ -91,9 +102,14 @@ class IsaacSimBackend:
         self.headless = headless
         self.enable_ros2 = enable_ros2
         self._app: Any | None = None
+        self._stage: Any | None = None
+        self._sim: Any | None = None
         self._articulation: Any | None = None
         self._camera: Any | None = None
         self._ros_bridge: Any | None = None
+        self._joint_velocity_command = np.zeros(5, dtype=float)
+        self._gripper_closure = 0.0
+        self._grasped_name: str | None = None
         self.tick = 0
         self.time_s = 0.0
 
@@ -102,13 +118,14 @@ class IsaacSimBackend:
     # ------------------------------------------------------------------
     def start(self) -> IsaacSimBackend:
         SimulationApp = _import_simulation_app()
-        self._app = SimulationApp({"headless": self.headless, "renderer": "RayTracedLighting"})
+        self._app = SimulationApp({"headless": self.headless, "anti_aliasing": 0, "denoiser": False})
         if not self.usda_path.exists():
             raise FileNotFoundError(
                 f"USD stage not found: {self.usda_path}. Run `lab-scene --seed 7` first."
             )
         self._open_stage()
-        self._setup_articulation()
+        self._build_arm()
+        self._start_physics()
         self._setup_camera()
         if self.enable_ros2:
             self._enable_ros2_bridge()
@@ -120,16 +137,160 @@ class IsaacSimBackend:
         context = omni.usd.get_context()
         if not context.open_stage(str(self.usda_path.resolve())):
             raise RuntimeError(f"Isaac Sim could not open {self.usda_path}")
-        self._update(60)
+        self._stage = context.get_stage()
+        # The CPU track renders flat, fully saturated cube colours. RTX shades
+        # them with a white dome light and desaturates them below the detector's
+        # threshold, so make the cube materials emissive and lower the dome.
+        from pxr import Sdf, UsdShade  # type: ignore[import-not-found]
 
-    def _setup_articulation(self) -> None:
-        try:
-            from isaacsim.core.prims import Articulation  # type: ignore[import-not-found]
-        except ImportError:
-            from omni.isaac.core.articulations import Articulation  # type: ignore[import-not-found]
+        for color in ("Red", "Green", "Blue", "Yellow", "Magenta"):
+            shader = UsdShade.Shader(
+                self._stage.GetPrimAtPath(f"/World/Materials/{color}/PreviewSurface")
+            )
+            if not shader:
+                continue
+            diffuse = shader.GetInput("diffuseColor").Get()
+            shader.CreateInput("emissiveColor", Sdf.ValueTypeNames.Color3f).Set(diffuse * 0.6)
+        dome = self._stage.GetPrimAtPath("/World/Lights/DomeLight")
+        if dome:
+            dome.GetAttribute("inputs:intensity").Set(100.0)
+        camera_prim = self._stage.GetPrimAtPath("/World/Camera")
+        if camera_prim:
+            camera_prim.GetAttribute("fStop").Set(64.0)
+            camera_prim.GetAttribute("focusDistance").Set(1.0)
 
-        self._articulation = Articulation(prim_paths_expr="/World/Robot/base")
+    # ------------------------------------------------------------------
+    # runtime arm (canonical stage stays untouched)
+    # ------------------------------------------------------------------
+    def _build_arm(self) -> None:
+        from pxr import Gf, Sdf, UsdGeom, UsdPhysics  # type: ignore[import-not-found]
+
+        stage = self._stage
+        assert stage is not None
+        old = stage.GetPrimAtPath(CANONICAL_ROBOT)
+        if old:
+            old.SetActive(False)
+
+        root = UsdGeom.Xform.Define(stage, ARM_ROOT)
+        root.GetPrim().ApplyAPI(UsdPhysics.ArticulationRootAPI)
+        # Adjacent link colliders overlap at the joints; PhysX self-collision
+        # would make the stiff drives explode. Cubes still collide with the arm.
+        root.GetPrim().CreateAttribute(
+            "physxArticulation:enabledSelfCollisions", Sdf.ValueTypeNames.Bool, custom=True
+        ).Set(False)
+
+        def link(name: str, xyz: Sequence[float], mass: float):
+            xform = UsdGeom.Xform.Define(stage, f"{ARM_ROOT}/{name}")
+            UsdGeom.Xformable(xform).AddTranslateOp().Set(Gf.Vec3d(*[float(v) for v in xyz]))
+            prim = xform.GetPrim()
+            UsdPhysics.RigidBodyAPI.Apply(prim)
+            UsdPhysics.MassAPI.Apply(prim).CreateMassAttr(float(mass))
+            return prim
+
+        def collider(parent, name: str, offset: Sequence[float], size: Sequence[float]) -> None:
+            cube = UsdGeom.Cube.Define(stage, f"{parent.GetPath()}/{name}")
+            cube.CreateSizeAttr(1.0)
+            UsdGeom.Xformable(cube).AddTranslateOp().Set(
+                Gf.Vec3d(*[float(v) for v in offset])
+            )
+            UsdGeom.Xformable(cube).AddScaleOp().Set(
+                Gf.Vec3f(*[float(v) for v in size])
+            )
+            UsdPhysics.CollisionAPI.Apply(cube.GetPrim())
+
+        def revolute(name, body0, body1, axis, p0, p1, limits_rad):
+            joint = UsdPhysics.RevoluteJoint.Define(stage, f"{ARM_ROOT}/{name}")
+            joint.CreateAxisAttr(axis)
+            if body0 is not None:
+                joint.CreateBody0Rel().SetTargets([str(body0.GetPath())])
+            joint.CreateBody1Rel().SetTargets([str(body1.GetPath())])
+            joint.CreateLocalPos0Attr(Gf.Vec3f(*[float(v) for v in p0]))
+            joint.CreateLocalPos1Attr(Gf.Vec3f(*[float(v) for v in p1]))
+            # USD revolute limits are degrees.
+            joint.CreateLowerLimitAttr(float(math.degrees(limits_rad[0])))
+            joint.CreateUpperLimitAttr(float(math.degrees(limits_rad[1])))
+            drive = UsdPhysics.DriveAPI.Apply(joint.GetPrim(), "angular")
+            drive.CreateTypeAttr("force")
+            drive.CreateStiffnessAttr(DRIVE_KP)
+            drive.CreateDampingAttr(DRIVE_KD)
+            drive.CreateMaxForceAttr(50.0)
+            return joint
+
+        bx, by, bz = self.arm.base_position
+        shoulder = (bx, by, bz + self.arm.base_height)
+        l1, l2 = self.arm.link1_length, self.arm.link2_length
+        wrist_len, tool_len = self.arm.wrist_length, self.arm.tool_length
+
+        base = link("base", (bx, by, bz), 0.5)
+        collider(base, "Column", (0.0, 0.0, self.arm.base_height / 2.0),
+                 (0.07, 0.07, self.arm.base_height))
+        anchor = UsdPhysics.FixedJoint.Define(stage, f"{ARM_ROOT}/anchor")
+        anchor.CreateBody1Rel().SetTargets([str(base.GetPath())])
+        anchor.CreateLocalPos0Attr(Gf.Vec3f(float(bx), float(by), float(bz)))
+        anchor.CreateLocalPos1Attr(Gf.Vec3f(0.0, 0.0, 0.0))
+
+        link0 = link("link0", shoulder, LINK_MASSES[0])
+        collider(link0, "Visual", (0.0, 0.0, 0.0), (0.06, 0.06, 0.06))
+        link1 = link("link1", shoulder, LINK_MASSES[1])
+        collider(link1, "Visual", (l1 / 2.0, 0.0, 0.0), (l1, 0.045, 0.045))
+        link2 = link("link2", (shoulder[0] + l1, shoulder[1], shoulder[2]), LINK_MASSES[2])
+        collider(link2, "Visual", (l2 / 2.0, 0.0, 0.0), (l2, 0.04, 0.04))
+        wrist = link("wrist", (shoulder[0] + l1 + l2, shoulder[1], shoulder[2]), LINK_MASSES[3])
+        collider(wrist, "Visual", (0.0, 0.0, 0.0), (0.06, 0.05, 0.05))
+        gripper = link(
+            "gripper",
+            (shoulder[0] + l1 + l2 + wrist_len, shoulder[1], shoulder[2]),
+            LINK_MASSES[4],
+        )
+        # The gripper body is visual only; the fingers are the contact surfaces.
+
+        limits = self.arm.joint_limits
+        revolute("joint_base_yaw", base, link0, "Z", (0.0, 0.0, self.arm.base_height), (0.0, 0.0, 0.0), limits[0])
+        revolute("joint_shoulder", link0, link1, "-Y", (0.0, 0.0, 0.0), (0.0, 0.0, 0.0), limits[1])
+        revolute("joint_elbow", link1, link2, "-Y", (l1, 0.0, 0.0), (0.0, 0.0, 0.0), limits[2])
+        revolute("joint_wrist_pitch", link2, wrist, "-Y", (l2, 0.0, 0.0), (0.0, 0.0, 0.0), limits[3])
+        revolute("joint_wrist_roll", wrist, gripper, "X", (wrist_len, 0.0, 0.0), (0.0, 0.0, 0.0), limits[4])
+
+        tip_x = shoulder[0] + l1 + l2 + wrist_len + tool_len
+        for side, y in (("left", -FINGER_Y), ("right", FINGER_Y)):
+            finger = link(f"finger_{side}", (tip_x, shoulder[1] + y, shoulder[2]), 0.005)
+            collider(finger, "Visual", (0.0, 0.0, 0.0), (0.06, FINGER_THICKNESS, 0.03))
+            joint = UsdPhysics.PrismaticJoint.Define(stage, f"{ARM_ROOT}/finger_joint_{side}")
+            joint.CreateAxisAttr("Y")
+            joint.CreateBody0Rel().SetTargets([str(gripper.GetPath())])
+            joint.CreateBody1Rel().SetTargets([str(finger.GetPath())])
+            joint.CreateLocalPos0Attr(Gf.Vec3f(float(tool_len), float(y), 0.0))
+            joint.CreateLocalPos1Attr(Gf.Vec3f(0.0, 0.0, 0.0))
+            joint.CreateLowerLimitAttr(-GRIPPER_OPEN)
+            joint.CreateUpperLimitAttr(GRIPPER_OPEN)
+            drive = UsdPhysics.DriveAPI.Apply(joint.GetPrim(), "linear")
+            drive.CreateTypeAttr("force")
+            drive.CreateStiffnessAttr(DRIVE_KP)
+            drive.CreateDampingAttr(DRIVE_KD)
+            drive.CreateMaxForceAttr(10.0)
+
+    def _start_physics(self) -> None:
+        from isaacsim.core.api import SimulationContext  # type: ignore[import-not-found]
+        from isaacsim.core.prims import Articulation  # type: ignore[import-not-found]
+
+        self._sim = SimulationContext(
+            physics_dt=1.0 / 240.0,
+            rendering_dt=1.0 / 60.0,
+            stage_units_in_meters=1.0,
+        )
+        self._sim.initialize_physics()
+        self._sim.reset()
+        self._articulation = Articulation(prim_paths_expr=ARM_ROOT)
         self._articulation.initialize()
+        n = int(self._articulation.num_dof)
+        self._articulation.set_gains(
+            kps=np.full(n, DRIVE_KP), kds=np.full(n, DRIVE_KD)
+        )
+        self._joint_velocity_command = np.zeros(n, dtype=float)
+        # Hold the assembled pose while the camera warms up; otherwise the arm
+        # falls under gravity before the first controller tick.
+        q = self.joint_positions
+        self._articulation.set_joint_position_targets(q.reshape(1, -1))
 
     def _setup_camera(self) -> None:
         try:
@@ -140,9 +301,11 @@ class IsaacSimBackend:
         self._camera = Camera(
             prim_path="/World/Camera",
             resolution=(self.camera.width, self.camera.height),
-            frequency=30,
         )
         self._camera.initialize()
+        # Warm the render product so the first get_rgba() has data.
+        for _ in range(10):
+            self._sim.render()
 
     def _enable_ros2_bridge(self) -> None:
         try:
@@ -154,7 +317,7 @@ class IsaacSimBackend:
             try:
                 enable_extension(extension)
                 break
-            except Exception:  # extension name differs between Isaac Sim versions
+            except Exception:
                 continue
         try:
             from ..bridge.ros2_bridge import Ros2Bridge
@@ -167,12 +330,6 @@ class IsaacSimBackend:
                 "LAB_BRIDGE=localbus."
             ) from exc
 
-    def _update(self, count: int = 1) -> None:
-        if self._app is None:
-            raise RuntimeError("IsaacSimBackend.start() must be called first")
-        for _ in range(count):
-            self._app.update()
-
     # ------------------------------------------------------------------
     # observation
     # ------------------------------------------------------------------
@@ -180,43 +337,93 @@ class IsaacSimBackend:
     def joint_positions(self) -> np.ndarray:
         if self._articulation is None:
             raise RuntimeError("articulation is not initialized")
-        return np.asarray(self._articulation.get_joint_positions(), dtype=float)
+        return np.asarray(self._articulation.get_joint_positions(), dtype=float).ravel()
 
     def joint_state(self) -> JointState:
-        positions = self.joint_positions
+        if self._articulation is None:
+            raise RuntimeError("articulation is not initialized")
+        positions = self.joint_positions[:5]
+        velocities = np.asarray(self._articulation.get_joint_velocities(), dtype=float).ravel()[:5]
         return JointState(
             stamp=self.time_s,
             names=self.arm.joint_names,
             positions=tuple(float(v) for v in positions),
-            velocities=tuple(float(v) for v in self._articulation.get_joint_velocities()),
-            gripper=0.0,
+            velocities=tuple(float(v) for v in velocities),
+            gripper=float(self._gripper_closure),
         )
 
     def cube_pose_array(self) -> CubePoseArray:
-        import omni.usd  # type: ignore[import-not-found]
-        from pxr import UsdGeom
+        from pxr import UsdGeom  # type: ignore[import-not-found]
 
-        stage = omni.usd.get_context().get_stage()
+        assert self._stage is not None
         names, colors, positions = [], [], []
         for index in range(self.scene.n_cubes):
-            prim = stage.GetPrimAtPath(f"/World/Cubes/Cube_{index:02d}")
+            prim = self._stage.GetPrimAtPath(f"/World/Cubes/Cube_{index:02d}")
             translate = UsdGeom.Xformable(prim).GetLocalTransformation().ExtractTranslation()
             names.append(f"Cube_{index:02d}")
-            colors.append(
-                str(prim.GetAttribute("lab:colorName").Get() or "unknown")
-            )
+            colors.append(str(prim.GetAttribute("lab:colorName").Get() or "unknown"))
             positions.append((float(translate[0]), float(translate[1]), float(translate[2])))
         return CubePoseArray(
             stamp=self.time_s,
             names=tuple(names),
             positions=tuple(positions),
             colors=tuple(colors),
+            grasped=self._estimate_grasp(names, positions),
+        )
+
+    def _estimate_grasp(self, names, positions) -> str | None:
+        """Report which cube is at the closed fingers; motion stays in PhysX."""
+        if self._gripper_closure < 0.7:
+            self._grasped_name = None
+            return None
+        q = self.joint_positions
+        if q[5] < 0.002 or q[6] > -0.002:
+            self._grasped_name = None
+            return None
+        from .kinematics import tool_tip
+
+        tip = tool_tip(self.arm, self.joint_positions[:5])
+        best_name = None
+        best = 0.05
+        for name, position in zip(names, positions, strict=True):
+            distance = float(np.linalg.norm(np.asarray(position) - tip))
+            if distance < best:
+                best = distance
+                best_name = name
+        self._grasped_name = best_name
+        return best_name
+
+    def camera_pose(self):
+        """Return the live USD camera pose in the CPU ``CameraPose`` convention."""
+        from scipy.spatial.transform import Rotation  # type: ignore[import-not-found]
+
+        from ..render.pinhole import CameraPose
+
+        position, quat = self._camera.get_world_pose()
+        rotation = Rotation.from_quat(
+            [float(quat[1]), float(quat[2]), float(quat[3]), float(quat[0])]
+        ).as_matrix()
+        right, up, backward = rotation[:, 0], rotation[:, 1], rotation[:, 2]
+        return CameraPose(
+            position=np.asarray(position, dtype=float),
+            rotation=np.vstack([right, -up, -backward]),
+            look_at=np.asarray(self.scene.camera_look_at, dtype=float),
+            up=np.asarray(self.scene.camera_up, dtype=float),
         )
 
     def rgb_frame(self) -> RgbFrame:
         if self._camera is None:
             raise RuntimeError("camera is not initialized")
-        rgba = np.asarray(self._camera.get_rgba(), dtype=np.uint8)
+        rgba = None
+        for _ in range(10):
+            rgba = self._camera.get_rgba()
+            if rgba is not None and np.asarray(rgba).size:
+                break
+            if self._sim is not None:
+                self._sim.render()
+        if rgba is None or not np.asarray(rgba).size:
+            raise RuntimeError("Isaac Sim camera returned an empty frame")
+        rgba = np.asarray(rgba, dtype=np.uint8)
         rgb = np.ascontiguousarray(rgba[..., :3])
         return RgbFrame(
             stamp=self.time_s,
@@ -230,25 +437,31 @@ class IsaacSimBackend:
     # control
     # ------------------------------------------------------------------
     def apply_joint_velocities(self, velocities: Sequence[float]) -> None:
-        if self._articulation is None:
-            raise RuntimeError("articulation is not initialized")
-        self._articulation.set_joint_velocity_targets(np.asarray(velocities, dtype=float))
+        values = np.asarray(velocities, dtype=float)
+        if values.shape != (5,):
+            raise ValueError("joint velocity command must have 5 values")
+        self._joint_velocity_command[:5] = values
 
     def apply_gripper(self, closure: float) -> None:
-        # The teaching gripper has a single prismatic finger joint.  Its USD name
-        # is resolved at runtime so the adapter keeps working if the asset changes.
-        if self._articulation is None:
-            return
-        names = list(self._articulation.joint_names)
-        if "finger_joint" in names:
-            index = names.index("finger_joint")
-            target = float(self.arm.gripper_open + closure * (self.arm.gripper_closed - self.arm.gripper_open))
-            self._articulation.set_joint_position_targets(
-                np.asarray([target]), joint_indices=np.asarray([index])
-            )
+        self._gripper_closure = float(np.clip(closure, 0.0, 1.0))
 
     def step(self) -> None:
-        self._update(1)
+        if self._articulation is None or self._sim is None:
+            raise RuntimeError("start() must be called first")
+        q = self.joint_positions
+        target = q.copy()
+        # The controller publishes v = 5 * (target - q), so q + v/5 recovers
+        # its joint-space position target. Bound the lead so a large clipped
+        # velocity cannot step the stiff drives into instability.
+        lead = np.clip(self._joint_velocity_command[:5] / 5.0, -0.05, 0.05)
+        target[:5] = q[:5] + lead
+        for index, (low, high) in enumerate(self.arm.joint_limits):
+            target[index] = min(max(target[index], low), high)
+        # left finger closes toward +Y, right toward -Y; both squeeze inward.
+        target[5] = GRIPPER_OPEN * self._gripper_closure
+        target[6] = -GRIPPER_OPEN * self._gripper_closure
+        self._articulation.set_joint_position_targets(target.reshape(1, -1))
+        self._sim.step(render=True)
         self.tick += 1
         self.time_s = self.tick / 60.0
 
@@ -262,12 +475,10 @@ class IsaacSimBackend:
     def close(self) -> None:
         if self._ros_bridge is not None:
             self._ros_bridge.close()
+        # Isaac Sim 6.0 can hang or fault in close(); artifacts are already written.
         if self._app is not None:
-            self._app.close()
             self._app = None
 
 
 if os.environ.get("LAB_BACKEND") == "isaac":  # pragma: no cover - GPU host only
-    # A convenience for `python -m isaac_starter_lab.sim.isaac_backend`; importing
-    # the module alone never touches Omniverse.
     pass

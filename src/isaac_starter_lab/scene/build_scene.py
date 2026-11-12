@@ -25,7 +25,11 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 import numpy as np
-from pxr import Gf, Sdf, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
+
+try:  # pxr is provided by Kit after SimulationApp starts on the GPU track
+    from pxr import Gf, Sdf, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
+except ImportError:  # pragma: no cover - GPU host before the app starts
+    Gf = Sdf = Usd = UsdGeom = UsdLux = UsdPhysics = UsdShade = None
 
 from ..config import ArmConfig, CameraIntrinsics, SceneConfig
 

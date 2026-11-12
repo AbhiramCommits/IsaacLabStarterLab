@@ -84,6 +84,7 @@ class PickPlaceController:
         *,
         target_color: str | None = None,
         target_override: Sequence[float] | None = None,
+        camera_pose: CameraPose | None = None,
         max_ticks: int = 4000,
     ) -> None:
         self.scene = scene
@@ -93,7 +94,7 @@ class PickPlaceController:
         self.target_color = target_color
         self.target_override = None if target_override is None else np.asarray(target_override, dtype=float)
         self.max_ticks = max_ticks
-        self.camera_pose = CameraPose.from_look_at(
+        self.camera_pose = camera_pose or CameraPose.from_look_at(
             scene.camera_position, scene.camera_look_at, scene.camera_up
         )
 

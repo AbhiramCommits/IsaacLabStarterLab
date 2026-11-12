@@ -7,12 +7,12 @@ phase so a new session can resume. Status values: **done**, **in progress**,
 | Phase | Status | Notes |
 | --- | --- | --- |
 | 1. Remove AI-agent tells and stale claims | done | Docs cleaned; owner cold run recorded (67 s, PASS 45). |
-| 2. Isaac Sim GPU track for real | blocked | A Secure RTX 4090 pod was created and Isaac Sim 4.5 started, opened the stage and ran PhysX, but the RTX renderer segfaulted with host driver 595.91.07. Isaac Sim 5.1 could not be made usable on that host (image runs as a non-root user with no sshd/rsync/sudo). |
-| 3. Real physics (PhysX) instead of attach rule | blocked | Same renderer blocker. Separately, the canonical arm is not a valid PhysX articulation (rigid bodies nested under `base`, joints outside the root), so `Articulation` reports 0 DOF. The approved runtime physics arm was not built. |
-| 4. Real Isaac Lab task + PPO | blocked | Same host/version blocker; no Isaac Lab install or training was completed. |
-| 5. ROS 2 nodes on real rclpy | blocked | Same host/version blocker; ROS 2 and the Isaac Sim bridge were not installed. |
-| 6. Perception on RTX frames | blocked | Pinhole ground-truth bug fixed and measured on the Mac; RTX frames were not produced because the renderer failed. |
-| 7. Restructure README | done | Restructured with committed CPU results only; GPU headline absent because no GPU result exists. |
+| 2. Isaac Sim GPU track for real | blocked | Isaac Sim 6.0 now starts on driver 595 and a real 7-DOF runtime arm runs. HOME and LOCATE pass; APPROACH times out because the RTX camera pose and the CPU look-at disagree, so back-projection sends the arm to the wrong point. No successful pick yet. |
+| 3. Real physics (PhysX) instead of attach rule | blocked | The runtime arm has PhysX contact and prismatic fingers, but the pick never reaches GRASP. The 100-seed sweep was not run. |
+| 4. Real Isaac Lab task + PPO | blocked | Not reached; the 6.0 pip stack is available but no Isaac Lab task/training was run. |
+| 5. ROS 2 nodes on real rclpy | blocked | Not reached. |
+| 6. Perception on RTX frames | blocked | RTX frames exist in `results/gpu/seed_7/`; the camera-pose mismatch prevents a valid side-by-side perception evaluation. |
+| 7. Restructure README | done | Restructured with committed CPU results only. |
 
 ## GPU attempt, 2026-11-12 (exact)
 
@@ -51,6 +51,28 @@ custom root image or a registry to push it to.
 roughly **$1.00** total including disk. Both pods were terminated; `list-pods`
 is empty.
 
+**Isaac Sim 6.0 attempt (the furthest run).** Built and pushed
+`madridista23/isaac-sim-60-root:latest` (`FROM nvcr.io/nvidia/isaac-sim:6.0.0`,
+`USER root`, openssh-server, rsync). On the same driver 595.91.07, 6.0 starts,
+opens the stage and renders: `APP_OK`, `PXR_OK`, `Camera.get_rgba()` returns
+480x640 RGB.
+
+- The canonical arm reports 5 DOF in 6.0 but is unstable under drives (nested
+  rigid bodies), so `isaac_backend.py` now builds a **flat 7-DOF runtime arm**
+  under `/World/RobotIsaac`: fixed base, five revolute links, two prismatic
+  fingers, self-collision off, light masses, USD drives, 240 Hz physics.
+- HOME and LOCATE pass. The seed-7 episode reaches APPROACH and fails there
+  (`TIMEOUT_APPROACH`) because the RTX camera pose and the CPU look-at pose
+  disagree: the USD camera quaternion is `[0.707,-0.119,0.122,0.687]` (a large
+  spurious yaw), so the green detection's back-projected 3D point is not the
+  green cube. `Camera.set_world_pose` and direct prim-matrix changes either
+  render grey or leave the view unchanged. No successful pick yet.
+- RTX artifacts (start/final frames, trajectory, summary) are committed under
+  `results/gpu/seed_7/`; the episode failed at APPROACH, not at startup.
+
+**Cost.** Pod 1 (4.5) ~55 min, pod 2 (5.1) ~13 min, pod 3 (6.0, the long run)
+~2 h at $0.89/hr: roughly **$2.30** including disk. All pods terminated.
+
 ## Environment facts
 
 - Mac: macOS 27.2.1 arm64, Python 3.11.14 in `.venv`; `pxr`, NumPy, Pillow work.
@@ -73,11 +95,16 @@ is empty.
 
 ## To resume
 
-1. Provide a registry the agent can push to, then build
-   `FROM nvcr.io/nvidia/isaac-sim:5.1.0` with `USER root` and
-   `RUN apt-get update && apt-get install -y openssh-server rsync`.
-   (The stock 5.1 image runs as uid 1234 and cannot install them.)
-2. Or use a host with an R580 production driver for the 4.5 image.
-3. Start the pod from this branch, then run Phase 2, 3, 6, 5, 4 in that order.
-4. Build the runtime physics arm in `isaac_backend` (approved), including the
-   prismatic finger joints, before the 100-seed PhysX sweep.
+1. Use the committed `madridista23/isaac-sim-60-root:latest` image (Isaac Sim
+   6.0 + root + openssh + rsync). It starts on driver 595.91.07.
+2. Fix the camera pose: the canonical `/World/Camera` USD transform does not
+   match the CPU look-at, so RTX back-projection is wrong. Either author the
+   correct USD camera matrix at runtime and recreate the render product, or
+   derive the controller pose from the actual rendered camera (the current
+   `camera_pose()` guess is not yet consistent). Validate by back-projecting a
+   known green cube pixel to its stage position.
+3. Then re-run the seed-7 episode; it should pass APPROACH and reach GRASP.
+4. Tune grasp friction/close speed, then the 100-seed PhysX sweep (Phase 3),
+   RTX perception (Phase 6), ROS 2 (Phase 5) and Isaac Lab (Phase 4).
+5. The runtime 7-DOF arm is implemented in `isaac_backend.py`; keep the
+   canonical `usd/tabletop_seed7.usda` and its hash untouched.

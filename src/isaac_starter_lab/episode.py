@@ -76,7 +76,7 @@ def _save_rgb(message: RgbFrame, path: Path) -> str:
 
 
 def _most_visible_palette_color(
-    sim, scene: SceneConfig, intrinsics: CameraIntrinsics, backend: str
+    sim, scene: SceneConfig, intrinsics: CameraIntrinsics, backend: str, pose=None
 ) -> str:
     """Pick the least-occluded palette colour from the initial camera frame.
 
@@ -88,7 +88,9 @@ def _most_visible_palette_color(
     best_area = -1
     best_color = scene.palette[0][0]
     for name, _rgb in scene.palette:
-        detections = detect_cubes(frame, name, scene=scene, intrinsics=intrinsics)
+        detections = detect_cubes(
+            frame, name, scene=scene, intrinsics=intrinsics, pose=pose
+        )
         if detections and detections[0].area > best_area:
             best_area = detections[0].area
             best_color = name
@@ -119,11 +121,16 @@ def run_episode(
         arm=arm,
         seed=seed,
         usda_path=Path("usd/tabletop_seed7.usda"),
+        enable_ros2=(bridge_name == "ros2"),
     )
+    camera_pose = None
     if backend == "isaac":
         sim.start()
+        camera_pose = sim.camera_pose()
     if target_color is None and target_override is None:
-        target_color = _most_visible_palette_color(sim, scene, intrinsics, backend)
+        target_color = _most_visible_palette_color(
+            sim, scene, intrinsics, backend, pose=camera_pose
+        )
 
     bridge = make_bridge(bridge_name)
     if backend == "isaac":
@@ -146,6 +153,7 @@ def run_episode(
         bridge,
         target_color=target_color,
         target_override=target_override,
+        camera_pose=camera_pose,
         max_ticks=max_ticks,
     )
 
