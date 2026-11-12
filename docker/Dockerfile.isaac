@@ -1,7 +1,5 @@
-# GPU-host-only Isaac Sim track.  THIS IMAGE IS NOT BUILT IN CI and has not been
-# executed on the build machine (no NVIDIA GPU, no Isaac Sim install).
-#
-# Build on an NVIDIA host with the NVIDIA Container Toolkit installed:
+# GPU-host-only Isaac Sim track. Build on an NVIDIA host with the NVIDIA
+# Container Toolkit installed:
 #
 #   docker build -f docker/Dockerfile.isaac -t isaac-starter-lab:gpu .
 #
@@ -21,6 +19,10 @@
 #
 # Isaac Sim 4.5.0 requires an NVIDIA driver >= 535.129.03 (see the version
 # matrix in docs/LAB_GUIDE.md) and a GPU with >= 16 GB VRAM for this scene.
+#
+# Do NOT install requirements.lock.txt here: it pins usd-core and numpy, which
+# would replace the pxr and numpy that Isaac Sim ships and break Omniverse.
+# Only the two runtime dependencies the lab adds are installed, without deps.
 
 FROM nvcr.io/nvidia/isaac-sim:4.5.0
 
@@ -32,9 +34,9 @@ ENV ACCEPT_EULA=Y \
 
 WORKDIR /lab
 
-# Isaac Sim ships its own Python (3.10) with pxr and the Omniverse runtime.
 COPY requirements.lock.txt ./
-RUN /isaac-sim/python.sh -m pip install --no-cache-dir -r requirements.lock.txt
+RUN /isaac-sim/python.sh -m pip install --no-cache-dir --no-deps \
+        pillow==12.0.0 PyYAML==6.0.3
 
 COPY . .
 RUN /isaac-sim/python.sh -m pip install --no-cache-dir --no-deps -e .

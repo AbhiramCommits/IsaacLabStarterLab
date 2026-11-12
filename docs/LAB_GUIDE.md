@@ -413,7 +413,7 @@ yaw jitter (±8°) and table albedo. The manifest records image and label hashes
 ```text
 dataset: datasets/dr
 count: 200
-dataset_hash: d2b7f692abeef297347f2c7d045ae81d9e274046e8db6409a357ae6aeee610a6
+dataset_hash: e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc
 ```
 
 Four sample pairs (`seed_0000` … `seed_0003`) are committed; the bulk 200 images
@@ -533,7 +533,7 @@ machine. The GPU track has no expected numbers because it was not executed.
 | Frame size | 640x480 RGB | `labcheck ex2` |
 | Reference-cube pixel error | 0.375 px (threshold ≤ 2.0) | `labcheck ex2` |
 | Reference-cube 3D error | 1.519 mm (threshold ≤ 20 mm) | `labcheck ex2` |
-| DR dataset | 200 seeds, hash `d2b7f692abeef297347f2c7d045ae81d9e274046e8db6409a357ae6aeee610a6` | `labcheck ex4` |
+| DR dataset | 200 seeds, hash `e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc` | `labcheck ex4` |
 | Perception pixel error | mean 1.058 px, p95 3.577 px | `results/perception_eval.json` |
 | Perception 3D error | mean 3.607 mm, p95 12.885 mm | `results/perception_eval.json` |
 | Detection recall / precision | 1.0000 / 1.0000 on the pinhole logic check | `results/perception_eval.json` |
@@ -748,7 +748,7 @@ ex1   FAIL    file_scene_seed7.usda        missing
 **Message:**
 
 ```text
-ex4   FAIL    dataset_hash                 computed=d2b7f692abeef297347f2c7d045ae81d9e274046e8db6409a357ae6aeee610a6 manifest=0000000000000000000000000000000000000000000000000000000000000000
+ex4   FAIL    dataset_hash                 computed=e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc manifest=0000000000000000000000000000000000000000000000000000000000000000
              FIX:    The manifest was edited or files changed. Regenerate with --overwrite.
 ```
 

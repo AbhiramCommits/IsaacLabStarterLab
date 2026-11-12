@@ -46,7 +46,29 @@ is exercised by the Docker image and by GitHub Actions (`ubuntu-latest`).
 | Isaac Lab task config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | requires Isaac Lab on a GPU host; dataclass validation is tested on CPU |
 | `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | requires a ROS 2 installation; only the missing-`rclpy` error path is tested |
 | ROS 2 ament package build | `ros2_ws/src/starter_lab/` | requires ROS 2 Humble/Jazzy; source only |
-| GPU Isaac Sim image | `docker/Dockerfile.isaac` | GPU-host-only; never built in CI |
+| GPU Isaac Sim image | `docker/Dockerfile.isaac` | GPU-host-only; never built |
+
+### GPU attempt, 2026-11-12
+
+A GPU run was planned on Runpod with the Isaac Sim 4.5 image, a 100 GB container
+disk, no network volume and TCP 22. Every `create-pod` request for an in-spec GPU
+(L40S, RTX 4090, RTX A6000) and for the nearest RT-core substitutes (RTX A5000,
+RTX 3090, RTX A4000) returned:
+
+```text
+400 Bad Request
+There are no longer any instances available with the requested specifications.
+Please refresh and try again.
+```
+
+Attempts covered Community and Secure Cloud, pinned and unpinned data centers,
+and 20/50/100 GB disks. A 2-vCPU CPU pod created successfully and was deleted
+immediately, so the account and API work; GPU capacity or a GPU quota is the
+blocker. No GPU number was produced and no pod was left running.
+
+The Docker and no-Docker install paths were updated (`docker/Dockerfile.isaac`,
+`scripts/setup_isaac_nodocker.sh`) so they do not replace Isaac Sim's bundled
+`pxr`/`numpy`, but neither was executed.
 
 No success-rate or accuracy number in this repository comes from the GPU path.
 Every measured number is produced by the CPU headless path and stored under
@@ -90,7 +112,7 @@ All CPU-track numbers below were produced by the commands shown and stored under
 
 | Command | Observed |
 | --- | --- |
-| `make dr` (200 seeds) | 200 images + labels, dataset hash `d2b7f692abeef297347f2c7d045ae81d9e274046e8db6409a357ae6aeee610a6`, 4.8 s |
+| `make dr` (200 seeds) | 200 images + labels, dataset hash `e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc`, 4.8 s |
 | `lab-eval perception` | 200 seeds / 1000 cubes; pixel error mean 1.058 px, p95 3.577 px; 3D error mean 3.607 mm, p95 12.885 mm; recall 1.0000, precision 1.0000; 105 centre-occluded cubes reported separately |
 | `lab-eval episodes` (100 seeds) | 100/100 success; mean 5.165 s, p95 5.467 s; no failure reasons |
 | `pytest -q` | 145 passed |
@@ -167,5 +189,6 @@ External human testers remain pending, as stated in
 
 The repository is self-contained on the CPU track: the scene, renderer, dataset,
 evaluation, grader, tests, guide commands, Docker image and walkthrough all run.
-The GPU Isaac Sim path, the `rclpy` transport and the Isaac Lab environment are
-labelled as unexecuted wherever they appear on the CPU side.
+The GPU Isaac Sim path, the `rclpy` transport, the Isaac Lab environment and RTX
+perception are unexecuted: Runpod had no GPU capacity for the planned run. They
+are labelled as unexecuted in the README, the guide and this file.
