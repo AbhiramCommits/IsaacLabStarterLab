@@ -123,10 +123,10 @@ def run_episode(
         usda_path=Path("usd/tabletop_seed7.usda"),
         enable_ros2=(bridge_name == "ros2"),
     )
-    camera_pose = None
     if backend == "isaac":
         sim.start()
-        camera_pose = sim.camera_pose()
+    # The USB camera transform and the CPU look-at agree; use the scene pose.
+    camera_pose = None
     if target_color is None and target_override is None:
         target_color = _most_visible_palette_color(
             sim, scene, intrinsics, backend, pose=camera_pose
@@ -154,6 +154,7 @@ def run_episode(
         target_color=target_color,
         target_override=target_override,
         camera_pose=camera_pose,
+        center_offset=(backend == "isaac"),
         max_ticks=max_ticks,
     )
 

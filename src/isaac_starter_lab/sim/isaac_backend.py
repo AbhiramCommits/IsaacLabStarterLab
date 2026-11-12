@@ -43,12 +43,14 @@ DOCKER_RUN = (
 
 ARM_ROOT = "/World/RobotIsaac"
 CANONICAL_ROBOT = "/World/Robot"
-GRIPPER_OPEN = 0.004  # metres of travel per finger
+GRIPPER_OPEN = 0.03  # metres of travel per finger
 LINK_MASSES = (0.1, 0.02, 0.02, 0.01, 0.01)
-FINGER_Y = 0.032
+FINGER_Y = 0.045
 FINGER_THICKNESS = 0.008
-DRIVE_KP = 5.0e4
-DRIVE_KD = 1.0e2
+DRIVE_KP = 1.0e5
+DRIVE_KD = 2.0e3
+# USD +Y rotates a +X link downward; the CPU FK uses positive = lift.
+JOINT_SIGNS = np.array([1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0])
 MAX_TARGET_STEP = 0.01
 
 
@@ -213,7 +215,7 @@ class IsaacSimBackend:
             drive.CreateTypeAttr("force")
             drive.CreateStiffnessAttr(DRIVE_KP)
             drive.CreateDampingAttr(DRIVE_KD)
-            drive.CreateMaxForceAttr(50.0)
+            drive.CreateMaxForceAttr(200.0)
             return joint
 
         bx, by, bz = self.arm.base_position
@@ -222,8 +224,16 @@ class IsaacSimBackend:
         wrist_len, tool_len = self.arm.wrist_length, self.arm.tool_length
 
         base = link("base", (bx, by, bz), 0.5)
-        collider(base, "Column", (0.0, 0.0, self.arm.base_height / 2.0),
-                 (0.07, 0.07, self.arm.base_height))
+        # Visual column only: a collider here intersects link0 at the shoulder
+        # and jams the base yaw at ~39 degrees.
+        column = UsdGeom.Cube.Define(stage, f"{ARM_ROOT}/base/Column")
+        column.CreateSizeAttr(1.0)
+        UsdGeom.Xformable(column).AddTranslateOp().Set(
+            Gf.Vec3d(0.0, 0.0, self.arm.base_height / 2.0)
+        )
+        UsdGeom.Xformable(column).AddScaleOp().Set(
+            Gf.Vec3f(0.07, 0.07, self.arm.base_height)
+        )
         anchor = UsdPhysics.FixedJoint.Define(stage, f"{ARM_ROOT}/anchor")
         anchor.CreateBody1Rel().SetTargets([str(base.GetPath())])
         anchor.CreateLocalPos0Attr(Gf.Vec3f(float(bx), float(by), float(bz)))
@@ -246,9 +256,9 @@ class IsaacSimBackend:
 
         limits = self.arm.joint_limits
         revolute("joint_base_yaw", base, link0, "Z", (0.0, 0.0, self.arm.base_height), (0.0, 0.0, 0.0), limits[0])
-        revolute("joint_shoulder", link0, link1, "-Y", (0.0, 0.0, 0.0), (0.0, 0.0, 0.0), limits[1])
-        revolute("joint_elbow", link1, link2, "-Y", (l1, 0.0, 0.0), (0.0, 0.0, 0.0), limits[2])
-        revolute("joint_wrist_pitch", link2, wrist, "-Y", (l2, 0.0, 0.0), (0.0, 0.0, 0.0), limits[3])
+        revolute("joint_shoulder", link0, link1, "Y", (0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (-limits[1][1], -limits[1][0]))
+        revolute("joint_elbow", link1, link2, "Y", (l1, 0.0, 0.0), (0.0, 0.0, 0.0), (-limits[2][1], -limits[2][0]))
+        revolute("joint_wrist_pitch", link2, wrist, "Y", (l2, 0.0, 0.0), (0.0, 0.0, 0.0), (-limits[3][1], -limits[3][0]))
         revolute("joint_wrist_roll", wrist, gripper, "X", (wrist_len, 0.0, 0.0), (0.0, 0.0, 0.0), limits[4])
 
         tip_x = shoulder[0] + l1 + l2 + wrist_len + tool_len
@@ -339,11 +349,17 @@ class IsaacSimBackend:
             raise RuntimeError("articulation is not initialized")
         return np.asarray(self._articulation.get_joint_positions(), dtype=float).ravel()
 
+    def _cpu_positions(self) -> np.ndarray:
+        return self.joint_positions * JOINT_SIGNS
+
     def joint_state(self) -> JointState:
         if self._articulation is None:
             raise RuntimeError("articulation is not initialized")
-        positions = self.joint_positions[:5]
-        velocities = np.asarray(self._articulation.get_joint_velocities(), dtype=float).ravel()[:5]
+        positions = self._cpu_positions()[:5]
+        velocities = (
+            np.asarray(self._articulation.get_joint_velocities(), dtype=float).ravel()[:5]
+            * JOINT_SIGNS[:5]
+        )
         return JointState(
             stamp=self.time_s,
             names=self.arm.joint_names,
@@ -376,8 +392,9 @@ class IsaacSimBackend:
         if self._gripper_closure < 0.7:
             self._grasped_name = None
             return None
-        q = self.joint_positions
-        if q[5] < 0.002 or q[6] > -0.002:
+        q = self._cpu_positions()
+        # The drive direction is inverted: the left jaw reports positive.
+        if q[5] < 0.01 or q[6] > -0.01:
             self._grasped_name = None
             return None
         from .kinematics import tool_tip
@@ -448,19 +465,22 @@ class IsaacSimBackend:
     def step(self) -> None:
         if self._articulation is None or self._sim is None:
             raise RuntimeError("start() must be called first")
-        q = self.joint_positions
+        q = self._cpu_positions()
         target = q.copy()
         # The controller publishes v = 5 * (target - q), so q + v/5 recovers
-        # its joint-space position target. Bound the lead so a large clipped
-        # velocity cannot step the stiff drives into instability.
+        # its joint-space target. Bound the lead to keep the drives stable.
         lead = np.clip(self._joint_velocity_command[:5] / 5.0, -0.05, 0.05)
         target[:5] = q[:5] + lead
         for index, (low, high) in enumerate(self.arm.joint_limits):
             target[index] = min(max(target[index], low), high)
-        # left finger closes toward +Y, right toward -Y; both squeeze inward.
+        # The right jaw drive is sign-inverted; the same positive target closes
+        # both jaws toward the tool axis.
         target[5] = GRIPPER_OPEN * self._gripper_closure
-        target[6] = -GRIPPER_OPEN * self._gripper_closure
-        self._articulation.set_joint_position_targets(target.reshape(1, -1))
+        target[6] = GRIPPER_OPEN * self._gripper_closure
+        physical = target * JOINT_SIGNS
+        physical[5] = target[5]
+        physical[6] = target[6]
+        self._articulation.set_joint_position_targets(physical.reshape(1, -1))
         self._sim.step(render=True)
         self.tick += 1
         self.time_s = self.tick / 60.0

@@ -25,7 +25,7 @@ from .bridge.base import Bridge
 from .config import ArmConfig, CameraIntrinsics, SceneConfig
 from .perception import detect_cubes
 from .render.pinhole import CameraPose
-from .sim.kinematics import inverse_kinematics
+from .sim.kinematics import inverse_kinematics, tool_tip
 from .sim.schema import (
     CMD_JOINT_TOPIC,
     CUBE_POSES_TOPIC,
@@ -85,6 +85,7 @@ class PickPlaceController:
         target_color: str | None = None,
         target_override: Sequence[float] | None = None,
         camera_pose: CameraPose | None = None,
+        center_offset: bool = False,
         max_ticks: int = 4000,
     ) -> None:
         self.scene = scene
@@ -97,6 +98,10 @@ class PickPlaceController:
         self.camera_pose = camera_pose or CameraPose.from_look_at(
             scene.camera_position, scene.camera_look_at, scene.camera_up
         )
+        # A rendered cube's visible-pixel centroid is on its camera-facing face,
+        # about half an edge from the 3D centre. The physics grasp needs the
+        # centre, so shift the target away from the camera by cube_size / 2.
+        self.center_offset = center_offset
 
         self.state = "HOME"
         self.previous_state: str | None = None
@@ -200,7 +205,15 @@ class PickPlaceController:
         if joints is None:
             self._fail("IK_UNREACHABLE")
             return float("inf")
-        return self._publish_commands(joints)
+        error = self._publish_commands(joints)
+        # A physical arm settles with a small constant joint bias; the task
+        # goal is the tool tip at the target, so use that distance when it is
+        # smaller than the joint-space error.
+        if self.latest_joints is not None:
+            tip = tool_tip(self.arm, self.latest_joints.positions)
+            tip_error = float(np.linalg.norm(tip - np.asarray(target, dtype=float)))
+            return min(error, tip_error)
+        return error
 
     def _drive_joints(self, target: Sequence[float]) -> float:
         return self._publish_commands(np.asarray(target, dtype=float))
@@ -245,8 +258,14 @@ class PickPlaceController:
                     self._fail("NO_DETECTION")
                 return
             detection = detections[0]
-            self.target_position = np.asarray(detection.position, dtype=float)
-            self.target_cube_name = self._match_cube_name(detection.position)
+            position = np.asarray(detection.position, dtype=float)
+            if self.center_offset:
+                ray = position[:2] - self.camera_pose.position[:2]
+                norm = float(np.linalg.norm(ray))
+                if norm > 1e-9:
+                    position[:2] += (self.scene.cube_size / 2.0) * ray / norm
+            self.target_position = position
+            self.target_cube_name = self._match_cube_name(position)
             self._transition("APPROACH")
 
         elif self.state == "APPROACH":

@@ -7,8 +7,8 @@ phase so a new session can resume. Status values: **done**, **in progress**,
 | Phase | Status | Notes |
 | --- | --- | --- |
 | 1. Remove AI-agent tells and stale claims | done | Docs cleaned; owner cold run recorded (67 s, PASS 45). |
-| 2. Isaac Sim GPU track for real | blocked | Isaac Sim 6.0 now starts on driver 595 and a real 7-DOF runtime arm runs. HOME and LOCATE pass; APPROACH times out because the RTX camera pose and the CPU look-at disagree, so back-projection sends the arm to the wrong point. No successful pick yet. |
-| 3. Real physics (PhysX) instead of attach rule | blocked | The runtime arm has PhysX contact and prismatic fingers, but the pick never reaches GRASP. The 100-seed sweep was not run. |
+| 2. Isaac Sim GPU track for real | blocked | Isaac Sim 6.0 starts on driver 595 and a real 7-DOF runtime arm runs. HOME, LOCATE, APPROACH and DESCEND pass; at GRASP the jaws contact the cube and push it 4.4 cm but do not hold it (`GRASP_FAILED`). No successful pick yet. |
+| 3. Real physics (PhysX) instead of attach rule | blocked | PhysX contact is proven: the jaws move the cube 4.4 cm. The grip does not hold, so the 100-seed sweep was not run. |
 | 4. Real Isaac Lab task + PPO | blocked | Not reached; the 6.0 pip stack is available but no Isaac Lab task/training was run. |
 | 5. ROS 2 nodes on real rclpy | blocked | Not reached. |
 | 6. Perception on RTX frames | blocked | RTX frames exist in `results/gpu/seed_7/`; the camera-pose mismatch prevents a valid side-by-side perception evaluation. |
@@ -61,12 +61,13 @@ opens the stage and renders: `APP_OK`, `PXR_OK`, `Camera.get_rgba()` returns
   rigid bodies), so `isaac_backend.py` now builds a **flat 7-DOF runtime arm**
   under `/World/RobotIsaac`: fixed base, five revolute links, two prismatic
   fingers, self-collision off, light masses, USD drives, 240 Hz physics.
-- HOME and LOCATE pass. The seed-7 episode reaches APPROACH and fails there
-  (`TIMEOUT_APPROACH`) because the RTX camera pose and the CPU look-at pose
-  disagree: the USD camera quaternion is `[0.707,-0.119,0.122,0.687]` (a large
-  spurious yaw), so the green detection's back-projected 3D point is not the
-  green cube. `Camera.set_world_pose` and direct prim-matrix changes either
-  render grey or leave the view unchanged. No successful pick yet.
+- The canonical USD green cube is at `(0.104,-0.053)`, and the RTX detection
+  `(374,252)` matches it; the earlier camera-pose alarm was a wrong comparison
+  against the CPU sim's *re-sampled* layout. The runtime arm now matches the CPU
+  kinematics (valid `Y` axes, sign-mapped joints, negated limits, tool-tip
+  convergence). HOME, LOCATE, APPROACH and DESCEND pass. At GRASP the jaws
+  contact the cube and push it from `(0.104,-0.053)` to `(0.072,-0.024)` — real
+  PhysX contact — but the grip does not hold (`GRASP_FAILED`).
 - RTX artifacts (start/final frames, trajectory, summary) are committed under
   `results/gpu/seed_7/`; the episode failed at APPROACH, not at startup.
 

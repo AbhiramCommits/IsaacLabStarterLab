@@ -70,12 +70,12 @@ Not validated:
 
 - A complete Isaac Sim pick. Isaac Sim 6.0 starts on a Secure RTX 4090
   (driver 595.91.07), renders RTX frames and runs a real 7-DOF runtime PhysX
-  arm; HOME and LOCATE pass, but APPROACH times out because the RTX camera
-  pose and the CPU look-at disagree, so back-projection sends the arm to the
-  wrong point. The failure and artifacts are in `results/gpu/seed_7/` and
+  arm; HOME, LOCATE, APPROACH and DESCEND pass. At GRASP the jaws contact the
+  cube and push it 4.4 cm, but the grip does not hold. The failure and
+  artifacts are in `results/gpu/seed_7/` and
   [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
-- A successful PhysX grasp. The runtime arm has contact, friction and
-  prismatic fingers, but the episode never reaches GRASP.
+- A successful PhysX grasp. Contact and friction are proven by the cube's
+  motion; the parallel jaws do not retain it.
 - The Isaac Lab `ManagerBasedRLEnv` task, 64-environment throughput and PPO.
 - The `rclpy` transport, the ROS 2 nodes and the Isaac Sim ROS 2 bridge.
 - RTX-frame perception and the pinhole-to-RTX gap.
