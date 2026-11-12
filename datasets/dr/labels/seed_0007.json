@@ -54,6 +54,7 @@
         349,
         248
       ],
+      "centre_visible": true,
       "color": "blue",
       "name": "Cube_00",
       "pixel_centroid": [
@@ -71,6 +72,10 @@
         220
       ],
       "visible": true,
+      "visible_centroid": [
+        333.6753371868979,
+        230.90944123314065
+      ],
       "visible_pixels": 1038
     },
     {
@@ -80,6 +85,7 @@
         395,
         272
       ],
+      "centre_visible": true,
       "color": "magenta",
       "name": "Cube_01",
       "pixel_centroid": [
@@ -97,6 +103,10 @@
         200
       ],
       "visible": true,
+      "visible_centroid": [
+        375.8230452674897,
+        251.38477366255145
+      ],
       "visible_pixels": 1458
     },
     {
@@ -106,6 +116,7 @@
         280,
         250
       ],
+      "centre_visible": false,
       "color": "green",
       "name": "Cube_02",
       "pixel_centroid": [
@@ -122,7 +133,11 @@
         180,
         60
       ],
-      "visible": false,
+      "visible": true,
+      "visible_centroid": [
+        265.468,
+        224.262
+      ],
       "visible_pixels": 500
     },
     {
@@ -132,6 +147,7 @@
         218,
         254
       ],
+      "centre_visible": true,
       "color": "red",
       "name": "Cube_03",
       "pixel_centroid": [
@@ -149,6 +165,10 @@
         30
       ],
       "visible": true,
+      "visible_centroid": [
+        200.56896551724137,
+        235.50656814449917
+      ],
       "visible_pixels": 1218
     },
     {
@@ -158,6 +178,7 @@
         279,
         272
       ],
+      "centre_visible": true,
       "color": "yellow",
       "name": "Cube_04",
       "pixel_centroid": [
@@ -175,6 +196,10 @@
         20
       ],
       "visible": true,
+      "visible_centroid": [
+        261.85817655571634,
+        252.0477568740955
+      ],
       "visible_pixels": 1382
     }
   ],

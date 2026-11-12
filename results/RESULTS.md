@@ -4,10 +4,10 @@
 | --- | --- |
 | Scene hash (seed 7) | `af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40` |
 | Scene prim count | 46 |
-| DR dataset | 200 frames, hash `9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96` |
+| DR dataset | 200 frames, hash `e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc` |
 | Perception pixel error | mean 1.058 px, p95 3.577 px |
 | Perception 3D error | mean 3.607 mm, p95 12.885 mm |
-| Detection recall / precision | 96.11% / 86.93% |
+| Detection recall / precision | 100.00% / 100.00% |
 | Episode success (100 seeds) | 100/100 (100.00%); failures: none |
 | Cycle time | mean 5.165 s, p95 5.467 s |
 | Per-stage timings | scene 0.06 s, dr 4.36 s, episode 0.33 s, perception_eval 11.20 s, episode_eval 30.16 s, labcheck 0.50 s |

@@ -413,7 +413,7 @@ yaw jitter (±8°) and table albedo. The manifest records image and label hashes
 ```text
 dataset: datasets/dr
 count: 200
-dataset_hash: 9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96
+dataset_hash: d2b7f692abeef297347f2c7d045ae81d9e274046e8db6409a357ae6aeee610a6
 ```
 
 Four sample pairs (`seed_0000` … `seed_0003`) are committed; the bulk 200 images
@@ -422,9 +422,8 @@ and labels are gitignored and regenerated from the pinned code and seeds.
 The **dataset hash is a self-consistency hash, not a cross-platform constant**:
 PNG bytes (compressor version) and full-precision label floats (libm) can differ
 between macOS and Linux even when every rendered pixel and every measured metric
-is identical. The value above is from the build machine; the Docker cold run
-produced `f868fa8b7403e44fcb42e5dc4b5dee6542e9eabd43c716c34025571471d0f490`
-with the same 1.058 px / 3.577 px perception result. `labcheck ex4` recomputes the
+is identical. The value above is from this machine; a Docker run produces a
+different value with the same perception result. `labcheck ex4` recomputes the
 hash from the manifest in **your** environment, so it passes on both. The scene
 hash is the cross-machine pin.
 
@@ -436,8 +435,12 @@ lab-eval perception
 ```
 
 Measured: **1.058 px mean / 3.577 px p95** pixel error, **3.607 mm mean /
-12.885 mm p95** 3D error, recall **0.9611**, precision **0.8693** over 1000 cubes
-(874 with a visible centre). Then sweep 100 episodes:
+12.885 mm p95** 3D error, recall **1.0000**, precision **1.0000** over 979 cubes
+(105 have an occluded centre; their centroid is matched inside the visible box and
+is excluded from the pixel/3D error, which needs an unoccluded projected centre).
+The pinhole renderer has flat shading and exact material colours, so 100% here is
+a logic check on the geometry and data pipeline, not a camera-perception result.
+Then sweep 100 episodes:
 
 <!-- test:run -->
 ```bash
@@ -530,10 +533,10 @@ machine. The GPU track has no expected numbers because it was not executed.
 | Frame size | 640x480 RGB | `labcheck ex2` |
 | Reference-cube pixel error | 0.375 px (threshold ≤ 2.0) | `labcheck ex2` |
 | Reference-cube 3D error | 1.519 mm (threshold ≤ 20 mm) | `labcheck ex2` |
-| DR dataset | 200 seeds, hash `9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96` | `labcheck ex4` |
+| DR dataset | 200 seeds, hash `d2b7f692abeef297347f2c7d045ae81d9e274046e8db6409a357ae6aeee610a6` | `labcheck ex4` |
 | Perception pixel error | mean 1.058 px, p95 3.577 px | `results/perception_eval.json` |
 | Perception 3D error | mean 3.607 mm, p95 12.885 mm | `results/perception_eval.json` |
-| Detection recall / precision | 0.9611 / 0.8693 | `results/perception_eval.json` |
+| Detection recall / precision | 1.0000 / 1.0000 on the pinhole logic check | `results/perception_eval.json` |
 | Episode seed 7 | success, `Cube_01`, 294 ticks, 4.900 s | `labcheck ex3` |
 | 100-episode sweep | 100/100 success, mean 5.165 s, p95 5.467 s | `results/episode_sweep.json` |
 | Determinism | seed 7 run twice → identical artifact hashes | `tests/test_controller.py` |
@@ -745,7 +748,7 @@ ex1   FAIL    file_scene_seed7.usda        missing
 **Message:**
 
 ```text
-ex4   FAIL    dataset_hash                 computed=9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96 manifest=0000000000000000000000000000000000000000000000000000000000000000
+ex4   FAIL    dataset_hash                 computed=d2b7f692abeef297347f2c7d045ae81d9e274046e8db6409a357ae6aeee610a6 manifest=0000000000000000000000000000000000000000000000000000000000000000
              FIX:    The manifest was edited or files changed. Regenerate with --overwrite.
 ```
 

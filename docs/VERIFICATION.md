@@ -90,8 +90,8 @@ All CPU-track numbers below were produced by the commands shown and stored under
 
 | Command | Observed |
 | --- | --- |
-| `make dr` (200 seeds) | 200 images + labels, dataset hash `9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96`, 4.8 s |
-| `lab-eval perception` | 200 seeds / 1000 cubes; pixel error mean 1.058 px, p95 3.577 px; 3D error mean 3.607 mm, p95 12.885 mm; recall 0.9611, precision 0.8693 |
+| `make dr` (200 seeds) | 200 images + labels, dataset hash `d2b7f692abeef297347f2c7d045ae81d9e274046e8db6409a357ae6aeee610a6`, 4.8 s |
+| `lab-eval perception` | 200 seeds / 1000 cubes; pixel error mean 1.058 px, p95 3.577 px; 3D error mean 3.607 mm, p95 12.885 mm; recall 1.0000, precision 1.0000; 105 centre-occluded cubes reported separately |
 | `lab-eval episodes` (100 seeds) | 100/100 success; mean 5.165 s, p95 5.467 s; no failure reasons |
 | `pytest -q` | 145 passed |
 | `ruff check .` | clean |
@@ -136,11 +136,19 @@ decimal places before hashing
 scene hash as the host:
 `af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40`.
 
-The **dataset** hash remains environment-specific (`9f14c038...` native,
-`f868fa8b...` in the Docker image) because PNG bytes and full-precision label
-floats differ between platforms; every perception metric is identical.
-`labcheck ex4` recomputes against the manifest in the current environment rather
-than a hardcoded dataset hash.
+The **dataset** hash is environment-specific because PNG bytes and
+full-precision label floats differ between platforms; every perception metric is
+identical. `labcheck ex4` recomputes against the manifest in the current
+environment rather than a hardcoded dataset hash.
+
+The pinhole perception evaluation had a ground-truth bug: a cube was marked
+invisible when its projected centre pixel was hidden, even with hundreds of
+rendered pixels, and precision matched only to the projected centre. The 128
+"false positives" were all detections of real cubes whose visible-pixel centroid
+is offset by partial occlusion; no detection was of a non-existent object. The
+label now records `visible = visible_pixels > 0` and a separate `centre_visible`,
+and matching accepts a detection inside the cube's visible box. Full analysis:
+`results/perception_fp_analysis.json`.
 
 CI is green on GitHub Actions. Its `gpu-isaac` job is a documented, skipped
 placeholder for a self-hosted NVIDIA runner.
@@ -153,7 +161,7 @@ External human testers remain pending, as stated in
 
 | Run | Environment | Result | Issue(s) |
 | --- | --- | --- | --- |
-| owner run 1 | fresh clone, fresh venv | pending | — |
+| owner run 1 | fresh clone, fresh venv, CPython 3.11.14 | PASS 45 checks in 67 s | — |
 
 ## Final status
 

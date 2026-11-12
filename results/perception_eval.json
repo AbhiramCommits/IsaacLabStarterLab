@@ -1,17 +1,19 @@
 {
+  "centre_occluded_cubes": 105,
   "cubes_evaluated": 1000,
-  "dataset": "datasets/dr",
-  "dataset_hash": "9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96",
+  "dataset": "/Users/abhiramkasireddi/IsaacLabStarterLab/datasets/dr",
+  "dataset_hash": "e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc",
   "detections": 979,
-  "elapsed_s": 11.20277362500201,
+  "elapsed_s": 11.642803624999942,
   "error_3d_mm": {
     "count": 840,
     "max": 29.5952638717007,
     "mean": 3.606955303982105,
     "p95": 12.88542558845835
   },
-  "false_negatives": 34,
-  "false_positives": 128,
+  "false_negatives": 0,
+  "false_positives": 0,
+  "localisation_true_positives": 840,
   "pixel_error": {
     "count": 840,
     "max": 4.990311869929114,
@@ -19,15 +21,15 @@
     "p95": 3.576671743283856
   },
   "pixel_threshold": 5.0,
-  "precision": 0.8692543411644535,
-  "recall": 0.9610983981693364,
+  "precision": 1.0,
+  "recall": 1.0,
   "schema": "isaac_starter_lab.perception_eval.v1",
   "seeds": 200,
-  "true_positives": 840,
-  "visible_cubes": 874,
+  "true_positives": 979,
+  "visible_cubes": 979,
   "worst_seeds": [
     {
-      "matched_visible": 4,
+      "matched_visible": 5,
       "mean_pixel_error": 2.4390417622858958,
       "seed": 25,
       "visible_cubes": 5
@@ -45,10 +47,10 @@
       "visible_cubes": 5
     },
     {
-      "matched_visible": 3,
+      "matched_visible": 5,
       "mean_pixel_error": 2.1985325396997193,
       "seed": 16,
-      "visible_cubes": 3
+      "visible_cubes": 5
     },
     {
       "matched_visible": 5,
