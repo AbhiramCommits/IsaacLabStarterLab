@@ -50,21 +50,32 @@ is exercised by the Docker image and by GitHub Actions (`ubuntu-latest`).
 
 ### GPU attempt, 2026-11-12
 
-A GPU run was planned on Runpod with the Isaac Sim 4.5 image, a 100 GB container
-disk, no network volume and TCP 22. Every `create-pod` request for an in-spec GPU
-(L40S, RTX 4090, RTX A6000) and for the nearest RT-core substitutes (RTX A5000,
-RTX 3090, RTX A4000) returned:
+A Secure RTX 4090 pod was created in EU-RO-1 (driver 595.91.07, 75 GB disk;
+100 GB was unavailable). The Isaac Sim 4.5 image started, opened
+`usd/tabletop_seed7.usda` and ran PhysX, but the RTX renderer did not work:
 
-```text
-400 Bad Request
-There are no longer any instances available with the requested specifications.
-Please refresh and try again.
-```
+- The default app segfaulted in `omni.usdphysics.ui` immediate-mode overlays
+  inside `_wait_for_viewport`.
+- Patching that overlay and the file-menu stage handler, and disabling the main
+  viewport window, let the app start and step physics; a minimal articulation
+  reported DOF 1.
+- With the viewport enabled, `app.update()` still segfaulted on driver
+  595.91.07. With it disabled, `Camera.get_rgba()` returned an empty array and
+  `rep.orchestrator.step()` hung, so no RTX frame was produced.
+- The canonical arm reported 0 DOF at `/World/Robot` and `/World/Robot/base`:
+  the rigid bodies are nested and the joints sit outside the articulation root.
 
-Attempts covered Community and Secure Cloud, pinned and unpinned data centers,
-and 20/50/100 GB disks. A 2-vCPU CPU pod created successfully and was deleted
-immediately, so the account and API work; GPU capacity or a GPU quota is the
-blocker. No GPU number was produced and no pod was left running.
+A second pod with the Isaac Sim 5.1 image could not be used: it runs as uid 1234
+(`isaac-sim`) with no `sudo`, `sshd` or `rsync`, and `apt-get` fails with
+`E: List directory /var/lib/apt/lists/partial is missing - Acquire (13: Permission denied)`.
+A user-space OpenSSH install did not serve SSH. Installing Isaac Sim 5.1 from pip
+inside the 4.5 container completed, but `SimulationApp` segfaulted in
+`libomni.usd.so` at startup because the 5.1 libraries were mixed with the 4.5
+container's USD/Kit libraries.
+
+Both pods were terminated; `list-pods` is empty. No GPU number was produced.
+The remaining path is a custom 5.1 image with `USER root` and openssh/rsync, or
+a host with an R580 production driver for 4.5.
 
 The Docker and no-Docker install paths were updated (`docker/Dockerfile.isaac`,
 `scripts/setup_isaac_nodocker.sh`) so they do not replace Isaac Sim's bundled

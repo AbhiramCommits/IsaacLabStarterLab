@@ -67,12 +67,14 @@ Validated on the CPU track:
 
 Not validated:
 
-- `IsaacSimBackend` against Isaac Sim 4.5 on a GPU. Runpod refused every GPU pod
-  at create time on 2026-11-12 (`no longer any instances available`), so the
-  GPU phases did not run.
-- PhysX contact and friction. The canonical arm has five revolute joints and no
-  gripper DOF, so the current `apply_gripper` is a no-op; a real grasp needs a
-  prismatic finger joint.
+- `IsaacSimBackend` against Isaac Sim 4.5 on a GPU. A Secure RTX 4090 pod was
+  created on 2026-11-12; Isaac Sim started, opened the stage and ran PhysX, but
+  the RTX renderer segfaulted with host driver 595.91.07. Isaac Sim 5.1 could
+  not be used on that host (the image is non-root and has no sshd/rsync/sudo).
+- PhysX contact and friction on the canonical arm. Its rigid bodies are nested
+  and its joints sit outside the articulation root, so PhysX sees 0 DOF; a
+  gripper DOF is also absent. A runtime physics arm is the approved fix and is
+  not built.
 - The Isaac Lab `ManagerBasedRLEnv` task, 64-environment throughput and PPO.
 - The `rclpy` transport, the ROS 2 nodes and the Isaac Sim ROS 2 bridge.
 - RTX-frame perception and the pinhole-to-RTX gap.
@@ -122,9 +124,9 @@ Python, without dependencies, so it does not replace Isaac Sim's `pxr` or
   logic check, not a camera result.
 - The dataset hash is a same-environment self-consistency hash. The scene hash is
   the cross-machine pin.
-- The GPU, Isaac Lab and ROS 2 paths have no measured results because no GPU pod
-  could be created. The exact API response is recorded in
-  [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
+- The GPU, Isaac Lab and ROS 2 paths have no measured results: the RTX renderer
+  failed on the pod's driver and the 5.1 image could not be equipped with SSH.
+  The exact errors are recorded in [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
 - External human testers have not run the lab. The owner cold run is the only
   completed one.
 
