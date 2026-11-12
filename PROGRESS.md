@@ -6,12 +6,12 @@ phase so a new session can resume. Status values: **done**, **in progress**,
 
 | Phase | Status | Notes |
 | --- | --- | --- |
-| 1. Remove AI-agent tells and stale claims | in progress | Docs edits done; owner cold run pending. |
+| 1. Remove AI-agent tells and stale claims | done | Docs cleaned; owner cold run recorded (67 s, PASS 45). |
 | 2. Isaac Sim GPU track for real | not started | Needs the GPU pod. |
 | 3. Real physics (PhysX) instead of attach rule | not started | Needs the GPU pod. |
 | 4. Real Isaac Lab task + PPO | not started | Needs the GPU pod. |
 | 5. ROS 2 nodes on real rclpy | not started | Needs the GPU pod. |
-| 6. Perception on RTX frames | in progress | False-positive cause analysis is Mac-only; RTX side needs the pod. |
+| 6. Perception on RTX frames | in progress | Pinhole ground-truth bug fixed on the Mac; RTX side needs the pod. |
 | 7. Restructure README | not started | Depends on GPU results. |
 
 ## Environment facts
@@ -30,5 +30,11 @@ phase so a new session can resume. Status values: **done**, **in progress**,
 - Phase 1: removed build-agent/session claims from README, TESTERS, PROTOCOL,
   VERIFICATION; dropped AI-authored cold runs 2/3; replaced the quickstart
   placeholder; corrected the CI statement.
-- Phase 6 (Mac part): false positives in the pinhole perception evaluation
-  analysed from `datasets/dr`.
+- Phase 6 (Mac part): the 128 false positives were a ground-truth bug, not
+  spurious detections. `dr.py` now sets `visible = visible_pixels > 0` and records
+  `centre_visible`; `evaluation.py` matches a detection inside the cube's visible
+  box, and reports pixel/3D error only where the projected centre is unoccluded.
+  The dataset was regenerated (hash `d2b7f692...`); analysis in
+  `results/perception_fp_analysis.json`.
+- Owner cold run: fresh clone, fresh venv, CPython 3.11.14, 67 s, `labcheck all`
+  PASS 45. Log in `learner-testing/cold_runs/run_1.md`.
