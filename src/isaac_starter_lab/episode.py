@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -120,7 +121,7 @@ def run_episode(
         scene=scene,
         arm=arm,
         seed=seed,
-        usda_path=Path("usd/tabletop_seed7.usda"),
+        usda_path=Path(os.environ.get("LAB_USD", "usd/tabletop_seed7.usda")),
         enable_ros2=(bridge_name == "ros2"),
     )
     if backend == "isaac":

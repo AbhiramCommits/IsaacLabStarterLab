@@ -3,9 +3,9 @@
 A tabletop pick-and-place teaching lab built on a real OpenUSD scene.
 A deterministic CPU track runs anywhere; a GPU track targets Isaac Sim 6.0,
 Isaac Lab and ROS 2 through the same message schema.
-The CPU track is tested and measured; the GPU track starts and runs a real
-7-DOF PhysX arm but has not completed a pick; ROS 2 was not run (see
-[Validated vs not validated](#validated-vs-not-validated)).
+The CPU track is tested and measured; the GPU track runs a real 7-DOF PhysX arm
+and completes the seed-7 pick; the 100-seed sweep is in progress and ROS 2 was
+not run (see [Validated vs not validated](#validated-vs-not-validated)).
 
 Built and tested on macOS arm64 with CPython 3.11; the test host has no NVIDIA
 GPU and no ROS 2 installation.
@@ -68,14 +68,10 @@ Validated on the CPU track:
 
 Not validated:
 
-- A complete Isaac Sim pick. Isaac Sim 6.0 starts on a Secure RTX 4090
-  (driver 595.91.07), renders RTX frames and runs a real 7-DOF runtime PhysX
-  arm; the full state machine runs. The jaws contact and nudge the cube ~1.2 cm
-  but do not retain it, so the final `CUBE_NOT_IN_BIN` check fails. Artifacts
-  are in `results/gpu/seed_7/` and
-  [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
-- A successful PhysX grasp. Contact and friction are proven by the cube's
-  motion; the parallel jaws do not retain it.
+- The 100-seed Isaac Sim sweep. The seed-7 episode is a real PhysX pick
+  (`results/gpu/seed_7/`, 272 ticks, 4.533 s, cube in the bin); the sweep is
+  running.
+- The Isaac Lab task, ROS 2 nodes and the RTX perception comparison.
 - The Isaac Lab `ManagerBasedRLEnv` task, 64-environment throughput and PPO.
 - The `rclpy` transport, the ROS 2 nodes and the Isaac Sim ROS 2 bridge.
 - RTX-frame perception and the pinhole-to-RTX gap.

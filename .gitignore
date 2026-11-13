@@ -36,3 +36,6 @@ ros2_ws/log/
 
 # Omniverse caches (GPU host only)
 .ov/
+
+# Generated per-seed GPU scenes
+usd/gpu_seeds/

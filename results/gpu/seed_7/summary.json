@@ -1,8 +1,8 @@
 {
   "backend": "isaac",
   "bridge": "localbus",
-  "cycle_time_s": 4.666666666666667,
-  "failure_reason": "CUBE_NOT_IN_BIN",
+  "cycle_time_s": 4.533333333333333,
+  "failure_reason": null,
   "final_cube_positions": {
     "Cube_00": [
       0.04728607460856438,
@@ -10,8 +10,8 @@
       0.7749999761581421
     ],
     "Cube_01": [
-      0.0951743945479393,
-      -0.04307418316602707,
+      0.2137642353773117,
+      0.11328478157520294,
       0.7749999761581421
     ],
     "Cube_02": [
@@ -30,15 +30,15 @@
       0.7749999761581421
     ]
   },
-  "frame_000_sha256": "39af1f58dd0fbc3465b9b3bf7262859d2a5fd40e67b0506249e4cae35aaac144",
-  "frame_final_sha256": "3eaeb0e32ae0af087c4df0d8206104786043c93506e230688008d0b6a6661b99",
+  "frame_000_sha256": "4bcc77d02d5d04540de14d84b4040ce4147f08c12d89a04b62cb91b9ccd9f159",
+  "frame_final_sha256": "e4eac93f42dfb6a34822e244756bd1f53b230d2c8873e414e2786ff2675a97d0",
   "schema": "isaac_starter_lab.episode_summary.v1",
   "seed": 7,
-  "state": "FAILED",
-  "success": false,
+  "state": "DONE",
+  "success": true,
   "target_color": "green",
   "target_cube": "Cube_01",
-  "ticks": 280,
-  "trajectory_messages": 280,
-  "trajectory_sha256": "9d66b4bdbb41dfadd754e18a000aa3dfb80ada9ba55e879c34ffe008113cfa76"
+  "ticks": 272,
+  "trajectory_messages": 272,
+  "trajectory_sha256": "0b047562b6980f29a919cb73b27750104ccb8b68d57238e7d5a722d2d7426073"
 }
