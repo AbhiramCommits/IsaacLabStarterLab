@@ -43,14 +43,14 @@ DOCKER_RUN = (
 
 ARM_ROOT = "/World/RobotIsaac"
 CANONICAL_ROBOT = "/World/Robot"
-GRIPPER_OPEN = 0.04  # metres of travel per finger
+GRIPPER_OPEN = 0.07  # metres of travel of the moving jaw
 LINK_MASSES = (0.1, 0.02, 0.02, 0.01, 0.01)
 FINGER_Y = 0.055
 FINGER_THICKNESS = 0.008
 DRIVE_KP = 1.0e5
 DRIVE_KD = 2.0e3
 # USD +Y rotates a +X link downward; the CPU FK uses positive = lift.
-JOINT_SIGNS = np.array([1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0])
+JOINT_SIGNS = np.array([1.0, -1.0, -1.0, -1.0, 1.0, 1.0])
 MAX_TARGET_STEP = 0.01
 
 
@@ -279,29 +279,32 @@ class IsaacSimBackend:
         revolute("joint_wrist_roll", wrist, gripper, "X", (wrist_len, 0.0, 0.0), (0.0, 0.0, 0.0), limits[4])
 
         tip_x = shoulder[0] + l1 + l2 + wrist_len + tool_len
-        for side, y in (("left", -FINGER_Y), ("right", FINGER_Y)):
-            finger = link(f"finger_{side}", (tip_x, shoulder[1] + y, shoulder[2]), 0.005)
-            collider(finger, "Visual", (0.0, 0.0, 0.0), (0.06, FINGER_THICKNESS, 0.03))
-            if self._physics_material is not None:
-                from pxr import UsdShade  # type: ignore[import-not-found]
+        # Fixed right jaw is part of the gripper body; one moving left jaw is
+        # the only gripper DOF, which makes its sign unambiguous.
+        collider(gripper, "FixedJaw", (tool_len, FINGER_Y, 0.0),
+                 (0.06, FINGER_THICKNESS, 0.03))
+        jaw = link("jaw", (tip_x, shoulder[1] - FINGER_Y, shoulder[2]), 0.005)
+        collider(jaw, "Visual", (0.0, 0.0, 0.0), (0.06, FINGER_THICKNESS, 0.03))
+        if self._physics_material is not None:
+            from pxr import UsdShade  # type: ignore[import-not-found]
 
-                collision_prim = stage.GetPrimAtPath(f"{finger.GetPath()}/Visual")
-                UsdShade.MaterialBindingAPI.Apply(collision_prim).Bind(
-                    self._physics_material, UsdShade.Tokens.weakerThanDescendants, "physics"
-                )
-            joint = UsdPhysics.PrismaticJoint.Define(stage, f"{ARM_ROOT}/finger_joint_{side}")
-            joint.CreateAxisAttr("Y")
-            joint.CreateBody0Rel().SetTargets([str(gripper.GetPath())])
-            joint.CreateBody1Rel().SetTargets([str(finger.GetPath())])
-            joint.CreateLocalPos0Attr(Gf.Vec3f(float(tool_len), float(y), 0.0))
-            joint.CreateLocalPos1Attr(Gf.Vec3f(0.0, 0.0, 0.0))
-            joint.CreateLowerLimitAttr(-GRIPPER_OPEN)
-            joint.CreateUpperLimitAttr(GRIPPER_OPEN)
-            drive = UsdPhysics.DriveAPI.Apply(joint.GetPrim(), "linear")
-            drive.CreateTypeAttr("force")
-            drive.CreateStiffnessAttr(DRIVE_KP)
-            drive.CreateDampingAttr(DRIVE_KD)
-            drive.CreateMaxForceAttr(50.0)
+            for prim_path in (f"{gripper.GetPath()}/FixedJaw", f"{jaw.GetPath()}/Visual"):
+                UsdShade.MaterialBindingAPI.Apply(
+                    stage.GetPrimAtPath(prim_path)
+                ).Bind(self._physics_material, UsdShade.Tokens.weakerThanDescendants, "physics")
+        joint = UsdPhysics.PrismaticJoint.Define(stage, f"{ARM_ROOT}/jaw_joint")
+        joint.CreateAxisAttr("Y")
+        joint.CreateBody0Rel().SetTargets([str(gripper.GetPath())])
+        joint.CreateBody1Rel().SetTargets([str(jaw.GetPath())])
+        joint.CreateLocalPos0Attr(Gf.Vec3f(float(tool_len), float(-FINGER_Y), 0.0))
+        joint.CreateLocalPos1Attr(Gf.Vec3f(0.0, 0.0, 0.0))
+        joint.CreateLowerLimitAttr(0.0)
+        joint.CreateUpperLimitAttr(GRIPPER_OPEN)
+        drive = UsdPhysics.DriveAPI.Apply(joint.GetPrim(), "linear")
+        drive.CreateTypeAttr("force")
+        drive.CreateStiffnessAttr(DRIVE_KP)
+        drive.CreateDampingAttr(DRIVE_KD)
+        drive.CreateMaxForceAttr(50.0)
 
     def _start_physics(self) -> None:
         from isaacsim.core.api import SimulationContext  # type: ignore[import-not-found]
@@ -499,10 +502,7 @@ class IsaacSimBackend:
         # The right jaw drive is sign-inverted; the same positive target closes
         # both jaws toward the tool axis.
         target[5] = GRIPPER_OPEN * self._gripper_closure
-        target[6] = GRIPPER_OPEN * self._gripper_closure
         physical = target * JOINT_SIGNS
-        physical[5] = target[5]
-        physical[6] = target[6]
         self._articulation.set_joint_position_targets(physical.reshape(1, -1))
         self._sim.step(render=True)
         self.tick += 1
