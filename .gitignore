@@ -39,3 +39,7 @@ ros2_ws/log/
 
 # Generated per-seed GPU scenes
 usd/gpu_seeds/
+
+# Generated RTX scenes/frames
+usd/rtx_seeds/
+results/gpu/rtx_frames/

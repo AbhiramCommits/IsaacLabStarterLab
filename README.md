@@ -90,7 +90,10 @@ Not validated:
 
 - The Isaac Lab task, ROS 2 nodes and the RTX perception comparison. The
   physical sweep is done; the 60 failures are recorded in
-  `results/gpu/isaac_sweep.json` and were not tuned further.
+  `results/gpu/isaac_sweep.json` and were not tuned further. The RTX comparison
+  tooling is committed (`scripts/make_rtx_scenes.py`,
+  `scripts/render_rtx_seeds.py`, `scripts/evaluate_rtx_perception.py`) but the
+  Runpod account balance ran out before the frames were rendered.
 - The Isaac Lab `ManagerBasedRLEnv` task, 64-environment throughput and PPO.
 - The `rclpy` transport, the ROS 2 nodes and the Isaac Sim ROS 2 bridge.
 - RTX-frame perception and the pinhole-to-RTX gap.

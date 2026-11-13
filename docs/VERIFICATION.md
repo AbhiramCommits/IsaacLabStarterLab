@@ -74,6 +74,12 @@ The GPU track was exercised on a Secure RTX 4090 pod (driver 595.91.07,
   `TIMEOUT_TRANSFER` 11, `CUBE_NOT_IN_BIN` 7, `NO_DETECTION` 1
   (`results/gpu/isaac_sweep.json`).
 
+  An RTX perception comparison was prepared: one DR-matched USD per seed
+  (`scripts/make_rtx_scenes.py`), an RTX renderer and an evaluator. The pod
+  rendering the frames was evicted by its host and a replacement could not be
+  rented because the Runpod account balance was too low. No RTX frames were
+  produced, so no RTX perception numbers are reported.
+
 RTX artifacts from the seed-7 run (start/final frame, trajectory, summary) are
 committed under `results/gpu/seed_7/`; `summary.json` records
 `failure_reason: CUBE_NOT_IN_BIN`.
