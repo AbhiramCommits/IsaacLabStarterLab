@@ -7,8 +7,8 @@ phase so a new session can resume. Status values: **done**, **in progress**,
 | Phase | Status | Notes |
 | --- | --- | --- |
 | 1. Remove AI-agent tells and stale claims | done | Docs cleaned; owner cold run recorded (67 s, PASS 45). |
-| 2. Isaac Sim GPU track for real | blocked | Isaac Sim 6.0 starts on driver 595 and a real 7-DOF runtime arm runs. HOME, LOCATE, APPROACH and DESCEND pass; at GRASP the jaws contact the cube and push it 4.4 cm but do not hold it (`GRASP_FAILED`). No successful pick yet. |
-| 3. Real physics (PhysX) instead of attach rule | blocked | PhysX contact is proven: the jaws move the cube 4.4 cm. The grip does not hold, so the 100-seed sweep was not run. |
+| 2. Isaac Sim GPU track for real | blocked | Isaac Sim 6.0 starts on driver 595 and a real 7-DOF runtime arm runs. The full state machine (HOME → LOCATE → APPROACH → DESCEND → GRASP → LIFT → TRANSFER → RELEASE → RETREAT) completes. The jaws contact and nudge the cube ~1.2 cm but do not retain it, so the final check fails (`CUBE_NOT_IN_BIN`). |
+| 3. Real physics (PhysX) instead of attach rule | blocked | PhysX contact is proven (the cube is nudged), but the parallel jaws do not retain it. The 100-seed sweep was not run. |
 | 4. Real Isaac Lab task + PPO | blocked | Not reached; the 6.0 pip stack is available but no Isaac Lab task/training was run. |
 | 5. ROS 2 nodes on real rclpy | blocked | Not reached. |
 | 6. Perception on RTX frames | blocked | RTX frames exist in `results/gpu/seed_7/`; the camera-pose mismatch prevents a valid side-by-side perception evaluation. |
@@ -67,7 +67,10 @@ opens the stage and renders: `APP_OK`, `PXR_OK`, `Camera.get_rgba()` returns
   kinematics (valid `Y` axes, sign-mapped joints, negated limits, tool-tip
   convergence). HOME, LOCATE, APPROACH and DESCEND pass. At GRASP the jaws
   contact the cube and push it from `(0.104,-0.053)` to `(0.072,-0.024)` — real
-  PhysX contact — but the grip does not hold (`GRASP_FAILED`).
+  PhysX contact — but the grip does not retain it. The final run completes the
+  whole state machine and ends `CUBE_NOT_IN_BIN` with the cube at
+  `(0.095,-0.043,0.775)`; wider jaws (0.055 m), 0.04 m travel, friction 1.2,
+  a 50 N close force and a slow close were all tried.
 - RTX artifacts (start/final frames, trajectory, summary) are committed under
   `results/gpu/seed_7/`; the episode failed at APPROACH, not at startup.
 

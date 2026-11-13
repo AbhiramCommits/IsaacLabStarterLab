@@ -70,9 +70,9 @@ Not validated:
 
 - A complete Isaac Sim pick. Isaac Sim 6.0 starts on a Secure RTX 4090
   (driver 595.91.07), renders RTX frames and runs a real 7-DOF runtime PhysX
-  arm; HOME, LOCATE, APPROACH and DESCEND pass. At GRASP the jaws contact the
-  cube and push it 4.4 cm, but the grip does not hold. The failure and
-  artifacts are in `results/gpu/seed_7/` and
+  arm; the full state machine runs. The jaws contact and nudge the cube ~1.2 cm
+  but do not retain it, so the final `CUBE_NOT_IN_BIN` check fails. Artifacts
+  are in `results/gpu/seed_7/` and
   [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
 - A successful PhysX grasp. Contact and friction are proven by the cube's
   motion; the parallel jaws do not retain it.

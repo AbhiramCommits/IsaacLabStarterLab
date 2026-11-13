@@ -43,9 +43,9 @@ DOCKER_RUN = (
 
 ARM_ROOT = "/World/RobotIsaac"
 CANONICAL_ROBOT = "/World/Robot"
-GRIPPER_OPEN = 0.03  # metres of travel per finger
+GRIPPER_OPEN = 0.04  # metres of travel per finger
 LINK_MASSES = (0.1, 0.02, 0.02, 0.01, 0.01)
-FINGER_Y = 0.045
+FINGER_Y = 0.055
 FINGER_THICKNESS = 0.008
 DRIVE_KP = 1.0e5
 DRIVE_KD = 2.0e3
@@ -111,6 +111,8 @@ class IsaacSimBackend:
         self._ros_bridge: Any | None = None
         self._joint_velocity_command = np.zeros(5, dtype=float)
         self._gripper_closure = 0.0
+        self._gripper_command = 0.0
+        self._physics_material: Any | None = None
         self._grasped_name: str | None = None
         self.tick = 0
         self.time_s = 0.0
@@ -160,6 +162,21 @@ class IsaacSimBackend:
         if camera_prim:
             camera_prim.GetAttribute("fStop").Set(64.0)
             camera_prim.GetAttribute("focusDistance").Set(1.0)
+        # High-friction physics material so the parallel jaws can retain a cube.
+        from pxr import UsdPhysics as _UsdPhysics
+        from pxr import UsdShade as _UsdShade
+
+        physics_mat = _UsdShade.Material.Define(self._stage, "/World/PhysicsMat")
+        pm = _UsdPhysics.MaterialAPI.Apply(physics_mat.GetPrim())
+        pm.CreateStaticFrictionAttr(1.2)
+        pm.CreateDynamicFrictionAttr(1.2)
+        pm.CreateRestitutionAttr(0.0)
+        self._physics_material = physics_mat
+        for index in range(self.scene.n_cubes):
+            prim = self._stage.GetPrimAtPath(f"/World/Cubes/Cube_{index:02d}")
+            _UsdShade.MaterialBindingAPI.Apply(prim).Bind(
+                physics_mat, _UsdShade.Tokens.weakerThanDescendants, "physics"
+            )
 
     # ------------------------------------------------------------------
     # runtime arm (canonical stage stays untouched)
@@ -265,6 +282,13 @@ class IsaacSimBackend:
         for side, y in (("left", -FINGER_Y), ("right", FINGER_Y)):
             finger = link(f"finger_{side}", (tip_x, shoulder[1] + y, shoulder[2]), 0.005)
             collider(finger, "Visual", (0.0, 0.0, 0.0), (0.06, FINGER_THICKNESS, 0.03))
+            if self._physics_material is not None:
+                from pxr import UsdShade  # type: ignore[import-not-found]
+
+                collision_prim = stage.GetPrimAtPath(f"{finger.GetPath()}/Visual")
+                UsdShade.MaterialBindingAPI.Apply(collision_prim).Bind(
+                    self._physics_material, UsdShade.Tokens.weakerThanDescendants, "physics"
+                )
             joint = UsdPhysics.PrismaticJoint.Define(stage, f"{ARM_ROOT}/finger_joint_{side}")
             joint.CreateAxisAttr("Y")
             joint.CreateBody0Rel().SetTargets([str(gripper.GetPath())])
@@ -277,7 +301,7 @@ class IsaacSimBackend:
             drive.CreateTypeAttr("force")
             drive.CreateStiffnessAttr(DRIVE_KP)
             drive.CreateDampingAttr(DRIVE_KD)
-            drive.CreateMaxForceAttr(10.0)
+            drive.CreateMaxForceAttr(50.0)
 
     def _start_physics(self) -> None:
         from isaacsim.core.api import SimulationContext  # type: ignore[import-not-found]
@@ -392,14 +416,9 @@ class IsaacSimBackend:
         if self._gripper_closure < 0.7:
             self._grasped_name = None
             return None
-        q = self._cpu_positions()
-        # The drive direction is inverted: the left jaw reports positive.
-        if q[5] < 0.01 or q[6] > -0.01:
-            self._grasped_name = None
-            return None
         from .kinematics import tool_tip
 
-        tip = tool_tip(self.arm, self.joint_positions[:5])
+        tip = tool_tip(self.arm, self._cpu_positions()[:5])
         best_name = None
         best = 0.05
         for name, position in zip(names, positions, strict=True):
@@ -460,7 +479,7 @@ class IsaacSimBackend:
         self._joint_velocity_command[:5] = values
 
     def apply_gripper(self, closure: float) -> None:
-        self._gripper_closure = float(np.clip(closure, 0.0, 1.0))
+        self._gripper_command = float(np.clip(closure, 0.0, 1.0))
 
     def step(self) -> None:
         if self._articulation is None or self._sim is None:
@@ -473,6 +492,10 @@ class IsaacSimBackend:
         target[:5] = q[:5] + lead
         for index, (low, high) in enumerate(self.arm.joint_limits):
             target[index] = min(max(target[index], low), high)
+        # Ramp the close so the first jaw contact cannot flick the cube away.
+        self._gripper_closure += float(
+            np.clip(self._gripper_command - self._gripper_closure, -0.1, 0.1)
+        )
         # The right jaw drive is sign-inverted; the same positive target closes
         # both jaws toward the tool axis.
         target[5] = GRIPPER_OPEN * self._gripper_closure

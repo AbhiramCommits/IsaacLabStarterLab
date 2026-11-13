@@ -66,13 +66,13 @@ The GPU track was exercised on a Secure RTX 4090 pod (driver 595.91.07,
   backend now builds a flat runtime arm (`/World/RobotIsaac`): fixed base, five
   revolute links, two prismatic fingers, self-collision off, 240 Hz physics.
   The canonical green cube is at `(0.104,-0.053)` and the RTX detection at
-  `(374,252)` matches it. HOME, LOCATE, APPROACH and DESCEND pass; at GRASP the
-  jaws contact the cube and push it to `(0.072,-0.024)` (4.4 cm) but do not
-  retain it, so the episode ends `GRASP_FAILED`. No pick completed.
+  `(374,252)` matches it. The full state machine completes. The jaws contact
+  and nudge the cube to `(0.095,-0.043)` (~1.2 cm) but do not retain it, so the
+  final check fails (`CUBE_NOT_IN_BIN`). No pick completed.
 
 RTX artifacts from the seed-7 run (start/final frame, trajectory, summary) are
 committed under `results/gpu/seed_7/`; `summary.json` records
-`failure_reason: GRASP_FAILED`.
+`failure_reason: CUBE_NOT_IN_BIN`.
 
 The Docker and no-Docker install paths were updated (`docker/Dockerfile.isaac`,
 `scripts/setup_isaac_nodocker.sh`) so they do not replace Isaac Sim's bundled
