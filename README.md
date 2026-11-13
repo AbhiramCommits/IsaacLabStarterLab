@@ -4,8 +4,9 @@ A tabletop pick-and-place teaching lab built on a real OpenUSD scene.
 A deterministic CPU track runs anywhere; a GPU track targets Isaac Sim 6.0,
 Isaac Lab and ROS 2 through the same message schema.
 The CPU track is tested and measured; the GPU track runs a real 7-DOF PhysX arm
-and completes the seed-7 pick; the 100-seed sweep is in progress and ROS 2 was
-not run (see [Validated vs not validated](#validated-vs-not-validated)).
+and completes 40 of 100 seeds on a physical 100-seed sweep. The CPU kinematic
+100% is a logic check, not a physics result (see
+[Validated vs not validated](#validated-vs-not-validated)).
 
 Built and tested on macOS arm64 with CPython 3.11; the test host has no NVIDIA
 GPU and no ROS 2 installation.
@@ -28,6 +29,23 @@ the artifacts. The owner cold run of these commands took 67 s on
 CPython 3.11.14 and passed all 45 checks.
 
 ## Results
+
+### GPU track — Isaac Sim 6.0 / PhysX (real physics)
+
+| Metric | Measured value |
+| --- | --- |
+| Seed-7 episode | **SUCCESS**, 272 ticks, 4.533 s, green `Cube_01` in the bin |
+| 100-seed sweep | **40/100 (40.00%)** |
+| Failure codes | `TIMEOUT_DESCEND` 41, `TIMEOUT_TRANSFER` 11, `CUBE_NOT_IN_BIN` 7, `NO_DETECTION` 1 |
+| Cycle time | mean 4.744 s, p95 7.733 s, max 7.833 s |
+| Ticks | mean 284.66, max 470 |
+
+These are real PhysX results: contact, friction, a physical gripper and a
+rendered RGB camera. The CPU table below is the kinematic logic check; its
+100/100 is not a physics claim. Source: `results/gpu/isaac_sweep.json` and
+`results/gpu/seed_7/`.
+
+### CPU track — kinematic logic check (no physics)
 
 <!-- RESULTS:START -->
 | Metric | Measured value |
@@ -65,13 +83,14 @@ Validated on the CPU track:
 - `detect_cubes`, `PickPlaceController`, the 200-seed dataset and the
   100-episode sweep.
 - `labcheck` (45 checks), the pytest suite, the Docker lab image and CI.
+- The Isaac Sim 6.0 seed-7 PhysX pick and the 100-seed physical sweep
+  (40/100; `results/gpu/`).
 
 Not validated:
 
-- The 100-seed Isaac Sim sweep. The seed-7 episode is a real PhysX pick
-  (`results/gpu/seed_7/`, 272 ticks, 4.533 s, cube in the bin); the sweep is
-  running.
-- The Isaac Lab task, ROS 2 nodes and the RTX perception comparison.
+- The Isaac Lab task, ROS 2 nodes and the RTX perception comparison. The
+  physical sweep is done; the 60 failures are recorded in
+  `results/gpu/isaac_sweep.json` and were not tuned further.
 - The Isaac Lab `ManagerBasedRLEnv` task, 64-environment throughput and PPO.
 - The `rclpy` transport, the ROS 2 nodes and the Isaac Sim ROS 2 bridge.
 - RTX-frame perception and the pinhole-to-RTX gap.
@@ -115,8 +134,8 @@ Python, without dependencies, so it does not replace Isaac Sim's `pxr` or
 
 ## Limitations
 
-- The kinematic grasp is an attach rule, not contact physics. 100/100 episodes
-  proves the state machine, not that a gripper holds a cube.
+- The kinematic grasp is an attach rule, not contact physics. Its 100/100 is a
+  logic check; the real physics rate is 40/100 under the same controller.
 - Pinhole frames use flat shading and exact material colours; 100% detection is a
   logic check, not a camera result.
 - The dataset hash is a same-environment self-consistency hash. The scene hash is

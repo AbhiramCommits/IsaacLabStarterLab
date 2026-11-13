@@ -69,6 +69,10 @@ The GPU track was exercised on a Secure RTX 4090 pod (driver 595.91.07,
   `(374,252)` matches it. With a fixed jaw and one moving jaw, the seed-7
   episode **succeeds**: state DONE, 272 ticks, 4.533 s, `Cube_01` at
   `(0.214,0.113,0.775)` inside the bin. Artifacts in `results/gpu/seed_7/`.
+  A 100-seed sweep with per-seed `lab-scene` stages succeeded **40/100 (40%)**;
+  cycle mean 4.744 s, p95 7.733 s; failures `TIMEOUT_DESCEND` 41,
+  `TIMEOUT_TRANSFER` 11, `CUBE_NOT_IN_BIN` 7, `NO_DETECTION` 1
+  (`results/gpu/isaac_sweep.json`).
 
 RTX artifacts from the seed-7 run (start/final frame, trajectory, summary) are
 committed under `results/gpu/seed_7/`; `summary.json` records
