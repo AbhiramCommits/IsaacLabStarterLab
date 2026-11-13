@@ -76,7 +76,9 @@ opens the stage and renders: `APP_OK`, `PXR_OK`, `Camera.get_rgba()` returns
 
 **Cost.** MCP billing for 2026-11-12: **$2.29** (GPU $2.26 + disk $0.03).
 Recorded runtimes: 4.5 ~56 min, 5.1 ~13 min, 6.0 ~111 min at $0.89/hr, and the
-L40S ~60 min at $1.09/hr. All pods terminated; `list-pods` is empty.
+L40S ~60 min at $1.09/hr. A follow-up 4090 run on 2026-11-13 lasted ~27 min at
+$0.89/hr (~$0.40; billing had not posted at teardown). All pods terminated;
+`list-pods` is empty.
 
 ## Environment facts
 
