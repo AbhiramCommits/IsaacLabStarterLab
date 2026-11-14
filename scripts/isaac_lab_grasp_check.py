@@ -25,6 +25,10 @@ from isaaclab.envs import ManagerBasedRLEnv  # noqa: E402
 
 from isaac_starter_lab.isaac_lab.pick_place_task import PickPlaceTaskCfg  # noqa: E402
 
+#: The binary gripper term treats a positive action as *open* and a negative
+#: action as *close* (Isaac Lab's BinaryJointAction convention), so the close
+#: phases below pass -1.0.
+#:
 #: Joint-position actions (relative to the start pose, scale 0.5) solved with
 #: isaac_starter_lab.sim.kinematics.inverse_kinematics for the tool tip 2 cm
 #: above the cube and then 10 cm above it.
@@ -61,9 +65,9 @@ def main() -> int:
             f"ee={[round(v, 3) for v in ee.tolist()]}"
         )
 
-    run(_action(DESCEND, 0.0), 40, "after descend")
-    run(_action(DESCEND, 1.0), 40, "after close")
-    run(_action(LIFT, 1.0), 45, "after lift")
+    run(_action(DESCEND, 1.0), 40, "after descend")
+    run(_action(DESCEND, -1.0), 40, "after close")
+    run(_action(LIFT, -1.0), 45, "after lift")
 
     final_z = cube.data.root_pos_w.torch[0, 2].item()
     lifted = final_z > 0.80
