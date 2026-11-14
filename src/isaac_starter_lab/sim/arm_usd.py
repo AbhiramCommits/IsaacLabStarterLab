@@ -61,8 +61,15 @@ def build_runtime_arm(
     physics_material: Any | None = None,
     root_path: str = ARM_ROOT,
     canonical_robot: str | None = CANONICAL_ROBOT,
+    colliders: str = "full",
 ) -> None:
-    """Author the runtime arm under ``root_path`` on ``stage``."""
+    """Author the runtime arm under ``root_path`` on ``stage``.
+
+    ``colliders="full"`` gives every link a collider (the PhysX episodes).
+    ``colliders="jaws"`` keeps collision geometry only on the two fingers, which
+    is what the RL task exports: the arm body passing through the table cannot
+    then inject contact impulses that the solver turns into NaNs.
+    """
     from pxr import Gf, Sdf, UsdGeom, UsdPhysics  # type: ignore[import-not-found]
 
     if canonical_robot is not None:
@@ -86,7 +93,11 @@ def build_runtime_arm(
         UsdPhysics.MassAPI.Apply(prim).CreateMassAttr(float(mass))
         return prim
 
-    def collider(parent, name: str, offset: Sequence[float], size: Sequence[float]) -> None:
+    def collider(
+        parent, name: str, offset: Sequence[float], size: Sequence[float], collide: bool = True
+    ) -> None:
+        if not collide:
+            return
         cube = UsdGeom.Cube.Define(stage, f"{parent.GetPath()}/{name}")
         cube.CreateSizeAttr(1.0)
         UsdGeom.Xformable(cube).AddTranslateOp().Set(
@@ -136,14 +147,15 @@ def build_runtime_arm(
     anchor.CreateLocalPos0Attr(Gf.Vec3f(float(bx), float(by), float(bz)))
     anchor.CreateLocalPos1Attr(Gf.Vec3f(0.0, 0.0, 0.0))
 
+    body_collide = colliders == "full"
     link0 = link("link0", shoulder, LINK_MASSES[0])
-    collider(link0, "Visual", (0.0, 0.0, 0.0), (0.06, 0.06, 0.06))
+    collider(link0, "Visual", (0.0, 0.0, 0.0), (0.06, 0.06, 0.06), collide=body_collide)
     link1 = link("link1", shoulder, LINK_MASSES[1])
-    collider(link1, "Visual", (l1 / 2.0, 0.0, 0.0), (l1, 0.045, 0.045))
+    collider(link1, "Visual", (l1 / 2.0, 0.0, 0.0), (l1, 0.045, 0.045), collide=body_collide)
     link2 = link("link2", (shoulder[0] + l1, shoulder[1], shoulder[2]), LINK_MASSES[2])
-    collider(link2, "Visual", (l2 / 2.0, 0.0, 0.0), (l2, 0.04, 0.04))
+    collider(link2, "Visual", (l2 / 2.0, 0.0, 0.0), (l2, 0.04, 0.04), collide=body_collide)
     wrist = link("wrist", (shoulder[0] + l1 + l2, shoulder[1], shoulder[2]), LINK_MASSES[3])
-    collider(wrist, "Visual", (0.0, 0.0, 0.0), (0.06, 0.05, 0.05))
+    collider(wrist, "Visual", (0.0, 0.0, 0.0), (0.06, 0.05, 0.05), collide=body_collide)
     gripper = link(
         "gripper",
         (shoulder[0] + l1 + l2 + wrist_len, shoulder[1], shoulder[2]),

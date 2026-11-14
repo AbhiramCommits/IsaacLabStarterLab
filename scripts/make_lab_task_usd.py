@@ -39,7 +39,7 @@ def write_arm(path: Path) -> None:
     UsdGeom.SetStageMetersPerUnit(stage, 1.0)
     UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
     material = make_physics_material(stage, path=f"{ARM_ROOT}/Looks/PhysicsMat")
-    build_runtime_arm(stage, ArmConfig(), material, canonical_robot=None)
+    build_runtime_arm(stage, ArmConfig(), material, canonical_robot=None, colliders="jaws")
     stage.SetDefaultPrim(stage.GetPrimAtPath(ARM_ROOT))
     stage.GetRootLayer().Export(str(path))
 
