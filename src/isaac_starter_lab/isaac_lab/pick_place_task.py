@@ -251,10 +251,9 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
             size=(_SCENE.cube_size, _SCENE.cube_size, _SCENE.cube_size),
             rigid_props=RigidBodyPropertiesCfg(),
             mass_props=sim_utils.MassPropertiesCfg(mass=0.05),
-            collision_props=sim_utils.CollisionPropertiesCfg(
-                physics_material=sim_utils.RigidBodyMaterialCfg(
-                    static_friction=1.2, dynamic_friction=1.2, restitution=0.0
-                )
+            collision_props=sim_utils.CollisionPropertiesCfg(),
+            physics_material=sim_utils.RigidBodyMaterialCfg(
+                static_friction=1.2, dynamic_friction=1.2, restitution=0.0
             ),
             visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.12, 0.71, 0.24)),
         ),
