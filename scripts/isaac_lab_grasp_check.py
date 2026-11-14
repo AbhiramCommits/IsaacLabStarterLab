@@ -52,9 +52,13 @@ def main() -> int:
     def run(action: torch.Tensor, steps: int, label: str) -> None:
         for _ in range(steps):
             env.step(action.to(env.device))
+        ee = robot.data.body_pos_w.torch[0, robot.find_bodies("gripper")[0][0]]
+        term = env.action_manager.get_term("gripper_action")
         print(
             f"{label}: cube z={cube.data.root_pos_w.torch[0, 2].item():.4f} "
-            f"jaw q={robot.data.joint_pos.torch[0, jaw_ids[0]].item():.4f}"
+            f"jaw q={robot.data.joint_pos.torch[0, jaw_ids[0]].item():.4f} "
+            f"jaw target={term.processed_actions[0, 0].item():.4f} "
+            f"ee={[round(v, 3) for v in ee.tolist()]}"
         )
 
     run(_action(DESCEND, 0.0), 40, "after descend")
