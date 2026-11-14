@@ -91,8 +91,21 @@ def main() -> int:
         policy_obs = obs["policy"]
         if torch.isnan(policy_obs).any():
             bad = [name for name, sl in slices.items() if torch.isnan(policy_obs[:, sl]).any()]
-            print(f"NAN at step {step}: terms={bad} reward_nan={bool(torch.isnan(reward).any())}")
-            print("raw joint_pos:", env.scene["robot"].data.joint_pos.torch[0].tolist())
+            bad_envs = torch.isnan(policy_obs).any(dim=1).nonzero().flatten().tolist()
+            print(f"NAN at step {step}: terms={bad} envs={bad_envs}")
+            for index in bad_envs[:2]:
+                print(
+                    f"  env {index} joint_pos=",
+                    [round(v, 3) for v in env.scene["robot"].data.joint_pos.torch[index].tolist()],
+                )
+                print(
+                    f"  env {index} joint_vel=",
+                    [round(v, 1) for v in env.scene["robot"].data.joint_vel.torch[index].tolist()],
+                )
+                print(
+                    f"  env {index} object=",
+                    [round(v, 3) for v in env.scene["object"].data.root_pos_w.torch[index].tolist()],
+                )
             return 1
         print(
             f"step {step}: reward_mean={reward.mean().item():.6f} "
