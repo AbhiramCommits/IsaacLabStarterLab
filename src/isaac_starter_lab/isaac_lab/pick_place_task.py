@@ -87,9 +87,10 @@ START_Q = {
     JAW_JOINT: 0.0,
 }
 
-#: Jaw travel that grips a 5 cm cube: the moving jaw's inner face meets the
-#: cube side at q ~= 0.026 (wide open is 0.0, fully shut is 0.07).
-JAW_GRIP = 0.026
+#: Jaw travel that grips a 5 cm cube.  The jaw gap is ``0.102 - q`` metres, so a
+#: 5 cm cube is pinched at ``q = 0.052``; 0.054 adds a 2 mm squeeze.  (The first
+#: value tried, 0.026, left a 0.076 m gap and the cube slid out.)
+JAW_GRIP = 0.054
 
 #: Object spawn on the table, clear of the bin wall (x >= 0.13 is bin) and of
 #: the arm base, so a randomised spawn can never start inside a collider.
