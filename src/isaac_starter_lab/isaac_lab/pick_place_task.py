@@ -203,12 +203,16 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
                 stiffness=100.0,
                 damping=10.0,
                 effort_limit_sim=20.0,
+                # The links weigh 10-100 g; a little reflected inertia keeps
+                # the implicit drive well conditioned at 240 Hz.
+                armature=0.01,
             ),
             "gripper": ImplicitActuatorCfg(
                 joint_names_expr=[JAW_JOINT],
                 stiffness=50.0,
                 damping=5.0,
-                effort_limit_sim=2.0,
+                effort_limit_sim=1.0,
+                armature=0.001,
             ),
         },
     )
