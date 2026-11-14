@@ -25,11 +25,9 @@ simulation_app = app_launcher.app
 
 import gymnasium as gym  # noqa: E402
 import torch  # noqa: E402
-
 from isaaclab.envs import ManagerBasedRLEnv  # noqa: E402
 
 from isaac_starter_lab.isaac_lab.pick_place_task import (  # noqa: E402
-    TASK_ID,
     PickPlaceTaskCfg,
     register,
 )
@@ -43,6 +41,7 @@ def main() -> int:
     cfg = PickPlaceTaskCfg()
     cfg.scene.num_envs = args_cli.num_envs
     cfg.sim.device = args_cli.device
+    cfg.seed = 7
     env = ManagerBasedRLEnv(cfg)
 
     print(f"num_envs={env.num_envs} num_actions={env.action_space.shape[-1]}")
@@ -57,11 +56,22 @@ def main() -> int:
 
     obs, _ = env.reset()
     print(f"reset obs shape: {tuple(obs['policy'].shape)}")
+    gripper_ids, gripper_names = env.scene["robot"].find_bodies("gripper")
+    print(f"gripper body: {gripper_names} ids={gripper_ids}")
+    print(
+        "object_pos[0]=",
+        [round(v, 4) for v in env.scene["object"].data.root_pos_w.torch[0].tolist()],
+        "ee_pos[0]=",
+        [
+            round(v, 4)
+            for v in env.scene["robot"].data.body_pos_w.torch[0, gripper_ids[0]].tolist()
+        ],
+    )
     actions = torch.zeros(env.action_space.shape, device=env.device)
     for step in range(args_cli.steps):
         obs, reward, terminated, truncated, _ = env.step(actions)
         print(
-            f"step {step}: reward_mean={reward.mean().item():.4f} "
+            f"step {step}: reward_mean={reward.mean().item():.6f} "
             f"terminated={int(terminated.sum())} truncated={int(truncated.sum())}"
         )
     print("SMOKE_OK")
