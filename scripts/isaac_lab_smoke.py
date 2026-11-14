@@ -18,6 +18,7 @@ from isaaclab.app import AppLauncher
 parser = argparse.ArgumentParser()
 parser.add_argument("--num_envs", type=int, default=2)
 parser.add_argument("--steps", type=int, default=5)
+parser.add_argument("--random_actions", action="store_true")
 AppLauncher.add_app_launcher_args(parser)
 args_cli = parser.parse_args()
 app_launcher = AppLauncher(args_cli)
@@ -77,8 +78,22 @@ def main() -> int:
         ],
     )
     actions = torch.zeros(env.action_space.shape, device=env.device)
+    slices = {
+        "joint_pos": slice(0, 6),
+        "joint_vel": slice(6, 12),
+        "object_position": slice(12, 15),
+        "last_action": slice(15, 21),
+    }
     for step in range(args_cli.steps):
+        if args_cli.random_actions:
+            actions = torch.randn(env.action_space.shape, device=env.device).clamp(-1.0, 1.0)
         obs, reward, terminated, truncated, _ = env.step(actions)
+        policy_obs = obs["policy"]
+        if torch.isnan(policy_obs).any():
+            bad = [name for name, sl in slices.items() if torch.isnan(policy_obs[:, sl]).any()]
+            print(f"NAN at step {step}: terms={bad} reward_nan={bool(torch.isnan(reward).any())}")
+            print("raw joint_pos:", env.scene["robot"].data.joint_pos.torch[0].tolist())
+            return 1
         print(
             f"step {step}: reward_mean={reward.mean().item():.6f} "
             f"terminated={int(terminated.sum())} truncated={int(truncated.sum())}"
