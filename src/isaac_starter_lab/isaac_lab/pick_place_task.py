@@ -104,7 +104,10 @@ def ee_object_distance(
     obj = env.scene[object_cfg.name]
     robot = env.scene[robot_cfg.name]
     cube = obj.data.root_pos_w.torch
-    ee = robot.data.body_pos_w.torch[:, robot_cfg.body_ids[0]]
+    ee = robot.data.body_pos_w.torch[:, robot_cfg.body_ids]
+    if ee.dim() == 3:
+        # ``body_ids`` resolves to a slice when a single body name is given.
+        ee = ee[:, 0]
     distance = torch.linalg.norm(cube - ee, dim=1)
     return 1.0 - torch.tanh(distance / std)
 
@@ -155,7 +158,7 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
     """Table, bin, lights and camera; the arm and the cube are added below."""
 
     tabletop = AssetBaseCfg(
-        prim_path="{ENV_REGEX_NS}",
+        prim_path="{ENV_REGEX_NS}/Tabletop",
         spawn=UsdFileCfg(usd_path=SCENE_USD),
         init_state=AssetBaseCfg.InitialStateCfg(pos=(0.0, 0.0, 0.0)),
     )
@@ -173,13 +176,13 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
                 joint_names_expr=ARM_JOINTS,
                 stiffness=1.0e5,
                 damping=2.0e3,
-                effort_limit=200.0,
+                effort_limit_sim=200.0,
             ),
             "gripper": ImplicitActuatorCfg(
                 joint_names_expr=[JAW_JOINT],
                 stiffness=1.0e5,
                 damping=2.0e3,
-                effort_limit=50.0,
+                effort_limit_sim=50.0,
             ),
         },
     )
