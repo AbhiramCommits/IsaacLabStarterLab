@@ -294,7 +294,7 @@ class EventCfg:
 class PickPlaceTaskCfg(ManagerBasedRLEnvCfg):
     """Top-level ManagerBasedRLEnv configuration for the lab."""
 
-    scene: PickPlaceSceneCfg = PickPlaceSceneCfg(num_envs=32, env_spacing=2.0, replicate_physics=True)
+    scene: PickPlaceSceneCfg = PickPlaceSceneCfg(num_envs=32, env_spacing=2.0, replicate_physics=False)
     observations: ObservationsCfg = ObservationsCfg()
     actions: ActionsCfg = ActionsCfg()
     rewards: RewardsCfg = RewardsCfg()
