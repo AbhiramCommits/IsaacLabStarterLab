@@ -73,7 +73,7 @@ def main() -> int:
         camera.initialize()
         rgba = None
         for _ in range(20):
-            sim.render()
+            sim.step(render=True)
             rgba = camera.get_rgba()
             if rgba is not None and np.asarray(rgba).size:
                 break

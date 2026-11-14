@@ -45,6 +45,22 @@ rendered RGB camera. The CPU table below is the kinematic logic check; its
 100/100 is not a physics claim. Source: `results/gpu/isaac_sweep.json` and
 `results/gpu/seed_7/`.
 
+### Pinhole vs RTX perception (same 200 DR scenes)
+
+| Metric | Pinhole (CPU ray caster) | RTX (Isaac Sim 6.0) |
+| --- | --- | --- |
+| Pixel error, mean / p95 | 1.058 / 3.577 px | 2.968 / 4.767 px |
+| 3D error, mean / p95 | 3.607 / 12.885 mm | 12.073 / 21.856 mm |
+| Recall | 100.00% | 95.51% |
+| Precision | 100.00% | 95.21% |
+| Detections / TP / FP / FN | 979 / 979 / 0 / 0 | 982 / 935 / 47 / 44 |
+
+Same labels, camera and cube layout; the RTX frames add shading, shadows and
+anti-aliasing. The pixel/3D errors are computed on the unoccluded-centre subset
+(840 pinhole, 336 RTX); many RTX visible centroids shift more than 5 px under
+shading/occlusion. Source: `results/gpu/rtx_perception.json`. The gap is real and
+is not hidden.
+
 ### CPU track — kinematic logic check (no physics)
 
 <!-- RESULTS:START -->

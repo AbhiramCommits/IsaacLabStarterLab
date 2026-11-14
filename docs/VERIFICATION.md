@@ -74,11 +74,13 @@ The GPU track was exercised on a Secure RTX 4090 pod (driver 595.91.07,
   `TIMEOUT_TRANSFER` 11, `CUBE_NOT_IN_BIN` 7, `NO_DETECTION` 1
   (`results/gpu/isaac_sweep.json`).
 
-  An RTX perception comparison was prepared: one DR-matched USD per seed
-  (`scripts/make_rtx_scenes.py`), an RTX renderer and an evaluator. The pod
-  rendering the frames was evicted by its host and a replacement could not be
-  rented because the Runpod account balance was too low. No RTX frames were
-  produced, so no RTX perception numbers are reported.
+  The RTX perception comparison completed on 200 DR-matched scenes: one USD
+  per seed (`scripts/make_rtx_scenes.py`), one RTX frame per seed
+  (`scripts/render_rtx_seeds.py`) and an evaluator
+  (`scripts/evaluate_rtx_perception.py`). RTX: recall 0.9551, precision 0.9521,
+  pixel error mean 2.968 px (p95 4.767), 3D error mean 12.073 mm (p95 21.856).
+  Pinhole: 1.0000/1.0000, 1.058 px, 3.607 mm. The RTX gap is real:
+  `results/gpu/rtx_perception.json`.
 
 RTX artifacts from the seed-7 run (start/final frame, trajectory, summary) are
 committed under `results/gpu/seed_7/`; `summary.json` records
