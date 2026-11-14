@@ -220,8 +220,8 @@ class ObservationsCfg:
         joint_pos = ObsTerm(func=mdp.joint_pos_rel)
         joint_vel = ObsTerm(func=mdp.joint_vel_rel)
         object_position = ObsTerm(
-            func=mdp.object_position_in_robot_root_frame,
-            params={"object_cfg": SceneEntityCfg("object")},
+            func=mdp.root_pos_w,
+            params={"asset_cfg": SceneEntityCfg("object")},
         )
         actions = ObsTerm(func=mdp.last_action)
 
