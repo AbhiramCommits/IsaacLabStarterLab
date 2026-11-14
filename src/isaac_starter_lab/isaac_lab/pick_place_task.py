@@ -79,9 +79,10 @@ BIN_Z = _SCENE.table_top + 0.04
 START_Q = {name: 0.0 for name in ARM_JOINTS}
 START_Q[JAW_JOINT] = 0.07
 
-#: Object spawn on the table, in front of the arm.
-OBJECT_X = 0.14
-OBJECT_Y = 0.0
+#: Object spawn on the table, clear of the bin wall (x >= 0.13 is bin) and of
+#: the arm base, so a randomised spawn can never start inside a collider.
+OBJECT_X = 0.02
+OBJECT_Y = -0.05
 OBJECT_Z = _SCENE.cube_center_z
 
 
@@ -283,7 +284,7 @@ class EventCfg:
         func=mdp.reset_root_state_uniform,
         mode="reset",
         params={
-            "pose_range": {"x": (-0.05, 0.05), "y": (-0.05, 0.05), "z": (0.0, 0.0)},
+            "pose_range": {"x": (-0.03, 0.03), "y": (-0.03, 0.03), "z": (0.0, 0.0)},
             "velocity_range": {},
             "asset_cfg": SceneEntityCfg("object"),
         },
