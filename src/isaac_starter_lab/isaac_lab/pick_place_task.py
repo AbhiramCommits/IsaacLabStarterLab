@@ -231,7 +231,7 @@ class ActionsCfg:
     arm_action = mdp.JointPositionActionCfg(
         asset_name="robot",
         joint_names=ARM_JOINTS,
-        scale=0.5,
+        scale=1.5,
         use_default_offset=True,
     )
     gripper_action = mdp.BinaryJointPositionActionCfg(
