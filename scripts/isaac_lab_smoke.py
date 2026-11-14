@@ -59,6 +59,11 @@ def main() -> int:
     gripper_ids, gripper_names = env.scene["robot"].find_bodies("gripper")
     print(f"gripper body: {gripper_names} ids={gripper_ids}")
     print("env_origin[0]=", [round(v, 4) for v in env.scene.env_origins[0].tolist()])
+    robot = env.scene["robot"]
+    print("joint_names:", robot.joint_names)
+    print("joint_pos[0]:", [round(v, 3) for v in robot.data.joint_pos.torch[0].tolist()])
+    print("default_joint_pos[0]:", [round(v, 3) for v in robot.data.default_joint_pos.torch[0].tolist()])
+    print("limits:", [tuple(round(x, 2) for x in lim) for lim in robot.data.joint_limits.torch[0].tolist()])
     print(
         "object_pos[0]=",
         [round(v, 4) for v in env.scene["object"].data.root_pos_w.torch[0].tolist()],
