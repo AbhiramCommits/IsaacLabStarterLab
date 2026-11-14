@@ -46,7 +46,8 @@ The GPU track was exercised on Secure and Community RTX 4090 / L40S pods
 | Component | Path | Status |
 | --- | --- | --- |
 | Isaac Sim backend | `src/isaac_starter_lab/sim/isaac_backend.py` | executed on Isaac Sim 6.0: runtime 7-DOF arm, seed-7 pick SUCCESS, 100-seed PhysX sweep 40/100 |
-| Isaac Lab task config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | unexecuted; dataclass validation is tested on CPU |
+| Isaac Lab task | `src/isaac_starter_lab/isaac_lab/pick_place_task.py` | executed on Isaac Lab 3.0.0 / Isaac Sim 6.0.1: 1500 PPO iterations, 2,304,000 env steps |
+| Isaac Lab dataclass config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | CPU-only mirror; validated on CPU, not used by the run |
 | `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | executed on ROS 2 Jazzy: 60 Hz joint states, 8.2 Hz RGB, recorded bag |
 | ROS 2 ament package | `ros2_ws/src/starter_lab/` | executed: `colcon build` succeeded; controller, bridge and perception nodes ran |
 | GPU image | `docker/Dockerfile.isaac` | built and pushed as `madridista23/isaac-sim-60-root:latest`; starts on this driver |
@@ -92,6 +93,26 @@ The Docker and no-Docker install paths were updated (`docker/Dockerfile.isaac`,
 `scripts/setup_isaac_nodocker.sh`) so they do not replace Isaac Sim's bundled
 `pxr`/`numpy`. The root/SSH 6.0 image that ran is published at
 `madridista23/isaac-sim-60-root:latest`.
+
+## Isaac Lab + PPO evidence
+
+Run on the `nvcr.io/nvidia/isaac-lab:3.0.0-beta2` image (Isaac Sim 6.0.1,
+Isaac Lab 3.0.0, rsl_rl 5.0.1) on a Secure RTX 4090 (EU-RO-1).
+
+| Command | Observed |
+| --- | --- |
+| `scripts/isaac_lab_smoke.py --num_envs 32 --steps 2000 --random_actions` | `SMOKE_OK`; no NaN |
+| `train.py --task IsaacLabStarterLab-PickPlace-v0 --num_envs 32 --max_iterations 1500` | 1500 iterations, 2,304,000 steps, 2346.69 s, mean 986 steps/s |
+| reaching reward | 0.043 at iteration 0, 0.50 by ~iteration 200, ~0.50 at 1499 |
+| lifting reward | peaks 0.389, returns to 0.0 |
+| success termination | 0.0 for every iteration |
+| checkpoints | `model_{250,500,750,1000,1250,1499}.pt`, 1.1 MB each (not committed) |
+
+The task uses our own arm (`usd/lab_arm.usda`) and table (`usd/lab_task_seed7.usda`),
+so it is the same robot as the PhysX sweep, with fingers-only collision geometry
+and joint armature added for multi-environment stability at 240 Hz.
+The policy learns to reach and does not learn to grasp or place; no success
+rate is claimed.
 
 ## Scene determinism evidence
 
@@ -225,6 +246,9 @@ External human testers remain pending, as stated in
 
 The repository is self-contained on the CPU track: the scene, renderer, dataset,
 evaluation, grader, tests, guide commands, Docker image and walkthrough all run.
-The GPU Isaac Sim path now starts, renders and runs a real 7-DOF PhysX arm but
-stops at APPROACH; the `rclpy` transport, Isaac Lab and RTX perception remain
-unexecuted. They are labelled accordingly in the README, the guide and this file.
+On the GPU pods, Isaac Sim 6.0 runs a real 7-DOF PhysX arm (40/100 physical
+seeds), RTX perception is compared against the pinhole renderer, ROS 2 Jazzy
+carries the topics, and Isaac Lab 3.0 trains a PPO policy on the same arm. The
+one open result is behavioural: the PPO policy reaches but does not grasp, and
+the distributed ROS 2 pick times out. Both are stated as such in the README,
+the guide and this file.

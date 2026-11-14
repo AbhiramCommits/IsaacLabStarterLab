@@ -1,8 +1,8 @@
 # IsaacLabStarterLab
 
 A tabletop pick-and-place teaching lab built on a real OpenUSD scene.
-A deterministic CPU track runs anywhere; a GPU track runs Isaac Sim 6.0 and
-ROS 2 Jazzy through the same message schema.
+A deterministic CPU track runs anywhere; a GPU track runs Isaac Sim 6.0,
+Isaac Lab 3.0 (PhysX + PPO) and ROS 2 Jazzy through the same message schema.
 The CPU track is tested and measured; the GPU track runs a real 7-DOF PhysX arm
 and completes 40 of 100 seeds on a physical 100-seed sweep. The CPU kinematic
 100% is a logic check, not a physics result (see
@@ -111,6 +111,34 @@ stable in lockstep overshoot once a wall-clock 60 Hz timer and DDS latency sit
 between sensor and actuator. The failure is recorded, not hidden. Source:
 `results/gpu/ros2_transport.json`.
 
+## Isaac Lab 3.0 + PPO
+
+`IsaacLabStarterLab-PickPlace-v0` is a real `ManagerBasedRLEnv` task: the
+articulation is the same flat 7-DOF arm the PhysX episodes use
+(`usd/lab_arm.usda`, exported from `sim/arm_usd.py`), the table and bin come
+from `usd/lab_task_seed7.usda`, and one 50 mm cube is spawned as a rigid body.
+Actions are joint-position targets plus a binary gripper; observations are
+joint position/velocity, the cube position and the last action (21 dims).
+
+| Measurement | Result |
+| --- | --- |
+| Engine | Isaac Sim 6.0.1, Isaac Lab 3.0.0 (beta2 image), PhysX, rsl_rl 5.0.1 |
+| Environments / steps | 32 / 2,304,000 |
+| Throughput | mean 986 steps/s |
+| Run | 1500 PPO iterations, 2346.69 s |
+| Reaching reward | 0.043 → 0.50 (by ~iteration 200), then flat |
+| Episode length | 32.8 → 240 steps (the limit) |
+| Lifting reward | peaks at 0.389, returns to 0.0 |
+| Success termination | **0.0 for all 1500 iterations** |
+
+The policy learns to reach the cube and stops there. It never learns to grasp
+and place in this run, and the repository does not claim it does. Getting the
+multi-environment run stable took 240 Hz physics, joint armature for the
+5–100 g links, extra solver iterations and fingers-only collision geometry in
+the RL export; those changes are in the task and the arm builder.
+
+Source: `results/gpu/isaac_lab_ppo.json`.
+
 ## Validated vs not validated
 
 Validated on the CPU track and the GPU pods:
@@ -127,12 +155,14 @@ Validated on the CPU track and the GPU pods:
 - The ROS 2 Jazzy transport: real nodes, 60 Hz joint states, 8.2 Hz RGB,
   ~31 ms perception latency and a recorded bag
   (`results/gpu/ros2_transport.json`).
+- The Isaac Lab 3.0 task `IsaacLabStarterLab-PickPlace-v0` and a 1500-iteration
+  PPO run on it at **986 steps/s** (`results/gpu/isaac_lab_ppo.json`).
 
 Not validated:
 
-- The Isaac Lab `ManagerBasedRLEnv` task, 64-environment throughput and PPO.
-  Not reached: under $1 of the $6.50 Runpod cap remained, which does not cover
-  an install, a first-time task bring-up and a training run (see `PROGRESS.md`).
+- Pick-and-place **learning**. PPO learns the reaching phase (reward 0.043 →
+  0.50) and plateaus; it does not learn to grasp and place (success 0 in 1500
+  iterations). No policy success rate is claimed.
 - The distributed ROS 2 pick. The transport works, but the controller fails
   `TIMEOUT_HOME` (see above).
 - The GPU image in `docker/Dockerfile.isaac` beyond the pushed
@@ -197,9 +227,9 @@ a real `/lab/joint_states` message, then launches `controller_node` and
   logic check, not a camera result.
 - The dataset hash is a same-environment self-consistency hash. The scene hash is
   the cross-machine pin.
-- The GPU track runs on Isaac Sim 6.0 / PhysX / RTX and is measured; the
-  Isaac Lab task and PPO are not run. The exact commands and errors are in
-  [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
+- The GPU track runs on Isaac Sim 6.0 / PhysX / RTX / Isaac Lab and is
+  measured. PPO trains but has not solved the task; the exact commands, the
+  run and the errors are in [`docs/VERIFICATION.md`](docs/VERIFICATION.md).
 - External human testers have not run the lab. The owner cold run is the only
   completed one.
 
