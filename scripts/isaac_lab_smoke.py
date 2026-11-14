@@ -82,7 +82,8 @@ def main() -> int:
         "joint_pos": slice(0, 6),
         "joint_vel": slice(6, 12),
         "object_position": slice(12, 15),
-        "last_action": slice(15, 21),
+        "ee_to_object": slice(15, 18),
+        "last_action": slice(18, 24),
     }
     for step in range(args_cli.steps):
         if args_cli.random_actions:

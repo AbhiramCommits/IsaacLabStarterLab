@@ -74,10 +74,22 @@ JAW_JOINT = "jaw_joint"
 BIN_X = 0.25
 BIN_Y = 0.14
 BIN_Z = _SCENE.table_top + 0.04
-#: Start pose: the assembled arm (all joints zero) with the jaw open, which is
-#: exactly where the PhysX backend starts before its controller takes over.
-START_Q = {name: 0.0 for name in ARM_JOINTS}
-START_Q[JAW_JOINT] = 0.07
+#: Start pose: the tool tip 8.5 cm above the cube with the tool pointing down,
+#: from :func:`isaac_starter_lab.sim.kinematics.inverse_kinematics`, mapped into
+#: USD joint signs (the CPU sign convention is negated on joints 1-3).
+START_Q = {
+    "joint_base_yaw": 1.497,
+    "joint_shoulder": -0.637,
+    "joint_elbow": 2.109,
+    "joint_wrist_pitch": 0.099,
+    "joint_wrist_roll": 0.0,
+    # The prismatic jaw is 0 at wide open and 0.07 fully shut; 0.0 starts open.
+    JAW_JOINT: 0.0,
+}
+
+#: Jaw travel that grips a 5 cm cube: the moving jaw's inner face meets the
+#: cube side at q ~= 0.026 (wide open is 0.0, fully shut is 0.07).
+JAW_GRIP = 0.026
 
 #: Object spawn on the table, clear of the bin wall (x >= 0.13 is bin) and of
 #: the arm base, so a randomised spawn can never start inside a collider.
@@ -107,6 +119,20 @@ def ee_object_distance(
     return 1.0 - torch.tanh(distance / std)
 
 
+def ee_to_object(
+    env,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),  # noqa: B008
+    robot_cfg: SceneEntityCfg = SceneEntityCfg("robot", body_names="gripper"),  # noqa: B008
+) -> torch.Tensor:
+    """Vector from the gripper to the cube, in the world frame."""
+    obj = env.scene[object_cfg.name]
+    robot = env.scene[robot_cfg.name]
+    ee = robot.data.body_pos_w.torch[:, robot_cfg.body_ids]
+    if ee.dim() == 3:
+        ee = ee[:, 0]
+    return obj.data.root_pos_w.torch - ee
+
+
 def object_lift_height(
     env,
     rest_height: float,
@@ -133,7 +159,8 @@ def grasp_object(
     jaw = robot.data.joint_pos.torch[:, jaw_cfg.joint_ids]
     if jaw.dim() == 2:
         jaw = jaw[:, 0]
-    closed = (jaw < closed_position).float()
+    # Jaw q grows as the fingers close, so "closed" is q above the threshold.
+    closed = (jaw > closed_position).float()
     ee = robot.data.body_pos_w.torch[:, ee_cfg.body_ids]
     if ee.dim() == 3:
         ee = ee[:, 0]
@@ -241,8 +268,8 @@ class ActionsCfg:
     gripper_action = mdp.BinaryJointPositionActionCfg(
         asset_name="robot",
         joint_names=[JAW_JOINT],
-        open_command_expr={JAW_JOINT: 0.07},
-        close_command_expr={JAW_JOINT: 0.0},
+        open_command_expr={JAW_JOINT: 0.0},
+        close_command_expr={JAW_JOINT: JAW_GRIP},
     )
 
 
@@ -256,6 +283,7 @@ class ObservationsCfg:
             func=mdp.root_pos_w,
             params={"asset_cfg": SceneEntityCfg("object")},
         )
+        ee_to_object = ObsTerm(func=ee_to_object)
         actions = ObsTerm(func=mdp.last_action)
 
         def __post_init__(self):
@@ -280,7 +308,7 @@ class RewardsCfg:
     grasping = RewTerm(
         func=grasp_object,
         weight=2.0,
-        params={"std": 0.05, "closed_position": 0.02},
+        params={"std": 0.05, "closed_position": 0.015},
     )
     placing = RewTerm(
         func=object_to_bin,
@@ -362,7 +390,7 @@ class LabPpoAgentCfg(RslRlOnPolicyRunnerCfg):
     seed = 7
     clip_actions = 1.0
     num_steps_per_env = 48
-    max_iterations = 1500
+    max_iterations = 2500
     save_interval = 250
     experiment_name = "lab_pick_place"
     run_name = ""
@@ -370,7 +398,7 @@ class LabPpoAgentCfg(RslRlOnPolicyRunnerCfg):
         hidden_dims=[256, 128, 64],
         activation="elu",
         obs_normalization=True,
-        distribution_cfg=RslRlMLPModelCfg.GaussianDistributionCfg(init_std=1.0),
+        distribution_cfg=RslRlMLPModelCfg.GaussianDistributionCfg(init_std=0.5),
     )
     critic = RslRlMLPModelCfg(
         hidden_dims=[256, 128, 64],
@@ -381,7 +409,7 @@ class LabPpoAgentCfg(RslRlOnPolicyRunnerCfg):
         value_loss_coef=1.0,
         use_clipped_value_loss=True,
         clip_param=0.2,
-        entropy_coef=0.005,
+        entropy_coef=0.001,
         num_learning_epochs=5,
         num_mini_batches=4,
         learning_rate=1.0e-3,
