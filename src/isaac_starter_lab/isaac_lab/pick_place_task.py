@@ -107,12 +107,38 @@ def ee_object_distance(
     return 1.0 - torch.tanh(distance / std)
 
 
-def object_lifted(
-    env, minimal_height: float, object_cfg: SceneEntityCfg = SceneEntityCfg("object")  # noqa: B008
+def object_lift_height(
+    env,
+    rest_height: float,
+    max_height: float,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),  # noqa: B008
 ) -> torch.Tensor:
-    """1.0 while the cube is above ``minimal_height`` (world z)."""
+    """Dense 0..1 reward on how far the cube has been raised above the table."""
     obj = env.scene[object_cfg.name]
-    return torch.where(obj.data.root_pos_w.torch[:, 2] > minimal_height, 1.0, 0.0)
+    height = obj.data.root_pos_w.torch[:, 2] - rest_height
+    return torch.clamp(height, min=0.0, max=max_height) / max_height
+
+
+def grasp_object(
+    env,
+    std: float,
+    closed_position: float,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),  # noqa: B008
+    jaw_cfg: SceneEntityCfg = SceneEntityCfg("robot", joint_names=["jaw_joint"]),  # noqa: B008
+    ee_cfg: SceneEntityCfg = SceneEntityCfg("robot", body_names="gripper"),  # noqa: B008
+) -> torch.Tensor:
+    """Reward closing the jaw while the gripper is on the cube."""
+    obj = env.scene[object_cfg.name]
+    robot = env.scene[jaw_cfg.name]
+    jaw = robot.data.joint_pos.torch[:, jaw_cfg.joint_ids]
+    if jaw.dim() == 2:
+        jaw = jaw[:, 0]
+    closed = (jaw < closed_position).float()
+    ee = robot.data.body_pos_w.torch[:, ee_cfg.body_ids]
+    if ee.dim() == 3:
+        ee = ee[:, 0]
+    distance = torch.linalg.norm(obj.data.root_pos_w.torch - ee, dim=1)
+    return closed * (1.0 - torch.tanh(distance / std))
 
 
 def object_to_bin(
@@ -243,9 +269,14 @@ class RewardsCfg:
         params={"std": 0.50},
     )
     lifting = RewTerm(
-        func=object_lifted,
-        weight=5.0,
-        params={"minimal_height": _SCENE.table_top + 0.04},
+        func=object_lift_height,
+        weight=10.0,
+        params={"rest_height": _SCENE.cube_center_z, "max_height": 0.10},
+    )
+    grasping = RewTerm(
+        func=grasp_object,
+        weight=2.0,
+        params={"std": 0.05, "closed_position": 0.02},
     )
     placing = RewTerm(
         func=object_to_bin,
@@ -327,8 +358,8 @@ class LabPpoAgentCfg(RslRlOnPolicyRunnerCfg):
     seed = 7
     clip_actions = 1.0
     num_steps_per_env = 48
-    max_iterations = 300
-    save_interval = 100
+    max_iterations = 1500
+    save_interval = 250
     experiment_name = "lab_pick_place"
     run_name = ""
     actor = RslRlMLPModelCfg(
