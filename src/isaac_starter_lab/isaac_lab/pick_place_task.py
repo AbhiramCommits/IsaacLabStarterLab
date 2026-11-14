@@ -88,9 +88,9 @@ START_Q = {
 }
 
 #: Jaw travel that grips a 5 cm cube.  The jaw gap is ``0.102 - q`` metres, so a
-#: 5 cm cube is pinched at ``q = 0.052``; 0.054 adds a 2 mm squeeze.  (The first
-#: value tried, 0.026, left a 0.076 m gap and the cube slid out.)
-JAW_GRIP = 0.054
+#: 5 cm cube is pinched at ``q = 0.052``; 0.056 adds a 4 mm squeeze, which with
+#: the jaw stiffness below gives a few newtons of normal force.
+JAW_GRIP = 0.056
 
 #: Object spawn on the table, clear of the bin wall (x >= 0.13 is bin) and of
 #: the arm base, so a randomised spawn can never start inside a collider.
@@ -237,9 +237,9 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
             ),
             "gripper": ImplicitActuatorCfg(
                 joint_names_expr=[JAW_JOINT],
-                stiffness=50.0,
-                damping=5.0,
-                effort_limit_sim=1.0,
+                stiffness=300.0,
+                damping=20.0,
+                effort_limit_sim=5.0,
                 armature=0.001,
             ),
         },
@@ -251,7 +251,11 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
             size=(_SCENE.cube_size, _SCENE.cube_size, _SCENE.cube_size),
             rigid_props=RigidBodyPropertiesCfg(),
             mass_props=sim_utils.MassPropertiesCfg(mass=0.05),
-            collision_props=sim_utils.CollisionPropertiesCfg(),
+            collision_props=sim_utils.CollisionPropertiesCfg(
+                physics_material=sim_utils.RigidBodyMaterialCfg(
+                    static_friction=1.2, dynamic_friction=1.2, restitution=0.0
+                )
+            ),
             visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.12, 0.71, 0.24)),
         ),
         init_state=RigidObjectCfg.InitialStateCfg(pos=(OBJECT_X, OBJECT_Y, OBJECT_Z)),
