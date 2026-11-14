@@ -131,7 +131,8 @@ Validated on the CPU track and the GPU pods:
 Not validated:
 
 - The Isaac Lab `ManagerBasedRLEnv` task, 64-environment throughput and PPO.
-  Not reached: the remaining Runpod budget could not cover a training run.
+  Not reached: under $1 of the $6.50 Runpod cap remained, which does not cover
+  an install, a first-time task bring-up and a training run (see `PROGRESS.md`).
 - The distributed ROS 2 pick. The transport works, but the controller fails
   `TIMEOUT_HOME` (see above).
 - The GPU image in `docker/Dockerfile.isaac` beyond the pushed
