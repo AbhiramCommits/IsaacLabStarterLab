@@ -161,7 +161,10 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
         prim_path="{ENV_REGEX_NS}/RobotIsaac",
         spawn=UsdFileCfg(usd_path=ARM_USD),
         init_state=ArticulationCfg.InitialStateCfg(
-            pos=(0.0, 0.0, 0.0),
+            # The arm's links are authored in world coordinates under a
+            # root that sits at the origin, so placing the root at the arm's
+            # base position reproduces the assembled pose in every env.
+            pos=_ARM.base_position,
             joint_pos=dict(START_Q),
             joint_vel={name: 0.0 for name in ARM_JOINTS + [JAW_JOINT]},
         ),
