@@ -196,10 +196,11 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
 
 @configclass
 class ActionsCfg:
-    arm_action = mdp.JointPositionToLimitsActionCfg(
+    arm_action = mdp.JointPositionActionCfg(
         asset_name="robot",
         joint_names=ARM_JOINTS,
-        rescale_to_limits=True,
+        scale=1.5,
+        use_default_offset=True,
     )
     gripper_action = mdp.BinaryJointPositionActionCfg(
         asset_name="robot",
@@ -233,7 +234,7 @@ class RewardsCfg:
     reaching = RewTerm(
         func=ee_object_distance,
         weight=1.0,
-        params={"std": 0.10},
+        params={"std": 0.50},
     )
     lifting = RewTerm(
         func=object_lifted,
