@@ -189,16 +189,16 @@ def render_markdown(summary: dict) -> str:
         ("Scene hash (seed 7)", f"`{scene.get('hash')}`"),
         ("Scene prim count", str(scene.get("prim_count"))),
         ("DR dataset", f"{dataset.get('count')} frames, hash `{dataset.get('dataset_hash')}`"),
-        ("Perception pixel error", f"mean {_num(pixel.get('mean'), 3, ' px')}, p95 {_num(pixel.get('p95'), 3, ' px')}"),
-        ("Perception 3D error", f"mean {_num(error_3d.get('mean'), 3, ' mm')}, p95 {_num(error_3d.get('p95'), 3, ' mm')}"),
-        ("Detection recall / precision", f"{_pct(perception.get('recall'))} / {_pct(perception.get('precision'))}"),
+        ("Pinhole pixel error (logic check)", f"mean {_num(pixel.get('mean'), 3, ' px')}, p95 {_num(pixel.get('p95'), 3, ' px')}"),
+        ("Pinhole 3D error (logic check)", f"mean {_num(error_3d.get('mean'), 3, ' mm')}, p95 {_num(error_3d.get('p95'), 3, ' mm')}"),
+        ("Pinhole recall / precision (logic check)", f"{_pct(perception.get('recall'))} / {_pct(perception.get('precision'))}"),
         (
-            "Episode success (100 seeds)",
+            "Kinematic episode success, 100 seeds (no physics)",
             f"{episodes.get('successes')}/{episodes.get('count')} "
             f"({_pct(episodes.get('success_rate'))}); failures: {failure_text}",
         ),
         (
-            "Cycle time",
+            "Kinematic cycle time (no physics)",
             f"mean {_num(cycle.get('mean'), 3, ' s')}, p95 {_num(cycle.get('p95'), 3, ' s')}",
         ),
         ("Per-stage timings", timing_text),
@@ -212,8 +212,10 @@ def render_markdown(summary: dict) -> str:
         ),
         (
             "Learner testing",
-            f"{learner.get('cold_runs', 0)} cold runs, "
-            f"{learner.get('issues_filed', 0)} issues filed, "
+            f"{learner.get('cold_runs', 0)} cold "
+            f"{'run' if learner.get('cold_runs', 0) == 1 else 'runs'}, "
+            f"{learner.get('issues_filed', 0)} "
+            f"{'issue' if learner.get('issues_filed', 0) == 1 else 'issues'} filed, "
             f"{learner.get('issues_fixed', 0)} fixed",
         ),
     ]

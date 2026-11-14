@@ -1,0 +1,102 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    custom double lab:cubeSize = 0.05
+    custom int lab:seed = 7
+
+    def Xform "Lights"
+    {
+        def DomeLight "DomeLight"
+        {
+            color3f inputs:color = (1, 1, 1)
+            float inputs:intensity = 1000
+            custom double3 lab:lightDirection = (0.3, 0.4, 0.85)
+            custom double lab:normalizedIntensity = 1
+        }
+    }
+
+    def Cube "Table" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        custom double[] lab:aabb = [-0.55, -0.45, 0.71, 0.55, 0.45, 0.75]
+        custom double3 lab:tableColor = (0.47058823529411764, 0.47058823529411764, 0.49019607843137253)
+        color3f[] primvars:displayColor = [(0.47058824, 0.47058824, 0.49019608)]
+        double size = 1
+        float3 xformOp:scale = (1.1, 0.9, 0.04)
+        double3 xformOp:translate = (0, 0, 0.73)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Xform "Bin"
+    {
+        custom double[] lab:aabb = [0.13, 0.02, 0.75, 0.37, 0.26, 0.83]
+        custom double3 lab:binColor = (0.27450980392156865, 0.2901960784313726, 0.3137254901960784)
+        custom double[] lab:innerAABB = [0.14200000000000002, 0.032, 0.75, 0.358, 0.248, 0.83]
+        custom double lab:wallHeight = 0.07999999999999996
+
+        def Cube "Wall_north" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(70, 74, 80)]
+            double size = 1
+            float3 xformOp:scale = (0.24, 0.012, 0.08)
+            double3 xformOp:translate = (0.25, 0.254, 0.79)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Wall_south" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(70, 74, 80)]
+            double size = 1
+            float3 xformOp:scale = (0.24, 0.012, 0.08)
+            double3 xformOp:translate = (0.25, 0.026000000000000002, 0.79)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Wall_east" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(70, 74, 80)]
+            double size = 1
+            float3 xformOp:scale = (0.012, 0.24, 0.08)
+            double3 xformOp:translate = (0.364, 0.14, 0.79)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Wall_west" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(70, 74, 80)]
+            double size = 1
+            float3 xformOp:scale = (0.012, 0.24, 0.08)
+            double3 xformOp:translate = (0.136, 0.14, 0.79)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Camera "Camera"
+    {
+        float2 clippingRange = (0.01, 100)
+        float focalLength = 24
+        float focusDistance = 1
+        float fStop = 4
+        float horizontalAperture = 36
+        custom double3 lab:lookAt = (0.02, 0.02, 0.77)
+        float verticalAperture = 27
+        matrix4d xformOp:transform = ( (0.9995920864606949, -0.028559773898876994, 0, 0), (0.009602216165773463, 0.3360775658020712, 0.9417853615390614, 0), (-0.026897176986827708, -0.9414011945389699, 0.33621471233534633, 0), (0, -0.68, 1.02, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+}
+

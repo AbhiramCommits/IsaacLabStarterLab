@@ -274,7 +274,7 @@
       "step": "ex4"
     },
     {
-      "detail": "computed=9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96 manifest=9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96",
+      "detail": "computed=e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc manifest=e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc",
       "hint": "The manifest was edited or files changed. Regenerate with --overwrite.",
       "name": "dataset_hash",
       "passed": true,
@@ -302,7 +302,7 @@
       "step": "ex4"
     },
     {
-      "detail": "recall=0.9611 precision=0.8693",
+      "detail": "recall=1.0000 precision=1.0000",
       "hint": "Check hue separation and occlusion handling; rerun lab-eval perception.",
       "name": "perception_recall_precision",
       "passed": true,

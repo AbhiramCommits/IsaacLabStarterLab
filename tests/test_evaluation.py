@@ -41,7 +41,7 @@ def test_perception_evaluation_on_small_dataset(dataset):
     assert result["visible_cubes"] > 0
     assert result["detections"] > 0
     assert result["pixel_error"]["mean"] < 3.0
-    assert result["pixel_error"]["count"] == result["true_positives"]
+    assert result["pixel_error"]["count"] == result["localisation_true_positives"]
     assert result["error_3d_mm"]["mean"] < 10.0
     assert result["recall"] > 0.8
     assert result["precision"] > 0.5

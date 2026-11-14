@@ -138,25 +138,39 @@ def generate_dataset(
             cubes = []
             for index, placement in enumerate(placements):
                 u, v, depth = project_point(placement.position, pose, intrinsics)
-                visible = False
-                visible_pixels = int(np.count_nonzero(ids == 2 + index))
+                projected_center = (
+                    [float(u), float(v)] if math.isfinite(u) and depth > 0 else None
+                )
+                rows, cols = np.nonzero(ids == 2 + index)
+                visible_pixels = int(rows.size)
+                # A cube is visible when any of its pixels survived occlusion.
+                # Testing only the projected centre pixel mislabels a cube whose
+                # top is visible over a bin wall as "invisible".
+                visible = visible_pixels > 0
                 bbox = None
-                if math.isfinite(u) and math.isfinite(v) and depth > 0:
-                    row = int(round(v))
-                    col = int(round(u))
+                visible_centroid = None
+                centre_visible = False
+                if projected_center is not None:
+                    row = int(round(projected_center[1]))
+                    col = int(round(projected_center[0]))
                     if 0 <= row < intrinsics.height and 0 <= col < intrinsics.width:
-                        visible = bool(ids[row, col] == 2 + index)
-                    rows, cols = np.nonzero(ids == 2 + index)
-                    if rows.size:
-                        bbox = [int(cols.min()), int(rows.min()), int(cols.max()), int(rows.max())]
+                        centre_visible = bool(ids[row, col] == 2 + index)
+                if visible_pixels:
+                    bbox = [int(cols.min()), int(rows.min()), int(cols.max()), int(rows.max())]
+                    # Kept for diagnostics: the detector reports this centroid,
+                    # while ``pixel_centroid`` stays the projection of the cube
+                    # centre so the 2D and 3D errors use the same definition.
+                    visible_centroid = [float(cols.mean()), float(rows.mean())]
                 cubes.append(
                     {
                         "name": placement.name,
                         "color": placement.color_name,
                         "rgb": list(placement.rgb),
                         "position": [float(v) for v in placement.position],
-                        "pixel_centroid": [float(u), float(v)] if math.isfinite(u) else None,
+                        "pixel_centroid": projected_center,
+                        "visible_centroid": visible_centroid,
                         "visible": visible,
+                        "centre_visible": centre_visible,
                         "visible_pixels": visible_pixels,
                         "bbox": bbox,
                     }

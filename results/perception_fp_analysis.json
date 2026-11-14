@@ -1,0 +1,38 @@
+{
+  "schema": "isaac_starter_lab.perception_fp_analysis.v1",
+  "dataset": "datasets/dr",
+  "seeds": 200,
+  "dataset_hash": "e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc",
+  "before": {
+    "detections": 979,
+    "true_positives": 840,
+    "false_positives": 128,
+    "false_negatives": 34,
+    "visible_cubes": 874,
+    "recall": 0.9610983981693364,
+    "precision": 0.8692543411644535
+  },
+  "after": {
+    "detections": 979,
+    "true_positives": 979,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "visible_cubes": 979,
+    "centre_occluded_cubes": 105,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "cause": {
+    "summary": "The 128 false positives were not spurious detections. Every one was a detection of a real rendered cube whose visible-pixel centroid is more than 5 px from the projected 3D cube centre.",
+    "label_bug": "The dataset label computed 'visible' from the single projected-centre pixel. A cube whose centre is hidden behind a bin wall but whose top is rendered was therefore labelled invisible, even with hundreds of visible pixels. Fixed: visible = visible_pixels > 0, with centre_visible recorded separately.",
+    "matching_bug": "Precision and recall matched detections to the projected 3D centre only. Under partial occlusion the visible-pixel centroid must be offset, so a correct detection was scored as a false positive. Fixed: a detection inside the cube's visible bounding box matches that cube; pixel and 3D error remain measured only where the projected centre is unoccluded."
+  },
+  "breakdown_of_the_old_128_false_positives": {
+    "cube_centre_occluded": 94,
+    "cube_centre_visible_but_visible_centroid_offset": 34,
+    "detections_outside_every_ground_truth_cube_bbox": 0,
+    "cubes_fully_occluded_no_detection": 21
+  },
+  "detector_change": "none; the shipped detect_cubes is unchanged",
+  "note": "The pinhole track has flat shading and exact material colours, so a corrected ground truth gives 100% detection. That is a logic check on the state machine and geometry, not evidence of camera perception quality. The RTX comparison in results/rtx_perception.json is the sim-to-sim measurement."
+}

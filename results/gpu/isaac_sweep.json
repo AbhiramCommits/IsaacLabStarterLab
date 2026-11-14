@@ -1,0 +1,4529 @@
+{
+  "backend": "isaac",
+  "bridge": "localbus",
+  "count": 100,
+  "cycle_time_s": {
+    "count": 100,
+    "max": 7.833333333333333,
+    "mean": 4.7443333333333335,
+    "p95": 7.733333333333333
+  },
+  "engine": "Isaac Sim 6.0 / PhysX",
+  "episodes": [
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.833333333333333,
+      "failure_reason": "CUBE_NOT_IN_BIN",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.10999683290719986,
+          -0.10891564935445786,
+          0.7750000357627869
+        ],
+        "Cube_01": [
+          0.15488478541374207,
+          -0.007969592697918415,
+          0.7749999165534973
+        ],
+        "Cube_02": [
+          0.002470522653311491,
+          0.1442260444164276,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.07009577006101608,
+          0.03952735289931297,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.1650559902191162,
+          -0.1418837010860443,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "229616682af3a5c8dbc5b3958452b0da0721d1fe812f26966b69b72b65a0309a",
+      "frame_final_sha256": "9805b37439b9cae70590d78b5c2a51045c638d057ae405602a43c3b024f4234a",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 0,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_01",
+      "ticks": 290,
+      "trajectory_messages": 290,
+      "trajectory_sha256": "f48ecb25269a4c05069de148fa37b7804f8040590b1b47271297605b2b37921a"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.416666666666667,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.0044685606844723225,
+          0.06117326021194458,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.1345076858997345,
+          0.06088660657405853,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.07112772017717361,
+          -0.022114431485533714,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.1238715797662735,
+          -0.024346549063920975,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.018746402114629745,
+          -0.08464566618204117,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "03d8be04aaed6ae182de990526ed9c540287a047fb6a7dfc09e5dfe0aabaa780",
+      "frame_final_sha256": "117b70a58f53378329ec901cbff54f2af504989b1799d622f61c09aa2194de90",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 1,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_03",
+      "ticks": 265,
+      "trajectory_messages": 265,
+      "trajectory_sha256": "f08a1243b8513d413b2fc4d3f58a6602af7ecc5cad624e4cdd01534f24a0ac4f"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.35,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.16537021100521088,
+          -0.05795280635356903,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.0048401313833892345,
+          -0.06752471625804901,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.07145578414201736,
+          0.04399612918496132,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.028157612308859825,
+          0.06219429895281792,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.13419201970100403,
+          0.02880166284739971,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "16cb1432dde18335d83f7e13483f3bf2cd9853840173e96b0fdf9372c1f1c0f8",
+      "frame_final_sha256": "70c7f73280ff153e45bb73793cbe839f6e9c67259fca1cf506238c09a17aec9e",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 10,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_00",
+      "ticks": 261,
+      "trajectory_messages": 261,
+      "trajectory_sha256": "90d1ed0748079645578246119510dc00408c2b42301038e41a818d730d1c2cf5"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.383333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.1404004842042923,
+          -0.010114109143614769,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.03836636245250702,
+          -0.08446714282035828,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.13308395445346832,
+          0.05765733867883682,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.16238102316856384,
+          -0.0684957206249237,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.169008269906044,
+          -0.00632493756711483,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "f886d105c250f6b04f42e3bf8275a43ce1edb60653a508962b9b21087884d33b",
+      "frame_final_sha256": "7ee0cae66b801295a61bc785449bb5a2f10e5452e36333557d22e05ef00c81dc",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 11,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_04",
+      "ticks": 263,
+      "trajectory_messages": 263,
+      "trajectory_sha256": "780f9b6314975ea11ababa5cde16b2a16e6469da0457502269bb2f929fa81c2f"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.4,
+      "failure_reason": "CUBE_NOT_IN_BIN",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.09418836236000061,
+          0.06058695539832115,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          1.7392635345458984,
+          -3.0896172523498535,
+          -5.3184494972229
+        ],
+        "Cube_02": [
+          -0.0274657029658556,
+          -0.06754695624113083,
+          0.7750000357627869
+        ],
+        "Cube_03": [
+          0.06442849338054657,
+          -0.07081746309995651,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.3329930305480957,
+          0.08820965886116028,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e84bfe49813cde6032a36f4f268861f79597a076dd56868d2edaa51581cea1bd",
+      "frame_final_sha256": "b2b64124414f621dae06f4a4e08ddf5aae8f4f6c66ee427fbecbfdeb4888d837",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 12,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_01",
+      "ticks": 264,
+      "trajectory_messages": 264,
+      "trajectory_sha256": "95fe7571e978aaf5b35c0fb39d2e800509d351bb3d140b9e8c330c6196975d18"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.683333333333334,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.3171122074127197,
+          0.07112666964530945,
+          0.781535267829895
+        ],
+        "Cube_01": [
+          0.21571843326091766,
+          0.10432615876197815,
+          0.7750000357627869
+        ],
+        "Cube_02": [
+          -0.1598186194896698,
+          0.06054158881306648,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.011347592808306217,
+          -0.08850400149822235,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.08077988773584366,
+          0.03955845162272453,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "3abc5bc45e04f3721901280eeebe3c0f0440790476032e6c21ddca2337a627c5",
+      "frame_final_sha256": "11c81dfa64c35b3cfa6668edafd2ce4120acba7f4007522d4490c8679d909ecd",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 13,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_01",
+      "ticks": 281,
+      "trajectory_messages": 281,
+      "trajectory_sha256": "22e90e3435b594ecfb51509f6f9620c15059232f2130f0e3e03316e4ee6c6cea"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.416666666666667,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.1251116842031479,
+          -0.03197043389081955,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.0766354501247406,
+          0.04689875617623329,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.012410227209329605,
+          0.0014484982239082456,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.10254359990358353,
+          0.0137306684628129,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.0636138990521431,
+          -0.0841304138302803,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "9e610c444931ac0c74b19c6f193f184b4eeaa006475aa433917d4dd694f0776b",
+      "frame_final_sha256": "6d8d625fe018f5c98e83ff7bd5d381ecdbc342435c5e912285615dedde6964df",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 14,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_00",
+      "ticks": 265,
+      "trajectory_messages": 265,
+      "trajectory_sha256": "5cd45fe7910c9681d29b8cdec64166ced0da14ecf5827e6fd4a9a1c5fbe761ec"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.066666666666666,
+      "failure_reason": "CUBE_NOT_IN_BIN",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.07285698503255844,
+          0.03989909216761589,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.05881427600979805,
+          -0.08191557228565216,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.027063753455877304,
+          -0.06589323282241821,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.016250362619757652,
+          0.06519817560911179,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.21784299612045288,
+          0.042697563767433167,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "c34b6073c6b80da5edd8ec0c020eff9bacf631883130eb5b6008f3ecd2382037",
+      "frame_final_sha256": "304cea9765da35cb50a161fb0d83e999056532db1e596d4d1865e30eacae74cb",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 15,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_04",
+      "ticks": 244,
+      "trajectory_messages": 244,
+      "trajectory_sha256": "b518cfb50675a55711bf6ccf9ef2c0116dd38fd889ed9dbf92cc48156d8684b5"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.766666666666667,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.10255211591720581,
+          -0.1561174988746643,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.12557314336299896,
+          -0.015459556132555008,
+          0.8186207413673401
+        ],
+        "Cube_02": [
+          -1.514271855354309,
+          -11.462078094482422,
+          -90.2908706665039
+        ],
+        "Cube_03": [
+          0.3193944990634918,
+          0.06643544882535934,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.17225301265716553,
+          0.03778250515460968,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "18fb9313551a7cdefaa524c434cd894e20fcf08c33d57e842b1e3888ebf0ae9d",
+      "frame_final_sha256": "0a47397d6cff122f39c692bcea2b001210e15289a40de6c7d3116eae99109b13",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 16,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_01",
+      "ticks": 466,
+      "trajectory_messages": 466,
+      "trajectory_sha256": "641eeca17b3a8eb2e678ea16bcb4045ab83b2258bc4064e032e52f9f3517def0"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.583333333333333,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.18765942752361298,
+          0.08999032527208328,
+          0.7750000357627869
+        ],
+        "Cube_01": [
+          0.021827425807714462,
+          -0.030843380838632584,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.10775193572044373,
+          -0.02803981490433216,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.15734753012657166,
+          0.06864665448665619,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.1863817572593689,
+          -0.06070474907755852,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "b74042960b29db5158bcfea7a7e93131d3708d49bee70bbb03b2ea0d967a2eda",
+      "frame_final_sha256": "6ce5251392a129151ab657ebbcba046c6dcc108fa45422c7c7616bf4975a99bc",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 17,
+      "state": "DONE",
+      "success": true,
+      "target_color": "red",
+      "target_cube": "Cube_00",
+      "ticks": 275,
+      "trajectory_messages": 275,
+      "trajectory_sha256": "99736c65c055eff5e7fd3e1e3fc018d751dda811e0cf8286a3de1aa7bd936f7b"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.383333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.038062430918216705,
+          0.024351507425308228,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.08284877985715866,
+          -0.07592947781085968,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.17757339775562286,
+          -0.005003799684345722,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.0545533113181591,
+          0.002145678736269474,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.009313571266829967,
+          -0.0696604922413826,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "3dffe7fc8f2fc4534da9f55ab20f964ba0c932590edf48e3e85ffe8871a29ee6",
+      "frame_final_sha256": "709c772d6b3bdc8f452e169eca5b1c106d8ca0602d8126f7d7e63f42209787f3",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 18,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "green",
+      "target_cube": "Cube_02",
+      "ticks": 263,
+      "trajectory_messages": 263,
+      "trajectory_sha256": "e9ec03159f0f98d70887c1a0a5ac4b5beaa375fcac886648ac7392233ce45c01"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.45,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.030096828937530518,
+          0.057287346571683884,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.08547714352607727,
+          -0.0795123279094696,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.1058412715792656,
+          -0.004637749399989843,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.025340350344777107,
+          -0.019180113449692726,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.05518612638115883,
+          0.05602247267961502,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "8bd360460afb7f512a8d24fa75a3a52d7adc7dbd31c6f247d38f30ce2cb4c496",
+      "frame_final_sha256": "41d19dd9f5253e4bc85a30598a183c0275f2282f24a2fa453e961d421adabf8b",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 19,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_02",
+      "ticks": 267,
+      "trajectory_messages": 267,
+      "trajectory_sha256": "849a941412a73e080a70be2a05b706770a89fb84bef1f5e728962b5d9a184294"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.583333333333333,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.09011062234640121,
+          -0.04183841124176979,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.20610925555229187,
+          0.10720345377922058,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.03783797100186348,
+          0.026112552732229233,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.08506157994270325,
+          0.014874404296278954,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.023536408320069313,
+          -0.0652901753783226,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e754199876bf0b423b873bc411918aad189fa3fcc72ea11f568f91a0a98117b0",
+      "frame_final_sha256": "8fbfc9572430cfef81b9501bc491c97a8d0c84b441641b8e53eec591df5708be",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 2,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_01",
+      "ticks": 275,
+      "trajectory_messages": 275,
+      "trajectory_sha256": "fe204e47cd9035bcfce58bf5eddea4e2aeb77f391a12bd64652c7be3cd801c3d"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.7,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.07435483485460281,
+          -0.02797565422952175,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.10139480978250504,
+          0.058677222579717636,
+          0.8300836682319641
+        ],
+        "Cube_02": [
+          -0.03433435410261154,
+          -0.07768096029758453,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.1515914499759674,
+          0.06683378666639328,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.07335765659809113,
+          -0.018107235431671143,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "3f69a2866aa7f76e4107044a04af274f6a4fe0de275d8ec17fe324bf49d7d5b4",
+      "frame_final_sha256": "59b6ef43ee9f07f31092a5c39d44ef7a76f3742d8f9bab761330ae07f62a3c1e",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 20,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "green",
+      "target_cube": "Cube_01",
+      "ticks": 462,
+      "trajectory_messages": 462,
+      "trajectory_sha256": "44ebb596736a1980d8944b80ff85e3f2d55ad4a4a8c65b94b7b449a4f68b0698"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.383333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.1052049770951271,
+          0.006357297301292419,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.07930484414100647,
+          -0.07492254674434662,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.04941002279520035,
+          0.06596808135509491,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.028952855616807938,
+          -0.07124032080173492,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.17328767478466034,
+          -0.006174551788717508,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "9da6a182d2b84879a2e086ce790f964671aee25e7022ae1b1c8c3afc5438ab06",
+      "frame_final_sha256": "c1e4c91e65604b17d6745acf690f602a39e1d622e922accaba7bf814f3f6f5c5",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 21,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_04",
+      "ticks": 263,
+      "trajectory_messages": 263,
+      "trajectory_sha256": "58280cf19e90b299423b1faba8cf77fd87cd58dd3ab76ec2653a3c92f7857d01"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.933333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.0505208894610405,
+          -0.057511329650878906,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.16219840943813324,
+          0.012907939031720161,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.12148717790842056,
+          0.109761543571949,
+          0.7750228047370911
+        ],
+        "Cube_03": [
+          -0.10940142720937729,
+          0.0545833595097065,
+          0.7750139236450195
+        ],
+        "Cube_04": [
+          0.040621567517519,
+          -0.0810776799917221,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "9dce8e8fc6e2cafffe15e3595e6a577df0622f617299cbf77f516ad015bb8ab9",
+      "frame_final_sha256": "a52cde3e423b6159fc393ec1a769e9fc141d14c4afbfebed537fbbed41db54fc",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 22,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "green",
+      "target_cube": "Cube_01",
+      "ticks": 296,
+      "trajectory_messages": 296,
+      "trajectory_sha256": "e9237c3b6ced3b981acba920bf39299b728b4e24aa2202555f0cc83bb1d357bc"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.483333333333333,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.10209894180297852,
+          0.031482938677072525,
+          0.7749999165534973
+        ],
+        "Cube_01": [
+          0.21826085448265076,
+          0.11318697035312653,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.03207075595855713,
+          -0.01256462000310421,
+          0.7749999165534973
+        ],
+        "Cube_03": [
+          -0.1821138560771942,
+          0.014372617937624454,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.015650121495127678,
+          0.04591985419392586,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "df15072f5ee97755c100d4837c8971b64cec5db96a4637fb1dae2f7b64c22fd1",
+      "frame_final_sha256": "f78bea06c3cc51ff304be96538517c0cb1ba2b97f3710cb4e2e3da5b1f624036",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 23,
+      "state": "DONE",
+      "success": true,
+      "target_color": "green",
+      "target_cube": "Cube_01",
+      "ticks": 269,
+      "trajectory_messages": 269,
+      "trajectory_sha256": "661c95fe671118765ddb0bc14e97d71cef4ad0d9789591b064af7b2b6aae2f8e"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.783333333333333,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.06415838748216629,
+          -0.024981996044516563,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.028250882402062416,
+          -0.008988849818706512,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.17803522944450378,
+          0.09064996242523193,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.0916556566953659,
+          0.04061802104115486,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.17345428466796875,
+          -0.036480892449617386,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "57ed94e82b0d644aaf203a6505f0c75f9883c1112f8e9635e0a0a5b109cbeec6",
+      "frame_final_sha256": "1c3f9be076bc84939a7b3129058ac602337d8c6bfab2543bdd2369871e34ee2f",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 24,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_02",
+      "ticks": 287,
+      "trajectory_messages": 287,
+      "trajectory_sha256": "7914ce1a2bdb6a0c5b08efa6933de2676906e6808a58d0eb66626af91e0dadb1"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.966666666666667,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.12824738025665283,
+          -0.08895070850849152,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.10717538744211197,
+          -0.03075399622321129,
+          0.7749731540679932
+        ],
+        "Cube_02": [
+          -0.18827787041664124,
+          -0.05837883800268173,
+          0.7749712467193604
+        ],
+        "Cube_03": [
+          0.18526919186115265,
+          0.058148302137851715,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.10086043179035187,
+          0.05586043372750282,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "9e2cbb52794ae4ddb79188708b65c6749432477c2cdf986ae2744398b8742952",
+      "frame_final_sha256": "7cff71dc38d2b43a41270ec7ee2990e2c9180c6293bdfd0571b181e1f20f88d9",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 25,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "green",
+      "target_cube": "Cube_00",
+      "ticks": 298,
+      "trajectory_messages": 298,
+      "trajectory_sha256": "c0683a23d56538e0179498acfd0b6183f2582fa156db44472a024102abe3f7d7"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.733333333333333,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.04404060170054436,
+          -0.06259876489639282,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.16344428062438965,
+          0.023631583899259567,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.19240742921829224,
+          -0.015291850082576275,
+          0.775000274181366
+        ],
+        "Cube_03": [
+          0.26497265696525574,
+          -0.008890809491276741,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.13776877522468567,
+          -0.02906145341694355,
+          0.8073571920394897
+        ]
+      },
+      "frame_000_sha256": "128b2cdc8d513c6a4951c3795e767d1d35ed7f523508b5e3f37527b5952d95f2",
+      "frame_final_sha256": "4cd4294e2c4c1e38549c19d50b9dc4b377280757b92b5a2c616fce7a11aacfce",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 26,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_04",
+      "ticks": 464,
+      "trajectory_messages": 464,
+      "trajectory_sha256": "04aae904a305efec84345e422c7486e194b6806e4b17fbc093fa501ebeca90c3"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.75,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.11437059193849564,
+          -0.19723156094551086,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.15074847638607025,
+          -0.021074628457427025,
+          0.7976416349411011
+        ],
+        "Cube_02": [
+          0.31857186555862427,
+          0.09393515437841415,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.07820302993059158,
+          0.060059670358896255,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.036500804126262665,
+          -0.06027305871248245,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e86d69eb565be2acd5ab4664b92994f962af44b946922b2870135f32e27e1f80",
+      "frame_final_sha256": "58bf7c2edb1b4e029fb6f5caa13adce1ff12619a30b22ea633a97fcf09f10947",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 27,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_01",
+      "ticks": 465,
+      "trajectory_messages": 465,
+      "trajectory_sha256": "b3ff2efca53822cfeee8a0843fd26a6d6cf65f25a44060daca475c35723fc8bc"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.816666666666666,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.05930232256650925,
+          0.1513286978006363,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.2323162853717804,
+          0.12991929054260254,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.17002451419830322,
+          -0.0369524285197258,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.010186497122049332,
+          0.0353158637881279,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.06451084464788437,
+          0.04025714844465256,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e5f0ace0780b00404c0c25975b3f50d31517850df7b36d59af16daf7992e7439",
+      "frame_final_sha256": "1c947144e9f5ec5d03479ee3ba0fdc28a307bb0bd1c5e0cc3d5474bb2813b67d",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 28,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_01",
+      "ticks": 289,
+      "trajectory_messages": 289,
+      "trajectory_sha256": "eaa35b56fe99c8388c58cc13bd36ba65a0c798fc5dd55f0e3aa08c29654d5e4d"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.516666666666667,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.1700822412967682,
+          -0.009001089259982109,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.07061995565891266,
+          -0.05104753002524376,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.22539876401424408,
+          0.13402390480041504,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.10560978204011917,
+          0.007624514866620302,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.18249866366386414,
+          0.05700564756989479,
+          0.7749999165534973
+        ]
+      },
+      "frame_000_sha256": "ec0657e742d6fc771ea9d4c239f71aba34e1c9e73b778b6a24400a14f88eb1d8",
+      "frame_final_sha256": "489eaa14fbb9e87ab8678535954b846c6e3d4631d3bfc74498592701acd5d336",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 29,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_02",
+      "ticks": 271,
+      "trajectory_messages": 271,
+      "trajectory_sha256": "b8f54283e63b2766476f160dde7d6dc220afcb6e3d849b3b88dc5dbd06e43ede"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.65,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.20450757443904877,
+          0.0967922955751419,
+          0.7749999165534973
+        ],
+        "Cube_01": [
+          0.17292284965515137,
+          -0.02570541948080063,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.00791864562779665,
+          -0.06376125663518906,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.08867016434669495,
+          -0.0710398256778717,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.012017227709293365,
+          -0.007783878594636917,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "ac4da5ec52c04b150148bf31e3b48bb498aaa88e4fe5de7e83b3e6483c8ed006",
+      "frame_final_sha256": "50132f371c231e045cfe55cc6ddadc14dc7629b3fda7540430dfb5fe0af255aa",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 3,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_00",
+      "ticks": 279,
+      "trajectory_messages": 279,
+      "trajectory_sha256": "dce430f8b2d4826d84421012bd1849e8f750c5eeb397de0912316b20a6412979"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.383333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.0998680517077446,
+          -0.021201107650995255,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.10499999672174454,
+          0.048077359795570374,
+          0.7749999165534973
+        ],
+        "Cube_02": [
+          -0.03825002908706665,
+          0.004473213106393814,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.15207631886005402,
+          -0.027217330411076546,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.04197569936513901,
+          0.02850990928709507,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "0fd4cbdc321f569dcbad88f210b6fcf8f694962205295d6d96ee4a835d230577",
+      "frame_final_sha256": "3f2b328f254d3826be41af7c62dd5f04b21f0bb57838c3d503d36cd9539b83bc",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 30,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_03",
+      "ticks": 263,
+      "trajectory_messages": 263,
+      "trajectory_sha256": "1afe3e91446cc0b481fbc3ebfb9b45a3fad522f808f032b1683ed50b5dec4606"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.633333333333334,
+      "failure_reason": "CUBE_NOT_IN_BIN",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.152398943901062,
+          -0.07830683887004852,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.18664008378982544,
+          -0.02334265597164631,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.0670676976442337,
+          -0.08273403346538544,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.3148307204246521,
+          0.3695865273475647,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.09913915395736694,
+          0.13357703387737274,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "36994fd7aceb77d7b86c8a4caa17f0501b346ec79c2455d9d5f4d10249b0bb82",
+      "frame_final_sha256": "ad192645663929d59b2c205d147cf4a6ff15f5e83feea41128fe3da51b1bf0ac",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 31,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_03",
+      "ticks": 278,
+      "trajectory_messages": 278,
+      "trajectory_sha256": "327a2ac74ecaa52c99a1c9d4598c0dde41316716a6279476303b9e85dd795d3b"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.366666666666666,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.12842822074890137,
+          0.0014122462598606944,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.04644278809428215,
+          -0.03797625005245209,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.07054004818201065,
+          0.06461265683174133,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.17641784250736237,
+          -0.006094671320170164,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.18571734428405762,
+          -0.016445301473140717,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "4353397cb54801a0191107f37c8522eabdb59e852791e36129b7fc102fcfaeaf",
+      "frame_final_sha256": "24a3b395697040884118b68af59ef249c3bb1f7af3a0dd67a1f156a35113ca1c",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 32,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_03",
+      "ticks": 262,
+      "trajectory_messages": 262,
+      "trajectory_sha256": "d332d5de593775770863656411f217a9126f4fb52b13ec0b11e03e0ef0271997"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.566666666666666,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.021303264424204826,
+          0.0008215816342271864,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.18397299945354462,
+          -0.05204537510871887,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.12900564074516296,
+          -0.007128676399588585,
+          0.7749999165534973
+        ],
+        "Cube_03": [
+          -0.11261207610368729,
+          -0.007455375045537949,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.2800513803958893,
+          0.10378134250640869,
+          0.7749999165534973
+        ]
+      },
+      "frame_000_sha256": "88f8489bbe24882cf69af5abbd7ccc9f331ba23a572a8ea0b8dbbddbab0eef8c",
+      "frame_final_sha256": "dc5840665f8c706bc120a19e8d4d41118bc4fb3e877e61550fa4dd8dff52a481",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 33,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_04",
+      "ticks": 274,
+      "trajectory_messages": 274,
+      "trajectory_sha256": "1c5768e2f61124befe542f35094969871839fbb7571a581671af607a154d6389"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.466666666666667,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.18747732043266296,
+          0.048803940415382385,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.09724337607622147,
+          0.013867671601474285,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.006013093516230583,
+          0.035588283091783524,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.3157828152179718,
+          0.10379107296466827,
+          0.7750000357627869
+        ],
+        "Cube_04": [
+          0.18302218616008759,
+          0.101645827293396,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "1fc8e7c522ee689226050ec4c75c0f19d5ac59380dedc6fc72df1dc34c2f00da",
+      "frame_final_sha256": "64f64e41f43e8d6b0b6705922c598cc5a8ee2a44fed497974afe86cdf6a91620",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 34,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_04",
+      "ticks": 268,
+      "trajectory_messages": 268,
+      "trajectory_sha256": "b71abf53b05320ae372597d038594b9549aba3c15503a2ae3f96d73cb7e0a3da"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.566666666666666,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.005686081480234861,
+          -0.007737072184681892,
+          0.7816999554634094
+        ],
+        "Cube_01": [
+          0.16700051724910736,
+          0.06059751659631729,
+          0.7749999165534973
+        ],
+        "Cube_02": [
+          0.22094513475894928,
+          0.12809446454048157,
+          0.7750000357627869
+        ],
+        "Cube_03": [
+          -0.01746213249862194,
+          0.05520883947610855,
+          0.7749998569488525
+        ],
+        "Cube_04": [
+          0.17183727025985718,
+          -0.08594619482755661,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "98465f1f555d284402583630abcfbd579aadc1a23cbc192823f5c05f70a4ae8a",
+      "frame_final_sha256": "4bcd5c12146faa1629bcf0821810dd72f0106fd636e2b14e1ccfd1fd0202b8ea",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 35,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_02",
+      "ticks": 274,
+      "trajectory_messages": 274,
+      "trajectory_sha256": "03b67dc5014b49cc01f462c79219edbe3cba33709a7a410beba0b81217c28537"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.383333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.12072069197893143,
+          -0.0260786022990942,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.1488686352968216,
+          -0.02526502124965191,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.06917575001716614,
+          -0.00824922788888216,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.0133912218734622,
+          0.04930600896477699,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.08722057193517685,
+          0.031269580125808716,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "0b027002ddcda9988664f5c1ad6f381beab59d7f728fc7a9612690209d6d497c",
+      "frame_final_sha256": "8c4571f393d17866cc13e0c6f8c85d675657324f27885f11575203c9e48be7df",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 36,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_01",
+      "ticks": 263,
+      "trajectory_messages": 263,
+      "trajectory_sha256": "ef50e29dfb8488f0f7c18b0e63690a847d68cb69a49d8684774a3a2cd76e2500"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.7,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.07716984301805496,
+          0.015543646179139614,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.16292056441307068,
+          0.022042647004127502,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.0684322863817215,
+          -0.01788489706814289,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.23340609669685364,
+          0.13446033000946045,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.02903652749955654,
+          -0.09170394390821457,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "d02112e9b9808870d231fbc066533cdbb01f36bb87cca8446d1bdd7a5fff53f2",
+      "frame_final_sha256": "bacb7dab4f6bc57e7c334be931f336845344a313a2cf2bfc7f399cd0e0c6ea95",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 37,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_03",
+      "ticks": 282,
+      "trajectory_messages": 282,
+      "trajectory_sha256": "4661d7d4571fe30ccb9d0e51d68bed4c9e1a64787338ed6b6842de9357eccb59"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.55,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.005382339004427195,
+          -0.049541741609573364,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.08083856105804443,
+          0.02746547944843769,
+          0.7749999165534973
+        ],
+        "Cube_02": [
+          0.21419206261634827,
+          0.12422940135002136,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.13796713948249817,
+          -0.07737419754266739,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.10657832771539688,
+          0.04258382320404053,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "8a218a45b681892e99b8fde81912c1a735072bdf056cfbc5ef64bb6af2219730",
+      "frame_final_sha256": "0bf0d0ed6382350ff1fec4ae773f560d758783e8ae82d8136662962f912eea3e",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 38,
+      "state": "DONE",
+      "success": true,
+      "target_color": "green",
+      "target_cube": "Cube_02",
+      "ticks": 273,
+      "trajectory_messages": 273,
+      "trajectory_sha256": "56e7757d1a91b29c92f64cd2d8e924fef1d1d52a1724be1d8198f45c3c7f0680"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 2.9166666666666665,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.0006471059168688953,
+          -0.003785019274801016,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.137639582157135,
+          -0.04059092700481415,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.2591080665588379,
+          0.1398017406463623,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.10003156960010529,
+          0.015169216319918633,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.024509374052286148,
+          0.0652216300368309,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "774c8a08d074be8d5faa949c7af970ca222cc71ea416d9d695f21aab50e46a71",
+      "frame_final_sha256": "bf1cc2f5e39c8d69bdf49b507a6e073fca10fd9efa5c22bb24a786b52a9e32f3",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 39,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_02",
+      "ticks": 175,
+      "trajectory_messages": 175,
+      "trajectory_sha256": "fc454ce1d3f1b426af4d77f9c3f92210ce9cfda514091cab7e4b716a59961fa1"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.283333333333333,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.13346025347709656,
+          -0.00794481672346592,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.18002012372016907,
+          -0.07622791826725006,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.04058048129081726,
+          -0.029515134170651436,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.026272419840097427,
+          0.035653576254844666,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.17725661396980286,
+          0.057786162942647934,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "34da0eb5ed2fb8461fbda5c5e93a25956d3c89b6df357dee518a60ffbd7837b7",
+      "frame_final_sha256": "ecf7e33bbf7437b2088f861b16e3a09828c45d4a604abb3f01bcb743ec22114e",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 4,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_01",
+      "ticks": 257,
+      "trajectory_messages": 257,
+      "trajectory_sha256": "e2a19a5ccef32d6e1bb253f74873ae9a0a631699e8028273d544165e0fcfb185"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.6,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.096964031457901,
+          0.032612692564725876,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.17174950242042542,
+          -0.07919619232416153,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.15563707053661346,
+          -0.014109083451330662,
+          0.7841091156005859
+        ],
+        "Cube_03": [
+          0.21666669845581055,
+          0.1198355108499527,
+          0.7750000357627869
+        ],
+        "Cube_04": [
+          0.10732097923755646,
+          -0.13785231113433838,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e5ef6bf3c62fea3090021a437a1857ee5099343098f171fa286ea4068b189cfe",
+      "frame_final_sha256": "d0d915b5dbec6ec4a15ad8aa34f0510d69f3bd72652c2be84f8facf4d90994f2",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 40,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_03",
+      "ticks": 276,
+      "trajectory_messages": 276,
+      "trajectory_sha256": "760b2bb5438fdb8ca7bf8b2f640b3f92760b9e11ad2ca0794c3da39ac1d15890"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 3.933333333333333,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.17126230895519257,
+          0.05788831412792206,
+          0.7750000357627869
+        ],
+        "Cube_01": [
+          -0.14138305187225342,
+          0.041664112359285355,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.22343391180038452,
+          0.11774517595767975,
+          0.7750000357627869
+        ],
+        "Cube_03": [
+          0.004312676377594471,
+          0.0061949738301336765,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.06092003732919693,
+          0.00924539752304554,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "7a908848b385e8f6d1b7f42d8a36a0e5792d36dacb442161976fc557e527511f",
+      "frame_final_sha256": "9ef991cc9a96b63f36e62d052f0b4a4153007633af517aada8e6f5689a7047a1",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 41,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_02",
+      "ticks": 236,
+      "trajectory_messages": 236,
+      "trajectory_sha256": "407530d222e16b5a0e2ed9018053e1d7f06e828a084ef14f727c5b1d383b139e"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.533333333333333,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.13698729872703552,
+          -0.032616373151540756,
+          0.7749999165534973
+        ],
+        "Cube_01": [
+          -0.1534009575843811,
+          0.06514832377433777,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.1965836137533188,
+          0.07957722246646881,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.03417761251330376,
+          0.0007401946350000799,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.09560075402259827,
+          0.036419909447431564,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "a68878f1015b2ccf9946d5e5f74ffd4978b3685a672fa2e44d02a760279d99f2",
+      "frame_final_sha256": "ec3b6aad91ef8bce74562062ec5fac0709495dd63d883b0c8dcd4a0540e735c3",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 42,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_02",
+      "ticks": 272,
+      "trajectory_messages": 272,
+      "trajectory_sha256": "ade5f601632e227bda01726e6de7e6d5dfb4d4979e8ec703d73c5968f513e956"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.066666666666666,
+      "failure_reason": "CUBE_NOT_IN_BIN",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.05756910890340805,
+          -0.08208350837230682,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.22150146961212158,
+          0.0027658031322062016,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.030248364433646202,
+          -0.017737049609422684,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.1721082329750061,
+          0.05700325593352318,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.02948417142033577,
+          -0.08835572749376297,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "d2ee086e63922fcbb4c5b79bc4d5ed8863a4a0967e1df1aa6039da560e0ed4ff",
+      "frame_final_sha256": "8e782abbb852ffd179581183967ad57ad78aa1c2c9a4d68f6a6550326d1dce20",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 43,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_01",
+      "ticks": 244,
+      "trajectory_messages": 244,
+      "trajectory_sha256": "8e03ec4f3b1c2328f930ce3d96c8fa0d057bc5e1d0087b68c2f8a81032d5951e"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.366666666666666,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.14267027378082275,
+          -0.04821813851594925,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.035618677735328674,
+          0.06413105875253677,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.1276441365480423,
+          0.04645238816738129,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.06717922538518906,
+          0.008412385359406471,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.17196586728096008,
+          -0.023998688906431198,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "398b6b67ad16c281562002cb1d7a4942e66a0a251195da2ece9c7dd55abaca51",
+      "frame_final_sha256": "f1afb98572af3b6f36fac63c19906d64b7d6f3710d3000a44494e4edaae09ad9",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 44,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_04",
+      "ticks": 262,
+      "trajectory_messages": 262,
+      "trajectory_sha256": "fd96b166e071641f2a1e0a9962fa09c3971f59deae48ca0278db7bc8218e9a86"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.366666666666666,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.027643375098705292,
+          -0.005498409736901522,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.09965979307889938,
+          0.03924744948744774,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.0345575250685215,
+          0.017061661928892136,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.17541691660881042,
+          -0.014936847612261772,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.04908059909939766,
+          -0.08158797770738602,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "2f038fc322095f4c79291112c57ba13dcd6f1ca625a09bfde72bd933b0595183",
+      "frame_final_sha256": "35b23eb603226695bb97d6c44752ca7a1825d5fdf34843534db54a242a3d07ad",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 45,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_03",
+      "ticks": 262,
+      "trajectory_messages": 262,
+      "trajectory_sha256": "6f22545cc0238c2d3650a768d1c8fe0995a1bfee139730af7f57791753ef7222"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.833333333333333,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.15397049486637115,
+          -0.07790195196866989,
+          0.7750000357627869
+        ],
+        "Cube_01": [
+          -0.032668519765138626,
+          0.008462927304208279,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.10196122527122498,
+          0.09535490721464157,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.24083872139453888,
+          -0.031718041747808456,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.13413730263710022,
+          -0.01921081356704235,
+          0.8166608810424805
+        ]
+      },
+      "frame_000_sha256": "5772cdcadb4c41370dfcbb9f9acbc2644c58868d7cdd47dcd9b3dcf0ef77377a",
+      "frame_final_sha256": "d348c7478c8ce289b27144746ef72877e42923b95688dbb32aa497d57d5b86a8",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 46,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_04",
+      "ticks": 470,
+      "trajectory_messages": 470,
+      "trajectory_sha256": "696e861708a7a1a67cd4953d6971eacd55778601bc001d37a8ea9f46cb8c66b2"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.35,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.09140115231275558,
+          0.030079660937190056,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.013161771930754185,
+          -0.07261145114898682,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.17646998167037964,
+          -0.03832145780324936,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.11327466368675232,
+          0.04652594402432442,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.020347317680716515,
+          0.040834635496139526,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "d6bd7874c0628a7bfe27f801659a15dd9ac5b85ea53b924d28b3a3dc26ceb87f",
+      "frame_final_sha256": "e752f00b7bde418eda42bfc70f872fb93f47ae91d39e3f99e90275936a51d5e1",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 47,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_02",
+      "ticks": 261,
+      "trajectory_messages": 261,
+      "trajectory_sha256": "25440c30d70e4a1cfc1b1ea58e8acfefb3282f828b5f99fac65ce55674b9179d"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.6,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.01441882736980915,
+          0.0008269923273473978,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.05970015004277229,
+          0.04880685359239578,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.15530969202518463,
+          -0.05847068876028061,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.2326245754957199,
+          0.14667394757270813,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.1811312735080719,
+          0.03140021115541458,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "f95e331c9b164560f4782fab20cac5dad5ee2e21e7cb35736fba37593c65365f",
+      "frame_final_sha256": "706d2a0a3dd69517bb92375a66fa72387f812fde12c4c77b1ae4f3c6c7195006",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 48,
+      "state": "DONE",
+      "success": true,
+      "target_color": "red",
+      "target_cube": "Cube_03",
+      "ticks": 276,
+      "trajectory_messages": 276,
+      "trajectory_sha256": "34304388cadc2ca4f2b109b17c8c30f7735a4bb7042e25041b84307516ab2bc0"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.4,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.051841139793395996,
+          0.004728312604129314,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.05889793485403061,
+          -0.08685344457626343,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.10445485264062881,
+          0.06832920014858246,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.14785872399806976,
+          -0.005000525154173374,
+          0.7750000357627869
+        ],
+        "Cube_04": [
+          -0.1819102168083191,
+          -0.06669532507658005,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "05d446098fe8cdc3c39939fad1570edf72e678776c740225d9e0fa4a292643da",
+      "frame_final_sha256": "f28aaf7680b660b458324cb7d46f0719997db25b6fbcdb339380d181cf39c873",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 49,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_03",
+      "ticks": 264,
+      "trajectory_messages": 264,
+      "trajectory_sha256": "a542156625e654a48c191d1f1f51cc0583a26720891afd7ba6cf224326b8763b"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.75,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.10458745807409286,
+          0.038133688271045685,
+          0.7752752304077148
+        ],
+        "Cube_01": [
+          0.005793046206235886,
+          -0.04384338855743408,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.105218805372715,
+          0.058584146201610565,
+          0.8344616889953613
+        ],
+        "Cube_03": [
+          -0.17056959867477417,
+          0.06886982172727585,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.07136080414056778,
+          0.10812102258205414,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "90f0ce822051bd8bf07134e816c155dab4133f418f0004315c696a9e4a999160",
+      "frame_final_sha256": "1764bbdabfb7e7387877f705bb6306f10b03545d797cfbd3ce0cf131b93fe22f",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 5,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_02",
+      "ticks": 465,
+      "trajectory_messages": 465,
+      "trajectory_sha256": "80e916cf79ef2d36a572d93dba338b0635c82ff743737d6437e29f10a56589a2"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.716666666666667,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.10499901324510574,
+          0.042661841958761215,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.049334265291690826,
+          0.06279147416353226,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.08256713300943375,
+          -0.003479292616248131,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.09964477270841599,
+          0.060661617666482925,
+          0.8323760032653809
+        ],
+        "Cube_04": [
+          -0.03690890967845917,
+          -0.04697740823030472,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "1797735683e23277c9242646e940a4f10a258979b2cd3dbf4309f5948c673a35",
+      "frame_final_sha256": "c9fd1ba7fff9d13e51f2059b78867d0e8105d4adc8734f0a6f7dfeb55b608d59",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 50,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_03",
+      "ticks": 463,
+      "trajectory_messages": 463,
+      "trajectory_sha256": "b94e4c117634e6ee5ad07f9ebb8aaea438b30a65ad768f8447b2b4e96f3924d1"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.366666666666666,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.16724276542663574,
+          -0.04047214984893799,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.09264529496431351,
+          -0.05382627993822098,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.10818518698215485,
+          -0.05476014316082001,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.10499538481235504,
+          0.026757117360830307,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.029569163918495178,
+          -0.011290314607322216,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e940a1bf73a06eba101112d5c0598d807b99c4a2aa51e73fd32c9151aa796c79",
+      "frame_final_sha256": "84e6f4d7063e802369db3ab3b5301aca6f04dc199c2bc530d1383fbaadd9aa7e",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 51,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_00",
+      "ticks": 262,
+      "trajectory_messages": 262,
+      "trajectory_sha256": "7a060c5792983c279a5de75359818823fd98cbe576c1962b67dc217bd847e46c"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.4,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.04375838488340378,
+          0.0017277420265600085,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.007387456949800253,
+          -0.08799046277999878,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.019010508432984352,
+          0.06399746239185333,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.0968615934252739,
+          0.060539137572050095,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.14969226717948914,
+          -0.014141685329377651,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "f64daad0a06d81dbe588bb9e59a6b544a377096fe58aebd10193f44ae42b6957",
+      "frame_final_sha256": "269e784ecba06d05bc11fe5cd17f43d6acf2085b6f93d598bfa515085e1229cc",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 52,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_04",
+      "ticks": 264,
+      "trajectory_messages": 264,
+      "trajectory_sha256": "60f1a15ac3feca4ef452561d40b2f6db38903ef9c94fa38c00cdb17f9773fe7a"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.483333333333333,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.18479400873184204,
+          0.02458786964416504,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.06383392959833145,
+          0.058427996933460236,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.10498566180467606,
+          0.019731422886252403,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.18793097138404846,
+          0.058136969804763794,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.07868924736976624,
+          -0.04139203950762749,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "fdbf109f6f53214cc849b40c7d821b75d4393d5732bc3c740e2c16b257662e05",
+      "frame_final_sha256": "397e81a7b20bac353d471827ddb51591430a1ccccd15335c2ff8554fe4c588f7",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 53,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_02",
+      "ticks": 269,
+      "trajectory_messages": 269,
+      "trajectory_sha256": "e479ef2045445317eb0e22cb9f01751bce71ea082937266cf242594d3a87a66b"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.183333333333334,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.2335823029279709,
+          0.12480904906988144,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.06338554620742798,
+          -0.06868566572666168,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.1670069843530655,
+          0.05819486826658249,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.03682538866996765,
+          0.029820026829838753,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.10498903691768646,
+          0.042037371546030045,
+          0.7749999165534973
+        ]
+      },
+      "frame_000_sha256": "783984b64fe01c93078cea958eeac8b3f3c93a63371511b21211eabcfbf5e5d1",
+      "frame_final_sha256": "879229a5dbc1ba9bf520c249e9bc87a635d015ec80509fb02ee040ef6375f67e",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 54,
+      "state": "DONE",
+      "success": true,
+      "target_color": "green",
+      "target_cube": "Cube_00",
+      "ticks": 251,
+      "trajectory_messages": 251,
+      "trajectory_sha256": "e3abfc59d8288140de55744e28c7e1830036ce73a2eaaf65705782e98dbaadca"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.916666666666667,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.007680419832468033,
+          0.13148373365402222,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.11297529190778732,
+          -0.061919331550598145,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.0038261732552200556,
+          0.06125656142830849,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.1610264778137207,
+          -0.009683473967015743,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.012218681164085865,
+          -0.003893566317856312,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "5a9e389ce2f0331c1153af9d9757fb10ca11389b3f560fd4a869c7dffc20ab80",
+      "frame_final_sha256": "130f8c6f33d960d5b0026e6ed2a05a337369d3951f5b98198a94aa763d7c5049",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 55,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_01",
+      "ticks": 295,
+      "trajectory_messages": 295,
+      "trajectory_sha256": "f512be8c584bc8dda38304e463f2e7a6e19c782128d74fd76a069ee9805c97e7"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.433333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.059688061475753784,
+          -0.0986880213022232,
+          0.7758464813232422
+        ],
+        "Cube_01": [
+          0.18139022588729858,
+          -0.007392462342977524,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.00423189764842391,
+          -0.06666265428066254,
+          0.7750000357627869
+        ],
+        "Cube_03": [
+          -0.17743486166000366,
+          0.004770749248564243,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.11038552969694138,
+          -0.09189794212579727,
+          0.7761315107345581
+        ]
+      },
+      "frame_000_sha256": "bc545441f6dd3bf08b9de7a7f2fd2977a89b7978f113f1b4df8dfbc8448ba9e8",
+      "frame_final_sha256": "7bb06dc0fd897d7ab19fdf374aa7c3f2c5c61eb75a90c2df5b659c8e0767eea1",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 56,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_00",
+      "ticks": 266,
+      "trajectory_messages": 266,
+      "trajectory_sha256": "3f1bf8c3d085e13627dca5eabbf1dfed61151d983d3a4d16bcab669ed4b584b8"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.4,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.03495750203728676,
+          -0.04670080170035362,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.12898631393909454,
+          -0.035229478031396866,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.040135469287633896,
+          -0.06428217142820358,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.02675555646419525,
+          0.025761619210243225,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.11810087412595749,
+          -0.01276097260415554,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "57d5016acd32c33bc3d0023234f9338a399e0ffccfcd9782637a6d13804df70f",
+      "frame_final_sha256": "c3b6969b4edde2ae328a44547c72ae0b82674290ee3d9b247f8d35a8c247ddda",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 57,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_01",
+      "ticks": 264,
+      "trajectory_messages": 264,
+      "trajectory_sha256": "c60838806e736159eb068e8e9f1cee47f54c8ace889b281bdbf696b7862aae29"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.616666666666666,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.07219354063272476,
+          0.0500137023627758,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.09711144119501114,
+          -0.05606957897543907,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.232075035572052,
+          0.11904843151569366,
+          0.7750000357627869
+        ],
+        "Cube_03": [
+          0.01004425622522831,
+          0.05715267360210419,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.01296386867761612,
+          -0.04633217304944992,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "caf44ead9930ee488f8de18a2bda8f586f6b27ef18f547b5efbbe991902c914c",
+      "frame_final_sha256": "de8b80cb5f1c11abb387469bcd695dd091ba84d024c523672b6741c2a507aad6",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 58,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_02",
+      "ticks": 277,
+      "trajectory_messages": 277,
+      "trajectory_sha256": "455de62c919d84882bb788607109bebdaa4409448c941841579a33fd2be99077"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.4,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.033168405294418335,
+          0.0415184460580349,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.1447952687740326,
+          -0.029366133734583855,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.18680021166801453,
+          0.06467880308628082,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.027865571901202202,
+          0.022614140063524246,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.2145519256591797,
+          0.111775241792202,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "1550d5b3fe752a4dfc81d8b81a28b764b587afd75bfcb582d463a88c61633ec7",
+      "frame_final_sha256": "bec4f4d0810c1b7002f821206e4526fc29401a6c8506bf1d18ec2acaccbb1738",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 59,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_04",
+      "ticks": 264,
+      "trajectory_messages": 264,
+      "trajectory_sha256": "6c7695ead0e71dd1cab43c8f8c911f9f5ae043f355bf9c8cc35a91ab4d170073"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.366666666666666,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.014426112174987793,
+          -0.03476320579648018,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.04949260875582695,
+          -0.02982952445745468,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.18398573994636536,
+          -0.005993816535919905,
+          0.7750000357627869
+        ],
+        "Cube_03": [
+          -0.16944636404514313,
+          0.0453302301466465,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.10499737411737442,
+          0.03507306054234505,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "a262a5d614130adf214d189dffdce97c8657991e7825b1f5cc8b75d6c8968ea9",
+      "frame_final_sha256": "d2f78b67730cddfcf83b98780951ee57edcf8010f4616a81bc268ce9e7814360",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 6,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "green",
+      "target_cube": "Cube_02",
+      "ticks": 262,
+      "trajectory_messages": 262,
+      "trajectory_sha256": "3052bf3767c443ef0d0afcb72cb53d5ac9c8f8bbc62a5d9b28b9050f8bdbedd3"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.416666666666667,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.06642071902751923,
+          -0.08471088111400604,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.16831550002098083,
+          0.06749765574932098,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.13732363283634186,
+          -0.005000010132789612,
+          0.7749999165534973
+        ],
+        "Cube_03": [
+          0.17697376012802124,
+          0.06766266375780106,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.06767822057008743,
+          -0.08574116975069046,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "0159b87c546e81cb780021c28133fb189bc11517757417db8b3c8939f25c848d",
+      "frame_final_sha256": "f906805b036e224573b65479692cf91a5501372f9039e5bf9243e8d36e80a659",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 60,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_02",
+      "ticks": 265,
+      "trajectory_messages": 265,
+      "trajectory_sha256": "89509efe31813455165ccee9acd3695acd08ffbbf8709b4d2ebdfdd1acccfcfe"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.733333333333333,
+      "failure_reason": "CUBE_NOT_IN_BIN",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.013552311807870865,
+          0.1382075846195221,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.10295179486274719,
+          0.03673078119754791,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.18827909231185913,
+          0.06074177473783493,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.1163114681839943,
+          0.01930157281458378,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.09319813549518585,
+          0.03849518299102783,
+          0.8249999284744263
+        ]
+      },
+      "frame_000_sha256": "5e165ea802041a339496bc463b8e6f938d1474de8f66bc022539725a125126f2",
+      "frame_final_sha256": "734dabe924d533904eb25f968f894f7249ed2da50a4a3c57bd74689e2d532219",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 61,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_04",
+      "ticks": 284,
+      "trajectory_messages": 284,
+      "trajectory_sha256": "2e3d7d6a03beff4126a6d766a18f117c8e18f381cb64280a9f99c6c20e1b4db8"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.55,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.09437714517116547,
+          0.03699344024062157,
+          0.7750000357627869
+        ],
+        "Cube_01": [
+          0.14200644195079803,
+          -0.07878730446100235,
+          0.7749999165534973
+        ],
+        "Cube_02": [
+          0.24895647168159485,
+          0.11378996819257736,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.042278509587049484,
+          -0.08498791605234146,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.11691940575838089,
+          0.023057667538523674,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e009e342de54d7b641792838ad76aef0acd0e1d1959aa16c8b19e0f82d6c9622",
+      "frame_final_sha256": "b6d8317f0e51e1985497ab93c94fc81c4510f883cf6f73a2f4135f52da479052",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 62,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_02",
+      "ticks": 273,
+      "trajectory_messages": 273,
+      "trajectory_sha256": "88c1d82a09e3927aab2914e8addf0fea5dd8423305cadbc01cef6757ad3d3086"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.433333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.022709984332323074,
+          0.06777689605951309,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.11465217173099518,
+          -0.009164569899439812,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.050039734691381454,
+          -0.0435255691409111,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.10579368472099304,
+          -0.028561390936374664,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.04472164064645767,
+          0.0487762987613678,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "5fd2894ce666aac9dff8efe2301f8c2e1196c14bb5c453bf44f43a7c6949034c",
+      "frame_final_sha256": "b520dd7305b8fab063def6f2295e76e182b57379d6ecc5b05b33f7f2cf2151e3",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 63,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_03",
+      "ticks": 266,
+      "trajectory_messages": 266,
+      "trajectory_sha256": "542b56624541143fae335e7d6a341fdbfbd57b66e06f2dcba1244da474dea927"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.35,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.16764049232006073,
+          -0.006312348414212465,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.16416126489639282,
+          -0.038667723536491394,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.1354817897081375,
+          -0.07563973218202591,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.030948685482144356,
+          -0.0012142894556745887,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.07325475662946701,
+          -0.08153582364320755,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "a2da9b3b302c7d72d0340411a223ef71db704d13ffb8b5d57d9ae44ad1b3b9d0",
+      "frame_final_sha256": "386e8ac235e0e3aa03960e36e1471fdab5a296ab4c82d1c12ce2c80dfd48d4a9",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 64,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_02",
+      "ticks": 261,
+      "trajectory_messages": 261,
+      "trajectory_sha256": "41d6e0e95071f5922dd5ef5833792147c6d319f51053c7cb205a321eeba0cc85"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.383333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.17108601331710815,
+          -0.007120908237993717,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.04730349779129028,
+          -0.0528688058257103,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.16736532747745514,
+          -0.005365213379263878,
+          0.7750000357627869
+        ],
+        "Cube_03": [
+          -0.1344776153564453,
+          -0.08731699734926224,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.04732551798224449,
+          0.046339891850948334,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "0665bfada108c17db3f15b0c170f211ed288850c7a40afba38198f444a4f9134",
+      "frame_final_sha256": "78f5dfe4921d3038d2913f7163dae4246bb524c96cbb21615d162d2b55420f01",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 65,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_02",
+      "ticks": 263,
+      "trajectory_messages": 263,
+      "trajectory_sha256": "5905dc372a7dd9844a7a56e6a672ee46866c9ffac0124389eb26f1a42a23d56c"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 2.8833333333333333,
+      "failure_reason": "CUBE_NOT_IN_BIN",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.44538554549217224,
+          -0.01988891139626503,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.16143065690994263,
+          0.009632089175283909,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.01038779690861702,
+          0.04514496773481369,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.10221478343009949,
+          -0.03624425828456879,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.011622038669884205,
+          -0.04742434248328209,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e182cdc4ce370372262cecd04292f7c8069c61166680be3686f38a02a2e8a2e7",
+      "frame_final_sha256": "6a0843f3c6068ba428a70bd8e9f814913993847bffde93fdaa31eac3866fd331",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 66,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_00",
+      "ticks": 173,
+      "trajectory_messages": 173,
+      "trajectory_sha256": "5d6f01e6ff8b1d0865ab63e76f144248e34bf8f334f1e5f64375e9eb07f05a93"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.6,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.02193632535636425,
+          -0.07660774886608124,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.116993747651577,
+          -0.0030294053722172976,
+          0.7749999165534973
+        ],
+        "Cube_02": [
+          -0.2996889352798462,
+          0.07223472744226456,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.218370720744133,
+          0.11127021163702011,
+          0.7750000357627869
+        ],
+        "Cube_04": [
+          -0.20620542764663696,
+          0.06091370806097984,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "f7d11c65237acbbe20c9892a286873c2b418584acdc2e0c4761ebf948653a2ac",
+      "frame_final_sha256": "a9665bb9c64bd4c528d822c46c176a30b6b30ccefdfb3f0fc0f2dec3c521550b",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 67,
+      "state": "DONE",
+      "success": true,
+      "target_color": "green",
+      "target_cube": "Cube_03",
+      "ticks": 276,
+      "trajectory_messages": 276,
+      "trajectory_sha256": "5de5f5d42343f1deb2953606746eaa4d8d726a0c944f51e0c6e202750ba64dae"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.366666666666666,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.005909392144531012,
+          0.045035555958747864,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.06559141725301743,
+          0.00994603056460619,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.1793590635061264,
+          -0.006464832462370396,
+          0.7750000357627869
+        ],
+        "Cube_03": [
+          -0.1397702991962433,
+          -0.005884617567062378,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.04240035265684128,
+          -0.060919731855392456,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "140e595327e1045c826ae4018cb13d05717b12f70a061716f1dfa270192239f1",
+      "frame_final_sha256": "f9f7c6479ab6d6ce9fcb27f2d300e8cab37e48f0fe8bec377bc6d29e007a7ee0",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 68,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_02",
+      "ticks": 262,
+      "trajectory_messages": 262,
+      "trajectory_sha256": "ea60a758197eb99b8cc73d6eba7832924af55195a248626d07b00459b992c193"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.316666666666666,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.0172517579048872,
+          0.02793218567967415,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.3203522264957428,
+          0.09882078319787979,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.18580548465251923,
+          0.018198831006884575,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.2216731458902359,
+          0.11150012165307999,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.05228246748447418,
+          -0.016885850578546524,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "fdaa73e3c3f1cd27fd5825128424a6c69b1554b391269fbbde7ed33c368587a1",
+      "frame_final_sha256": "0a8bde3c4419dc98b761d649e29a313ccd556fb6bb3b64a1a5fb52a3a915a829",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 69,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_03",
+      "ticks": 259,
+      "trajectory_messages": 259,
+      "trajectory_sha256": "a911a4296505ecf2f5028f441777e850fb428f0ac03a49a9438f90d9f2efe22b"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.016666666666667,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.04728607460856438,
+          0.05275977402925491,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.20610813796520233,
+          0.10545895248651505,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.07553713023662567,
+          0.04902143403887749,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.18700972199440002,
+          0.040754079818725586,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.07445374876260757,
+          -0.04500875994563103,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "c4a3147566ef2e7af54d98c554d977bc794c412191dcb945685cb57628c0b978",
+      "frame_final_sha256": "9434e852ad15f8b75b89a4cfda7b3c12e1f91b48f0e168883d30b2fa2a48e3c9",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 7,
+      "state": "DONE",
+      "success": true,
+      "target_color": "green",
+      "target_cube": "Cube_01",
+      "ticks": 241,
+      "trajectory_messages": 241,
+      "trajectory_sha256": "2bc91c951542398e3d9f3e4533109bee0d295dea96eece1acc21a837d1e78eab"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.616666666666666,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.045082252472639084,
+          0.025361310690641403,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.11853322386741638,
+          -0.007477949373424053,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.23700633645057678,
+          0.13155117630958557,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.18335656821727753,
+          -0.035099487751722336,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.03804297000169754,
+          -0.060834046453237534,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "3b4af01438a9af5fd51573104394ac11b843f6d98ebf9d0c6dbf002d3fc7f147",
+      "frame_final_sha256": "03b4ca5115e707fa36772bef5995e697ce98bd00e1f1547634f5bf8b96a5f68b",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 70,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_02",
+      "ticks": 277,
+      "trajectory_messages": 277,
+      "trajectory_sha256": "85f2017555ab04f4ee8981733bbeb87f56eab070653e4f2ac7d70bef567c9d99"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.333333333333333,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.0932096317410469,
+          -0.005648877937346697,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.0986529216170311,
+          0.011292235925793648,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.11182282119989395,
+          -0.08176839351654053,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.00875652115792036,
+          -0.05717693269252777,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.1551704704761505,
+          -0.05589539185166359,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "70d9e3e275a8f85e3b120d9a35085454d23b4ca5e763cb601ce0ad1b454b7069",
+      "frame_final_sha256": "13bd1ef0d58cde550dfb25aa0e89378a8451c41694aa77b8661202b5690bdcf2",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 71,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_04",
+      "ticks": 260,
+      "trajectory_messages": 260,
+      "trajectory_sha256": "06e5fc0c89dd7a4f1d12eb1531a2d3ec1758355153a9e83d4677981001b3832a"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.616666666666666,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.19062772393226624,
+          0.11595474928617477,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.10151255875825882,
+          -0.07095079123973846,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.02771034650504589,
+          -0.08080125600099564,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.07888220995664597,
+          0.06166728585958481,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.06312629580497742,
+          -0.018436294049024582,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "6a9327182e67358eae0105d3fda5b6028319f129a72bafdd92eb3c503ab9d7a1",
+      "frame_final_sha256": "abf49787f9f8a75179ca75b89b9b974cd8259831f18d003d51c05765b98ab462",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 72,
+      "state": "DONE",
+      "success": true,
+      "target_color": "green",
+      "target_cube": "Cube_00",
+      "ticks": 277,
+      "trajectory_messages": 277,
+      "trajectory_sha256": "bf27f4162f8c222e810b4910a713fd06de8f70bbb1f0ffdf24e810e15a966bc5"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.383333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.0027835348155349493,
+          -0.0410679392516613,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.08748139441013336,
+          0.06665481626987457,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.10588111728429794,
+          -0.08394268900156021,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.13407549262046814,
+          -0.062009718269109726,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.0008119589765556157,
+          0.10941795259714127,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "6ef360d96e79bed22c7ac29128e51108dd52a8fa29340dec006e9da5a1c5ae21",
+      "frame_final_sha256": "26ba3af4e8846b525b9aba4acb3b02d0d8d0bc68787ad3ff52107a3c8163088f",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 73,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_03",
+      "ticks": 263,
+      "trajectory_messages": 263,
+      "trajectory_sha256": "9074d50603f87dc7bf53633d17213c89652eb84bfd1511ad3be9baa2d0f2dc17"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.216666666666667,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.1503254622220993,
+          -0.005115029867738485,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.06668076664209366,
+          0.01673341915011406,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.1874983310699463,
+          0.029243316501379013,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.005479468498378992,
+          0.0629989504814148,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.21920354664325714,
+          0.11581481993198395,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "83618b70ac609902ef0759ea9e254b8b0bca6d48ce03a8824a545405ea606005",
+      "frame_final_sha256": "44656e538602ed0c232f7b3a183250f265bb502f223d0a4172f959dcac03e3ce",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 74,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_04",
+      "ticks": 253,
+      "trajectory_messages": 253,
+      "trajectory_sha256": "1934052428351348e86f8636f67d8340a230678da3817873c9da50a65baae615"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.216666666666667,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.10837575048208237,
+          -0.06480561941862106,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.06208665296435356,
+          0.019124409183859825,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.3281024992465973,
+          0.11686132848262787,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.15045669674873352,
+          -0.015288530848920345,
+          0.8141133189201355
+        ],
+        "Cube_04": [
+          -0.03276471048593521,
+          0.04104115068912506,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "9958b885bbf2b3e4106d9a58542c77e861fc2a85a77b26a556d3aa668c93c0be",
+      "frame_final_sha256": "a424b953ec84ab48cac52c45bd3224f38b233e66ae08bb6e34236a2b274b4cd0",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 75,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_03",
+      "ticks": 433,
+      "trajectory_messages": 433,
+      "trajectory_sha256": "c56e9b7d42a5f33c1b3cf3814ec884227df14e89b333c12edd819362b42af298"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.683333333333334,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.10499117523431778,
+          0.06674327701330185,
+          0.7749999165534973
+        ],
+        "Cube_01": [
+          0.21253006160259247,
+          0.10831039398908615,
+          0.7750000357627869
+        ],
+        "Cube_02": [
+          0.05356581136584282,
+          0.10522912442684174,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.06616634875535965,
+          -0.045018259435892105,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.030797772109508514,
+          0.05829261243343353,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "d56c0a820e48945a73a6374d3d057da5e7dee1edd88cad60779a6ae6618c9a1c",
+      "frame_final_sha256": "bc6519491151daffa8a4c14f26156bb8d7bb45c98643f4a24443111f56540cdd",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 76,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_01",
+      "ticks": 281,
+      "trajectory_messages": 281,
+      "trajectory_sha256": "a051b27cbfb86eece6be7c5d337ffbb84b136a5163dabb79e03bc2bba87b5014"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.333333333333333,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.09659074991941452,
+          0.03973348066210747,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.09681026637554169,
+          -0.03615640476346016,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.2373436987400055,
+          0.14618875086307526,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.04776998981833458,
+          0.03602901101112366,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.29751056432724,
+          0.06943607330322266,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "1c22751e8fb0a66b4a19a27c45cd891fb90d884d7bc62907a32114928cb14c1c",
+      "frame_final_sha256": "a22370c2a44e284c829a5e9a93a497296673d7947ce7cb5bdf213bf0e9de5df9",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 77,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_02",
+      "ticks": 260,
+      "trajectory_messages": 260,
+      "trajectory_sha256": "00bc1ce68cb75ea315f73c2c264c94f947e33a49d56b55df54fe6599612efe9a"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.05,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.030669763684272766,
+          0.05559137091040611,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.04545993357896805,
+          -0.03778570517897606,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.030569160357117653,
+          0.017365213483572006,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.2041725069284439,
+          0.10479069501161575,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.13175275921821594,
+          0.019065605476498604,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "2f236add8de968891e85b96a7cd16091a6de3be93dd181e97da0c1b96f8b3968",
+      "frame_final_sha256": "9e7affb9106fcccabe931f3b656e7a52399d50a0763c8ec94b9baf5dc21b2918",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 78,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_03",
+      "ticks": 243,
+      "trajectory_messages": 243,
+      "trajectory_sha256": "bea89ed12c5a03a112ad3399befbc8b39a7b37a5a90a030e9f7c37c16711c751"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.333333333333333,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.15860968828201294,
+          -0.07768363505601883,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.15593567490577698,
+          -0.06913908571004868,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.008429110050201416,
+          -0.029750648885965347,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.14994816482067108,
+          0.009167752228677273,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.23010893166065216,
+          0.21076485514640808,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "8c68846193408409e82313dafc4f0c16b6b729495304d73d8ac1a5463d305cb7",
+      "frame_final_sha256": "066a00abe3d2236ebe9cd3e0ddee3cf5c5d85aa22abd1ce4609805150cde37e7",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 79,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_00",
+      "ticks": 260,
+      "trajectory_messages": 260,
+      "trajectory_sha256": "a279262adc345bc4a3e2df53e5657925195efed595a8df756603337ebbe55769"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.183333333333334,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.0654044821858406,
+          0.06698973476886749,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.19746515154838562,
+          0.09679744392633438,
+          0.7750000357627869
+        ],
+        "Cube_02": [
+          -0.023480664938688278,
+          -0.03010568395256996,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.14857155084609985,
+          -0.013323471881449223,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.09226205199956894,
+          0.004362638108432293,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "01d904de576c210f1045ed7342db820fdb4c5f878edca299414cbb4f2884fe12",
+      "frame_final_sha256": "54a43903c28765b26739542e3e6aae7c75ff9451ec8ccf4904d727c02200e41b",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 8,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_01",
+      "ticks": 251,
+      "trajectory_messages": 251,
+      "trajectory_sha256": "20bc7f8ecd059c2942766a178c37decd0db41cdeb44a69ecf0f13ec1c37b3273"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.433333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.0893937200307846,
+          -0.0860898345708847,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.17515245079994202,
+          0.004963729064911604,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.016139928251504898,
+          -0.07323143631219864,
+          0.7749974727630615
+        ],
+        "Cube_03": [
+          0.05233687534928322,
+          0.033853888511657715,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.07899268716573715,
+          -0.07624249905347824,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "d2b605e4cb4aa9bd01de831654cc3264221bf9724810317ee3f4552a8e4b976c",
+      "frame_final_sha256": "92f90c521aafb557050d67c3472a31b5b5fb1203e34b05a37d6b89b483e567a8",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 80,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_00",
+      "ticks": 266,
+      "trajectory_messages": 266,
+      "trajectory_sha256": "5fcbc4e7908c021467ccc482b57e10a5f1dfd896f640bee76ffe0127942c1749"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 1.2333333333333334,
+      "failure_reason": "NO_DETECTION",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.024905191734433174,
+          -0.05556273087859154,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          2.5691916942596436,
+          -0.8606104850769043,
+          -4.9567551612854
+        ],
+        "Cube_02": [
+          -0.0838288739323616,
+          -0.0818806141614914,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.034446679055690765,
+          0.06746870279312134,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.09960377961397171,
+          -0.056270938366651535,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "48fa051dcb07fd9fa5e9a46a623aedcde0b0f7a5f69e3db6b944f6115b64de92",
+      "frame_final_sha256": "a49888b49671def8afca6dfd866b1c6732a588a58014d65cfeae32af42e0616f",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 81,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": null,
+      "ticks": 74,
+      "trajectory_messages": 74,
+      "trajectory_sha256": "13218a933879a779a192c7c67af4b81a34f36554412e428eab13cc4e13dcee63"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.333333333333333,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.1880638152360916,
+          0.05703999474644661,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.10671453922986984,
+          0.06586296856403351,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.03455337509512901,
+          0.05937336012721062,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.10433989018201828,
+          -0.04075658693909645,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.1709209382534027,
+          -0.06612079590559006,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "caa82535bb08622e2e272718af00907bdc1abd7772f97a3a52005e51c2b30cef",
+      "frame_final_sha256": "fdd59e487c163f4e336df5e1776d2fb0a9e6e341d594fd9fdcb8a75ef2fa904b",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 82,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_04",
+      "ticks": 260,
+      "trajectory_messages": 260,
+      "trajectory_sha256": "c2965afaf3c164375df2bf72c1d982ef368b6a6866ef17c3841a18dd5efee07e"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.4,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.06939538568258286,
+          -0.08195243775844574,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.04879721999168396,
+          -0.04041800647974014,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.14665894210338593,
+          -0.02470063976943493,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.04848325252532959,
+          0.005139070563018322,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.04297783225774765,
+          0.05135582387447357,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "03af65aed940fca3791e2d83396bb9d228f156361059dfd3fbd54ffc5470cf34",
+      "frame_final_sha256": "42981f65e2708ade2a5ee21f6ab62731d33cc0706b89e7acd1b015ca5e89f2f2",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 83,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_02",
+      "ticks": 264,
+      "trajectory_messages": 264,
+      "trajectory_sha256": "faae7b58fd47ca600ee27efecab87d220772c02bdcc9a2b8c744fca285905808"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.466666666666667,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.09683434665203094,
+          0.05777338892221451,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.11279845237731934,
+          0.02457650937139988,
+          0.7750000357627869
+        ],
+        "Cube_02": [
+          0.06116039678454399,
+          -0.1017458587884903,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.0052811806090176105,
+          -0.055041249841451645,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.23806354403495789,
+          0.15003305673599243,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "509b67abc582348983191c31837a69e4815e1dabbbd8bd947fcc02fe6825582f",
+      "frame_final_sha256": "b276cc9b38cd187a5d05d351f22c1e7df35c88a6f4f2a9015182a39aa105236d",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 84,
+      "state": "DONE",
+      "success": true,
+      "target_color": "red",
+      "target_cube": "Cube_04",
+      "ticks": 268,
+      "trajectory_messages": 268,
+      "trajectory_sha256": "7d81007d93542751180dfcb0ce0d8781dc95afa9c265b41bed83996396af0b4c"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.75,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.14272156357765198,
+          0.1086735799908638,
+          0.8647171854972839
+        ],
+        "Cube_01": [
+          -0.01402175985276699,
+          -0.0134652741253376,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.1771848350763321,
+          0.06694000959396362,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.08712760359048843,
+          0.006337362341582775,
+          0.7749999165534973
+        ],
+        "Cube_04": [
+          -0.15961141884326935,
+          0.06667307764291763,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "96d71c7ede2adb2f027d1ea8d7f46a4eec409121032ef1ddaf4be87006c734f6",
+      "frame_final_sha256": "438cd1cb85492b2a79763db5f8b99e40981edf6081c6dbf2b2782e6d465072fe",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 85,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_00",
+      "ticks": 465,
+      "trajectory_messages": 465,
+      "trajectory_sha256": "b6951d2c5795cc73cf9204b8f5f45df2fdb067582fafc212bbf7da8e2c34409b"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.333333333333333,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.043644748628139496,
+          -0.061294034123420715,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.04976407811045647,
+          0.03639591857790947,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.17368003726005554,
+          -0.0682031586766243,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.03626880794763565,
+          -0.034928467124700546,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.13351956009864807,
+          -0.04564448818564415,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "52f3a4fcc5f30d616b78df75d7f6cbf928c3e696b81c4fe8ea53eacad91957ef",
+      "frame_final_sha256": "b7ee30c5207b90e21e238c9871b1dd8220a7d4ea2f266140a1f57aaa069bacaf",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 86,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_02",
+      "ticks": 260,
+      "trajectory_messages": 260,
+      "trajectory_sha256": "9e7cb4c255c875ce1c6ba6be88747ff16b44374c9837e7741d8571e75927c3bb"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.15,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.02674592286348343,
+          0.03479921072721481,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.12383582442998886,
+          -0.013026508502662182,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.027203503996133804,
+          -0.05920572951436043,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.09788993746042252,
+          -0.02229829877614975,
+          0.7904489040374756
+        ],
+        "Cube_04": [
+          0.15028752386569977,
+          -0.013258003629744053,
+          0.8310874104499817
+        ]
+      },
+      "frame_000_sha256": "91adf7509e76db18f5c118d222794b9b2ac0d51111062d06c44f2d277892d510",
+      "frame_final_sha256": "d4d40c97d02829d0a9d1869d82032a29a36f5e0c2a3c1afb9a561c81631706c2",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 87,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_04",
+      "ticks": 429,
+      "trajectory_messages": 429,
+      "trajectory_sha256": "90ba7c249e551bc195162fef1a4930cf6dfc3e1c8711ed187371dc96f59b0688"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.466666666666667,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.24421536922454834,
+          -0.008073226548731327,
+          0.7749999165534973
+        ],
+        "Cube_01": [
+          0.10690639168024063,
+          0.006545482203364372,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.09805014729499817,
+          -0.11244427412748337,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.19785268604755402,
+          0.08586855232715607,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.047079406678676605,
+          0.03202692046761513,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "29b89d31ae7f7845ae0b2ee86ed3ffd309c7696a11e68cecf62c2d78a3e312ef",
+      "frame_final_sha256": "eeee9afbabdf55af2103a507d3756d03cde7a0b05f03c653e5d6997af184bfb1",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 88,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_03",
+      "ticks": 268,
+      "trajectory_messages": 268,
+      "trajectory_sha256": "849ef4d4869f13c752c4e9b3e13404496559d2345a13dd9f61c3724b398807dd"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.383333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.02864375151693821,
+          0.032650336623191833,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.08736306428909302,
+          -0.08589357137680054,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.1050034910440445,
+          0.015429205261170864,
+          0.7749999165534973
+        ],
+        "Cube_03": [
+          -0.07716657221317291,
+          -0.06098548322916031,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.1483757197856903,
+          -0.0493113212287426,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "bd341816dd7543c408b1636daec6ca86a1bb0b1e34e3a9c990bc8bc4d990a4a4",
+      "frame_final_sha256": "c66d62015c3aa7ffaf0299f953adffb7aa03d5f398a868ab780f78973ec07d57",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 89,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "yellow",
+      "target_cube": "Cube_04",
+      "ticks": 263,
+      "trajectory_messages": 263,
+      "trajectory_sha256": "2c5cd4a688d6df0e8eb5c3c59aea106ea3fd5b105981980402136067e2d93b18"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.45,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.21588324010372162,
+          0.10903757810592651,
+          0.7750000357627869
+        ],
+        "Cube_01": [
+          0.03898998722434044,
+          0.03385038301348686,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.33299148082733154,
+          0.0675601065158844,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.17894983291625977,
+          -0.01991483010351658,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.005691059865057468,
+          -0.07870564609766006,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "82f5c7512c3ea01ff5e0725520c71bfd132a336824341db1559ed3fa481e5493",
+      "frame_final_sha256": "b6ca1729565a2a2e6d5f1c8b6f5a0e04e2dfe24b6a3f6aaf2f64522c2b7f45e4",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 9,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_00",
+      "ticks": 267,
+      "trajectory_messages": 267,
+      "trajectory_sha256": "1611285c43649cf90e398263760b8790b348e5220b0ece8fdbc3f2b7684c238f"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.633333333333334,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.0482582226395607,
+          0.01873973198235035,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.19606012105941772,
+          0.09932951629161835,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.07554133236408234,
+          0.046427372843027115,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.03190518543124199,
+          -0.08894079923629761,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.1392572522163391,
+          0.04330877587199211,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "eb38dc66dae1af026c6a27c2f54741be8c160569504cc20672133aa6c659f3f5",
+      "frame_final_sha256": "23f7e7bcac3230bfac8574b613ab29fef58be2e902b0404394161c81eb4ce57f",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 90,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_01",
+      "ticks": 278,
+      "trajectory_messages": 278,
+      "trajectory_sha256": "f9962fe0fd7a3091585d34c6c4deef7fcb4bbf501968b1d439fd3a98829165dc"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 7.25,
+      "failure_reason": "TIMEOUT_TRANSFER",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.1302962303161621,
+          0.05912727490067482,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.14736714959144592,
+          -0.012143341824412346,
+          0.8306555151939392
+        ],
+        "Cube_02": [
+          -0.07170946151018143,
+          0.08791609853506088,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.018273336812853813,
+          -0.055999115109443665,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.18514487147331238,
+          -0.0051507591269910336,
+          0.7750322818756104
+        ]
+      },
+      "frame_000_sha256": "efba912de2952eef8dcc5f8dd921e95b60ce6dee6bf9e34ae9619ef7b440733e",
+      "frame_final_sha256": "70081d062f54769f802439fa112cc1556913cb4135e717585f78f6ae69881c6d",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 91,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "red",
+      "target_cube": "Cube_01",
+      "ticks": 435,
+      "trajectory_messages": 435,
+      "trajectory_sha256": "39e24c342e34f9795b07406b56e7bf6fec1558b903996993c631eedb648a33e8"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.75,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.052871160209178925,
+          -0.08831154555082321,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.012157483957707882,
+          -0.033001601696014404,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.17464464902877808,
+          0.046480387449264526,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.21232260763645172,
+          0.2111094892024994,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.10500000417232513,
+          0.06776971369981766,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "6706f774fb7ee5a8f78bb7356ee9c3d95756cd40d30c20e6a6ebde6bed7aea87",
+      "frame_final_sha256": "d3ebc1c113ed18bd0ddf640953786b2c7c3cec171281f4d0106bb5aee5041604",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 92,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_03",
+      "ticks": 285,
+      "trajectory_messages": 285,
+      "trajectory_sha256": "8a9ed9673ecb1680c83d4072480639229a59771b5727f67b0381d84f3ba438ad"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.366666666666666,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.18351498246192932,
+          -0.005000120494514704,
+          0.7750000357627869
+        ],
+        "Cube_01": [
+          -0.015363136306405067,
+          -0.02030189335346222,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.06167462095618248,
+          -0.08003263175487518,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.18050149083137512,
+          0.06892266869544983,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.13245126605033875,
+          0.02065829187631607,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "5e9cbf82e4e516cfd95042cb64af28dee4b1034c0bf71030abaae960b1225d15",
+      "frame_final_sha256": "87b0bf0fe683bd361bf25375f723d33927851edd073e6a3a32e096183c14c1f9",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 93,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_00",
+      "ticks": 262,
+      "trajectory_messages": 262,
+      "trajectory_sha256": "5f229ba710c46f733c201be574636f5420b2d8e0f84d9584ddaf2722d8db3cad"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.35,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          -0.09840438514947891,
+          0.03561348840594292,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.08393283188343048,
+          -0.08176708221435547,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.06446528434753418,
+          -0.0475861057639122,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.024295376613736153,
+          0.0511164627969265,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.1410897970199585,
+          -0.06674930453300476,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "e3141838bedf43bbe3e3228dce419a940e6d012e9c2dbf15ddf6b3d7bc6bd71d",
+      "frame_final_sha256": "37c53dfbf283813125d9eaea5e624cb574047d30aa8b5799c10484a3e98373dc",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 94,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "magenta",
+      "target_cube": "Cube_04",
+      "ticks": 261,
+      "trajectory_messages": 261,
+      "trajectory_sha256": "a34d4896beffa7860a2d8f5fdbb2766b3fdb227610ae3dbefc0a3aed5a367333"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.433333333333334,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.015670547261834145,
+          0.05530257150530815,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          -0.10351131111383438,
+          -0.02885471098124981,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.03388768807053566,
+          -0.013672725297510624,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.12785255908966064,
+          0.033964838832616806,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.11076606065034866,
+          -0.023145198822021484,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "9ff5d5cb3864f602e8e42cdc061dea6557f49a3c968052054bfc7a40b616e3fb",
+      "frame_final_sha256": "67f795cab88ae7b63df21a8b8daf2efb36c572a34f14705156dbb4c06e4048a9",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 95,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_04",
+      "ticks": 266,
+      "trajectory_messages": 266,
+      "trajectory_sha256": "c8bafe483ea801ecf2f1befd5197a4d6642ca3b7754e09074894f5c217218949"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.366666666666666,
+      "failure_reason": "TIMEOUT_DESCEND",
+      "final_cube_positions": {
+        "Cube_00": [
+          0.08662588894367218,
+          0.026954544708132744,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.018255900591611862,
+          -0.01161184161901474,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.1539618968963623,
+          0.06287899613380432,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.15462133288383484,
+          -0.05225301533937454,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          -0.13732478022575378,
+          -0.0159345343708992,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "ec3a994f5c4d6e61486eb9c845f683291042d9dadd5adea8a667f55f3cb272f1",
+      "frame_final_sha256": "e2a9d6dd7f664e391ef8ccd6d2a198ba81914d0a34eadfced9aec21281f39d2c",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 96,
+      "state": "FAILED",
+      "success": false,
+      "target_color": "blue",
+      "target_cube": "Cube_03",
+      "ticks": 262,
+      "trajectory_messages": 262,
+      "trajectory_sha256": "a8a77463b99b04a88553d31ba0fcd205a6b7b09f12bac30112041972c26a0424"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.633333333333334,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.06591375917196274,
+          -0.020699884742498398,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.007230892311781645,
+          0.09604593366384506,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.12098023295402527,
+          0.028959766030311584,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.18178927898406982,
+          0.17949560284614563,
+          0.7749999165534973
+        ],
+        "Cube_04": [
+          0.01818181946873665,
+          0.03569018095731735,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "c7e5be29d76a5452b8f57d01bd7659666c317bd7523b3120a381829dd0aa2738",
+      "frame_final_sha256": "817e57c517b01c39eae62af73066cf02e3211b88da70f9140b63a55d86452702",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 97,
+      "state": "DONE",
+      "success": true,
+      "target_color": "blue",
+      "target_cube": "Cube_03",
+      "ticks": 278,
+      "trajectory_messages": 278,
+      "trajectory_sha256": "0bc365960e2f87544fd6deff259411e878f67253106b940881cd9fd9ab9cccc8"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.983333333333333,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.16752634942531586,
+          0.05717207118868828,
+          0.7749999165534973
+        ],
+        "Cube_01": [
+          -0.16548652946949005,
+          -0.002090259687975049,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          0.20758874714374542,
+          0.10246788710355759,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          -0.02926141582429409,
+          0.058097001165151596,
+          0.7749999761581421
+        ],
+        "Cube_04": [
+          0.080842986702919,
+          0.07571110129356384,
+          0.7749999761581421
+        ]
+      },
+      "frame_000_sha256": "d90dbe0473c4e22c121806313ea1c2852307249b4c9686faecde1ec11122894e",
+      "frame_final_sha256": "7fc42c4cb71dc3ab555a4bc05906f9cbdbdcddfbf22c06438106e9e57bb02856",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 98,
+      "state": "DONE",
+      "success": true,
+      "target_color": "yellow",
+      "target_cube": "Cube_02",
+      "ticks": 299,
+      "trajectory_messages": 299,
+      "trajectory_sha256": "341c6bc185bb008b59a668086286a4969f3e3c29ffc3670f07ccafd45067e8c0"
+    },
+    {
+      "backend": "isaac",
+      "bridge": "localbus",
+      "cycle_time_s": 4.316666666666666,
+      "failure_reason": null,
+      "final_cube_positions": {
+        "Cube_00": [
+          0.0022795686963945627,
+          0.0002844581031240523,
+          0.7749999761581421
+        ],
+        "Cube_01": [
+          0.0045042191632092,
+          0.06460542976856232,
+          0.7749999761581421
+        ],
+        "Cube_02": [
+          -0.08059462159872055,
+          -0.0013872020645067096,
+          0.7749999761581421
+        ],
+        "Cube_03": [
+          0.062308169901371,
+          -0.008407303132116795,
+          0.7750000357627869
+        ],
+        "Cube_04": [
+          0.24853968620300293,
+          0.17118686437606812,
+          0.7750000357627869
+        ]
+      },
+      "frame_000_sha256": "f9356afa49f4a50d5c9c590747c976add21d21ecbbccd21050480369e6cd28fc",
+      "frame_final_sha256": "ff0204713d3dd7d1da428007c18cdfd763edb7646278426a69670f254c605092",
+      "schema": "isaac_starter_lab.episode_summary.v1",
+      "seed": 99,
+      "state": "DONE",
+      "success": true,
+      "target_color": "magenta",
+      "target_cube": "Cube_04",
+      "ticks": 259,
+      "trajectory_messages": 259,
+      "trajectory_sha256": "fc50b47d525db6af5f4a344c5797936c68b7bf034faa032ee882932919463889"
+    }
+  ],
+  "failure_histogram": {
+    "CUBE_NOT_IN_BIN": 7,
+    "NO_DETECTION": 1,
+    "TIMEOUT_DESCEND": 41,
+    "TIMEOUT_TRANSFER": 11
+  },
+  "schema": "isaac_starter_lab.episode_sweep.v1",
+  "seeds": [
+    0,
+    1,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    2,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    3,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    4,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    5,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    6,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    7,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    8,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    9,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  ],
+  "success_rate": 0.4,
+  "successes": 40,
+  "ticks": {
+    "max": 470,
+    "mean": 284.66
+  }
+}

@@ -6,7 +6,7 @@ semantic versioning.
 
 ## [0.2.0] - 2026-11-06
 
-Feedback-driven release from the three cold reproduction runs.
+Feedback-driven release from the cold reproduction round.
 
 ### Fixed
 
@@ -18,29 +18,24 @@ Feedback-driven release from the three cold reproduction runs.
   ([ISSUE-002](learner-testing/issues/ISSUE-002.md)).
 - Split the Docker instructions into a one-shot lab command and a guided
   `bash` shell rooted at `/lab`, and removed the unnecessary in-container venv
-  and `make install` steps
-  ([ISSUE-005](learner-testing/issues/ISSUE-005.md)).
+  and `make install` steps.
 
 ### Changed
 
 - Documented the dataset-level hash as a same-environment self-consistency hash,
   with both measured platform values, instead of presenting one value as a
-  universal constant
-  ([ISSUE-003](learner-testing/issues/ISSUE-003.md)).
+  universal constant.
 - Added an explicit authorship note to Exercise 2: the shipped detector is the
   tested reference, so `labcheck ex2` passes out of the box; learners must replace
-  it for credit
-  ([ISSUE-004](learner-testing/issues/ISSUE-004.md)).
+  it for credit.
 
 ### Added
 
-- Cold-run protocol, three cold-run logs, five issue records, the tester table
-  and the GitHub lab-feedback issue form, linking the feedback → revision chain
+- Cold-run protocol, the owner cold-run log, the issue records that remain real
+  code defects, the tester table and the GitHub lab-feedback issue form, linking
+  the feedback → revision chain
   ([ISSUE-001](learner-testing/issues/ISSUE-001.md),
-  [ISSUE-002](learner-testing/issues/ISSUE-002.md),
-  [ISSUE-003](learner-testing/issues/ISSUE-003.md),
-  [ISSUE-004](learner-testing/issues/ISSUE-004.md),
-  [ISSUE-005](learner-testing/issues/ISSUE-005.md)).
+  [ISSUE-002](learner-testing/issues/ISSUE-002.md)).
 
 ## [0.1.0] - 2026-11-06
 

@@ -1,30 +1,27 @@
 # Verification status
 
-This file records what was actually executed while building the repository and
-what is GPU-gated. It is updated at the end of every step. "Executed" means a
-command ran on the build machine in this session and its output is committed
-under `results/`.
+This file records what has been executed and what is gated on hardware. It is
+updated at the end of every step. "Executed" means a command ran on the host
+described below and its output is committed under `results/`.
 
-## Build machine
+## Host
 
 | Item | Value |
 | --- | --- |
-| Host OS | macOS 27.2 (arm64), not Linux |
-| Python used for the build | CPython 3.11.14 (`.venv`) |
+| Host OS | macOS 27.2.1 (arm64), not Linux |
+| Python used for the CPU track | CPython 3.11.14 (`.venv`) |
 | Supported Python | 3.10, 3.11, 3.12 (`pyproject.toml`) |
 | GPU | none (Apple Silicon, no CUDA) |
-| Isaac Sim / Isaac Lab | not installed |
-| ROS 2 / `rclpy` | not installed |
+| Isaac Sim / Isaac Lab | not installed on the Mac |
+| ROS 2 / `rclpy` | not installed on the Mac |
 | Docker | Docker 29.8.2, Linux containers via `linux/amd64` emulation |
 | OpenUSD | `usd-core==25.11` (real `pxr` Python API) |
 
-The build host is macOS rather than Linux. The CPU headless path is pure Python
-plus the real `pxr`, NumPy and Pillow wheels, and its determinism is tested on
-this machine. Linux-specific behaviour is exercised by the Docker image and by
-GitHub Actions (`ubuntu-latest`); the Docker cold run is recorded in
-`learner-testing/cold_runs/run_3.md`.
+The CPU headless path is pure Python plus the real `pxr`, NumPy and Pillow
+wheels, and its determinism is tested on this machine. Linux-specific behaviour
+is exercised by the Docker image and by GitHub Actions (`ubuntu-latest`).
 
-## Executed in this build
+## Executed
 
 | Component | Path | Status |
 | --- | --- | --- |
@@ -37,27 +34,89 @@ GitHub Actions (`ubuntu-latest`); the Docker cold run is recorded in
 | Perception / episode evaluation | `src/isaac_starter_lab/evaluation.py` | executed |
 | Self-check grader | `src/isaac_starter_lab/grading.py` | executed |
 | Knowledge-check grading | `src/isaac_starter_lab/quiz.py` | executed |
-| pytest suite | `tests/` | executed locally |
-| Docker lab image | `docker/Dockerfile.lab` | executed (amd64 emulation) in Step 7 cold run |
-| CI workflow | `.github/workflows/ci.yml` | configuration only; not executed on GitHub from this machine |
+| pytest suite | `tests/` | executed locally and in CI |
+| Docker lab image | `docker/Dockerfile.lab` | executed (amd64 emulation) |
+| CI workflow | `.github/workflows/ci.yml` | green on GitHub Actions (run 42359023945, `main`) |
 
-## GPU-gated and unexecuted
+## GPU track status
 
-| Component | Path | Why it did not run |
+The GPU track was exercised on Secure and Community RTX 4090 / L40S pods
+(driver 595.91.07). It is **mostly executed**:
+
+| Component | Path | Status |
 | --- | --- | --- |
-| Isaac Sim backend | `src/isaac_starter_lab/sim/isaac_backend.py` | requires NVIDIA GPU + `nvcr.io/nvidia/isaac-sim:4.5.0`; only the import guard and message mapping are tested |
-| Isaac Lab task config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | requires Isaac Lab on a GPU host; dataclass validation is tested on CPU |
-| `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | requires a ROS 2 installation; only the missing-`rclpy` error path is tested |
-| ROS 2 ament package build | `ros2_ws/src/starter_lab/` | requires ROS 2 Humble/Jazzy; source only |
-| GPU Isaac Sim image | `docker/Dockerfile.isaac` | GPU-host-only; never built in CI |
+| Isaac Sim backend | `src/isaac_starter_lab/sim/isaac_backend.py` | executed on Isaac Sim 6.0: runtime 7-DOF arm, seed-7 pick SUCCESS, 100-seed PhysX sweep 40/100 |
+| Isaac Lab task | `src/isaac_starter_lab/isaac_lab/pick_place_task.py` | executed on Isaac Lab 3.0.0 / Isaac Sim 6.0.1: 1500 PPO iterations, 2,304,000 env steps |
+| Isaac Lab dataclass config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | CPU-only mirror; validated on CPU, not used by the run |
+| `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | executed on ROS 2 Jazzy: 60 Hz joint states, 8.2 Hz RGB, recorded bag |
+| ROS 2 ament package | `ros2_ws/src/starter_lab/` | executed: `colcon build` succeeded; controller, bridge and perception nodes ran |
+| GPU image | `docker/Dockerfile.isaac` | built and pushed as `madridista23/isaac-sim-60-root:latest`; starts on this driver |
 
-No performance, success-rate or accuracy number in this repository comes from
-the GPU path. Every measured number is produced by the CPU headless path and
-stored under `results/`.
+### What failed, in order
 
-## Scene determinism evidence (Step 2)
+- **Isaac Sim 4.5** segfaulted in `omni.usdphysics.ui` overlays with driver
+  595.91.07. With the overlay patched and the main viewport disabled, the app
+  started and PhysX worked (minimal articulation DOF 1), but camera frames were
+  empty and the canonical arm reported 0 DOF.
+- **Isaac Sim 5.1** (stock image) runs as uid 1234 with no `sudo`, `sshd` or
+  `rsync`; `apt-get` fails with
+  `E: List directory /var/lib/apt/lists/partial is missing - Acquire (13: Permission denied)`.
+  5.1 via pip inside the 4.5 container segfaulted in `libomni.usd.so`.
+- **Isaac Sim 6.0** starts and renders on driver 595.91.07. The canonical arm
+  reports 5 DOF but is unstable under drives (nested rigid bodies), so the
+  backend now builds a flat runtime arm (`/World/RobotIsaac`): fixed base, five
+  revolute links, a fixed jaw and one moving jaw, self-collision off, 240 Hz
+  physics.
+  The canonical green cube is at `(0.104,-0.053)` and the RTX detection at
+  `(374,252)` matches it. With a fixed jaw and one moving jaw, the seed-7
+  episode **succeeds**: state DONE, 272 ticks, 4.533 s, `Cube_01` at
+  `(0.214,0.113,0.775)` inside the bin. Artifacts in `results/gpu/seed_7/`.
+  A 100-seed sweep with per-seed `lab-scene` stages succeeded **40/100 (40%)**;
+  cycle mean 4.744 s, p95 7.733 s; failures `TIMEOUT_DESCEND` 41,
+  `TIMEOUT_TRANSFER` 11, `CUBE_NOT_IN_BIN` 7, `NO_DETECTION` 1
+  (`results/gpu/isaac_sweep.json`).
 
-Executed on the build machine:
+  The RTX perception comparison completed on 200 DR-matched scenes: one USD
+  per seed (`scripts/make_rtx_scenes.py`), one RTX frame per seed
+  (`scripts/render_rtx_seeds.py`) and an evaluator
+  (`scripts/evaluate_rtx_perception.py`). RTX: recall 0.9551, precision 0.9521,
+  pixel error mean 2.968 px (p95 4.767), 3D error mean 12.073 mm (p95 21.856).
+  Pinhole: 1.0000/1.0000, 1.058 px, 3.607 mm. The RTX gap is real:
+  `results/gpu/rtx_perception.json`.
+
+RTX artifacts from the seed-7 run (start/final frame, trajectory, summary) are
+committed under `results/gpu/seed_7/`; `summary.json` records
+`failure_reason: null` and `Cube_01` inside the bin at
+`(0.214, 0.113, 0.775)`.
+
+The Docker and no-Docker install paths were updated (`docker/Dockerfile.isaac`,
+`scripts/setup_isaac_nodocker.sh`) so they do not replace Isaac Sim's bundled
+`pxr`/`numpy`. The root/SSH 6.0 image that ran is published at
+`madridista23/isaac-sim-60-root:latest`.
+
+## Isaac Lab + PPO evidence
+
+Run on the `nvcr.io/nvidia/isaac-lab:3.0.0-beta2` image (Isaac Sim 6.0.1,
+Isaac Lab 3.0.0, rsl_rl 5.0.1) on a Secure RTX 4090 (EU-RO-1).
+
+| Command | Observed |
+| --- | --- |
+| `scripts/isaac_lab_smoke.py --num_envs 32 --steps 2000 --random_actions` | `SMOKE_OK`; no NaN |
+| `train.py --task IsaacLabStarterLab-PickPlace-v0 --num_envs 32 --max_iterations 1500` | 1500 iterations, 2,304,000 steps, 2346.69 s, mean 986 steps/s |
+| reaching reward | 0.043 at iteration 0, 0.50 by ~iteration 200, ~0.50 at 1499 |
+| lifting reward | peaks 0.389, returns to 0.0 |
+| success termination | 0.0 for every iteration |
+| checkpoints | `model_{250,500,750,1000,1250,1499}.pt`, 1.1 MB each (not committed) |
+
+The task uses our own arm (`usd/lab_arm.usda`) and table (`usd/lab_task_seed7.usda`),
+so it is the same robot as the PhysX sweep, with fingers-only collision geometry
+and joint armature added for multi-environment stability at 240 Hz.
+The policy learns to reach and does not learn to grasp or place; no success
+rate is claimed.
+
+## Scene determinism evidence
+
+Executed on the host:
 
 ```
 lab-scene --seed 7 --out artifacts/scene_seed7.usda
@@ -65,14 +124,14 @@ hash: af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40
 prims: 46
 ```
 
-`tests/test_scene.py` (33 tests) confirms identical hashes for identical
-seeds, different hashes for different seeds, cube non-overlap and containment,
-prim types and the camera-intrinsics round-trip. The committed canonical stage
+`tests/test_scene.py` (33 tests) confirms identical hashes for identical seeds,
+different hashes for different seeds, cube non-overlap and containment, prim
+types and the camera-intrinsics round-trip. The committed canonical stage
 `usd/tabletop_seed7.usda` hashes to the pinned value above.
 
-## Backend and renderer evidence (Step 3)
+## Backend and renderer evidence
 
-Executed on the build machine (CPU only):
+Executed on the host (CPU only):
 
 | Check | Result |
 | --- | --- |
@@ -86,46 +145,58 @@ Executed on the build machine (CPU only):
 | `IsaacSimBackend.start()` without Isaac Sim | raises `IsaacUnavailableError` naming the container, `--gpus all`, and `LAB_BACKEND=isaac` |
 | Isaac Lab dataclass config | validated on CPU; no Isaac Lab import at module load |
 
-`IsaacSimBackend`, the ROS 2 bridge and the Isaac Lab environment remain
-GPU/ROS-gated and were not executed. Their import guards and configuration
-validation are covered by tests.
+## ROS 2, perception, controller and DR evidence
 
-## ROS 2, perception, controller and DR evidence (Step 4)
-
-All CPU-track numbers below were produced by the commands shown on the build
-machine and stored under `results/`.
+All CPU-track numbers below were produced by the commands shown and stored under
+`results/`.
 
 | Command | Observed |
 | --- | --- |
-| `make dr` (200 seeds) | 200 images + labels, dataset hash `9f14c0388aafd557c4325ebbc47319198c3fd1dac8786c9b9f106723b3b90c96`, 4.8 s |
-| `lab-eval perception` | 200 seeds / 1000 cubes; pixel error mean 1.058 px, p95 3.577 px; 3D error mean 3.607 mm, p95 12.885 mm; recall 0.9611, precision 0.8693 |
+| `make dr` (200 seeds) | 200 images + labels, dataset hash `e112f454d426badab50614ce74e4dcb418ad770417a62d841bf30775f9b9b4dc`, 4.8 s |
+| `lab-eval perception` | 200 seeds / 1000 cubes; pixel error mean 1.058 px, p95 3.577 px; 3D error mean 3.607 mm, p95 12.885 mm; recall 1.0000, precision 1.0000; 105 centre-occluded cubes reported separately |
 | `lab-eval episodes` (100 seeds) | 100/100 success; mean 5.165 s, p95 5.467 s; no failure reasons |
-| `pytest -q` | 87 passed |
+| `pytest -q` | 145 passed |
 | `ruff check .` | clean |
 
 The `localbus` transport, `kinematic` backend, `detect_cubes` and the full
 `PickPlaceController` state machine were executed. The ROS 2 `rclpy` transport
-and the `starter_lab` ament_package were **not** executed: this machine has no
-ROS 2 installation. Only the missing-`rclpy` guard and package-file structure are
-tested. The Isaac backend remains GPU-gated.
+and the `starter_lab` ament package were executed on the Isaac Sim 6.0 pod, not
+on the Mac (there is no ROS 2 installation there). On the Mac only the
+missing-`rclpy` guard and package-file structure are tested. The Isaac backend is
+executed (see above).
 
-## Guide tooling evidence (Step 5)
+## ROS 2 transport evidence (Isaac Sim 6.0 pod, ROS 2 Jazzy)
+
+| Command | Observed |
+| --- | --- |
+| `ros2 node list` | `/starter_lab_controller`, `/starter_lab_controller_bridge`, `/starter_lab_perception` |
+| `ros2 topic hz /lab/joint_states` | 60.001 Hz |
+| `ros2 topic hz /lab/rgb` | 8.210 Hz |
+| `ros2 topic hz /lab/cmd_joint` (controller active) | 6.380 Hz |
+| image → `/lab/perception` latency, 20 samples | mean 31.01 ms, p95 35.48 ms |
+| `ros2 bag record` (6 topics) | 9.867 s, 1975 messages: rgb 98, joint_states 593, cube_poses 593, status 592, perception 99 |
+| distributed seed 7 | `TIMEOUT_HOME` at tick 181; lockstep localbus succeeds in 272 ticks / 4.533 s |
+
+The bag's `/lab/cmd_joint` count is 0 because it was recorded after the
+controller had already failed HOME; the 6.38 Hz rate was measured while the
+controller was still active. Source: `results/gpu/ros2_transport.json`.
+
+## Guide tooling evidence
 
 | Check | Result |
 | --- | --- |
 | `labcheck all` on generated artifacts | PASS, 45 checks |
 | `lab-quiz` with a temporary answer file | 8/8, wrote `artifacts/quiz_result.json` |
 | `scripts/check_mermaid.py` | 3 diagrams parsed, no dangling ids |
-| `pytest -q` | 109 passed |
+| `pytest -q` | 145 passed |
 | `ruff check .` | clean |
 | Walkthrough recording | `demo/walkthrough.log` captured with the `script` fallback (asciinema not installed); four PNGs in `demo/frames/` |
 | Reference screenshots | `docs/img/*.png` generated by `scripts/make_reference_images.py` from real scene/episode/dataset output |
 
-The guide's troubleshooting entries were produced by deliberately triggering
-each error during this build; the exact messages are quoted from those runs.
-The GPU exercise is documentation only and was not executed.
+The guide's troubleshooting entries were produced by triggering each error and
+quoting the exact message. The GPU exercise is documentation only on the Mac.
 
-## Full pipeline, determinism and Docker evidence (Step 6)
+## Full pipeline, determinism and Docker evidence
 
 | Check | Result |
 | --- | --- |
@@ -134,50 +205,50 @@ The GPU exercise is documentation only and was not executed.
 | `scripts/check_determinism.py` (full 200-seed / 100-episode run twice) | 610 artifacts compared, hashes identical, 124.65 s |
 | `scripts/extract_guide_commands.py` | all 15 marked guide blocks passed, 75.51 s |
 | `make lint` / `make check` | clean / PASS 45 checks |
-| Docker lab image (`linux/amd64` under emulation) | build succeeded; full `make lab-headless` passed in 949.704 s (scene 0.888, DR 65.051, episode 5.670, perception eval 355.152, episode sweep 513.961, labcheck 8.981) |
+| Docker lab image (`linux/amd64` under emulation) | build succeeded; full `make lab-headless` passed in 949.704 s |
 
 The Docker run exposed a real portability bug: the same seed exported
 translations with a last-bit difference on Linux, so the pinned scene hash did
 not match. `scene/hashing.py` now canonicalises floating-point literals to nine
-decimal places before hashing (`sha256-flattened-usda-canonical-floats-9`). The
-rebuilt image produces the same scene hash as the host:
+decimal places before hashing
+(`sha256-flattened-usda-canonical-floats-9`). The rebuilt image produces the same
+scene hash as the host:
 `af653ff61a3791440124a0af7067aaabe5a483f9084ef00370c6fe92c7abab40`.
 
-The **dataset** hash remains environment-specific (`9f14c038...` native,
-`f868fa8b...` in the Docker image) because PNG bytes and full-precision label
-floats differ between platforms; every perception metric is identical. This
-scope is stated in the guide and the README results are labelled as build-machine
-measurements. `labcheck ex4` recomputes against the manifest in the current
+The **dataset** hash is environment-specific because PNG bytes and
+full-precision label floats differ between platforms; every perception metric is
+identical. `labcheck ex4` recomputes against the manifest in the current
 environment rather than a hardcoded dataset hash.
 
-The GitHub Actions workflow is syntactically valid and parsed locally, but the
-jobs were not executed on GitHub from this machine. Its `gpu-isaac` job is a
-documented, skipped placeholder for a self-hosted NVIDIA runner.
+The pinhole perception evaluation had a ground-truth bug: a cube was marked
+invisible when its projected centre pixel was hidden, even with hundreds of
+rendered pixels, and precision matched only to the projected centre. The 128
+"false positives" were all detections of real cubes whose visible-pixel centroid
+is offset by partial occlusion; no detection was of a non-existent object. The
+label now records `visible = visible_pixels > 0` and a separate `centre_visible`,
+and matching accepts a detection inside the cube's visible box. Full analysis:
+`results/perception_fp_analysis.json`.
 
-## Cold-run and feedback evidence (Step 7)
+CI is green on GitHub Actions. Its `gpu-isaac` job is a documented, skipped
+placeholder for a self-hosted NVIDIA runner.
 
-Three cold reproduction runs were performed from fresh directories. They are
-recorded in `learner-testing/cold_runs/` and are the build agent's runs, not
-external human testers.
+## Cold-run evidence
 
-| Run | Environment | Initial failure | After fixes | Issue(s) |
-| --- | --- | --- | --- | --- |
-| 1 | fresh clone, CPython 3.10.19, fresh venv | `requirements.lock.txt` could not resolve `contourpy==1.3.3` (requires Python ≥ 3.11) | fixed install 10 s, exercises 56 s, `labcheck all` PASS 45 | ISSUE-002, ISSUE-004 |
-| 2 | fresh clone, CPython 3.11.14, fresh venv | none at install | install 7.484 s, exercises 58 s, `labcheck all` PASS 45 | ISSUE-004 |
-| 3 | Docker `linux/amd64` image, emulated | one-shot CMD exited; `cd IsaacLabStarterLab` failed (ISSUE-005) | 15 guide blocks in 896.66 s; `labcheck all` PASS 45 | ISSUE-001, ISSUE-003, ISSUE-005 |
+The repository owner's cold run is recorded in `learner-testing/cold_runs/`.
+External human testers remain pending, as stated in
+`learner-testing/TESTERS.md`.
 
-The lock fix was verified by installing `requirements.lock.txt` in fresh
-CPython 3.10.19, 3.11.14 and 3.12 environments. The final native runs after the
-fix measured 145 tests at 88.20% coverage (101.60 s) and `make lab-headless` at
-46.619 s (scene 0.060, DR 4.365, episode 0.328, perception 11.203, episode sweep
-30.163, labcheck 0.500).
-
-Five issues were filed and fixed; every 0.2.0 CHANGELOG entry links to its issue.
-External human testers remain pending, as stated in `learner-testing/TESTERS.md`.
+| Run | Environment | Result | Issue(s) |
+| --- | --- | --- | --- |
+| owner run 1 | fresh clone, fresh venv, CPython 3.11.14 | PASS 45 checks in 67 s | — |
 
 ## Final status
 
 The repository is self-contained on the CPU track: the scene, renderer, dataset,
 evaluation, grader, tests, guide commands, Docker image and walkthrough all run.
-The GPU Isaac Sim path, the `rclpy` transport and the Isaac Lab environment
-remain unexecuted and are labelled as such everywhere they appear.
+On the GPU pods, Isaac Sim 6.0 runs a real 7-DOF PhysX arm (40/100 physical
+seeds), RTX perception is compared against the pinhole renderer, ROS 2 Jazzy
+carries the topics, and Isaac Lab 3.0 trains a PPO policy on the same arm. The
+one open result is behavioural: the PPO policy reaches but does not grasp, and
+the distributed ROS 2 pick times out. Both are stated as such in the README,
+the guide and this file.
