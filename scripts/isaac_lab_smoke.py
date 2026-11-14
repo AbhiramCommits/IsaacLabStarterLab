@@ -64,6 +64,9 @@ def main() -> int:
     print("joint_pos[0]:", [round(v, 3) for v in robot.data.joint_pos.torch[0].tolist()])
     print("default_joint_pos[0]:", [round(v, 3) for v in robot.data.default_joint_pos.torch[0].tolist()])
     print("limits:", [tuple(round(x, 2) for x in lim) for lim in robot.data.joint_limits.torch[0].tolist()])
+    print("root_pos_w[0]:", [round(v, 3) for v in robot.data.root_pos_w.torch[0].tolist()])
+    for name, pos in zip(robot.body_names, robot.data.body_pos_w.torch[0].tolist(), strict=True):
+        print(f"  body {name}: {[round(v, 3) for v in pos]}")
     print(
         "object_pos[0]=",
         [round(v, 4) for v in env.scene["object"].data.root_pos_w.torch[0].tolist()],
