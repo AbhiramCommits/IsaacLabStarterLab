@@ -111,8 +111,9 @@ $0.89/hr (~$0.40; billing had not posted at teardown). All pods terminated;
 - Phase 7: README restructured, shorter, CPU logic check clearly labelled.
 - Cost: billed **$5.47** through Nov 14 before Phase 4. The Phase 4 pods were a
   stuck isaac-lab pull (~40 min, ~$0.59) and the working 4090 in EU-RO-1
-  (2.1 h, ~$1.89), so the project total is about **$7.9**; the $6.50 cap was
-  waived by the owner for this run.
+  (2.1 h, ~$1.89). Billed total from `list-billing` is **$7.27** so far and the
+  Nov-14 bucket may still settle; the $6.50 cap was waived by the owner for this
+  run.
 - Phase 4: Isaac Lab 3.0.0-beta2 image, our arm exported to `usd/lab_arm.usda`,
   task `IsaacLabStarterLab-PickPlace-v0`, 1500-iteration PPO run. NaNs under
   random actions were fixed with 240 Hz physics, joint armature, extra solver
