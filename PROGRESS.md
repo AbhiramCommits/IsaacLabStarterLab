@@ -9,9 +9,9 @@ phase so a new session can resume. Status values: **done**, **in progress**,
 | 1. Remove AI-agent tells and stale claims | done | Docs cleaned; owner cold run recorded (67 s, PASS 45). |
 | 2. Isaac Sim GPU track for real | done | Isaac Sim 6.0 seed-7 episode **SUCCESS**: a real 7-DOF PhysX arm with a fixed jaw + one moving jaw places green `Cube_01` in the bin in 272 ticks / 4.533 s. Artifacts in `results/gpu/seed_7/`. |
 | 3. Real physics (PhysX) instead of attach rule | done | Real 100-seed PhysX sweep: **40/100 (40%)**, cycle mean 4.744 s/p95 7.733 s. Failures: `TIMEOUT_DESCEND` 41, `TIMEOUT_TRANSFER` 11, `CUBE_NOT_IN_BIN` 7, `NO_DETECTION` 1. No further tuning; the numbers are in `results/gpu/isaac_sweep.json`. |
-| 4. Real Isaac Lab task + PPO | blocked | Not reached; the 6.0 pip stack is available but no Isaac Lab task/training was run. |
-| 5. ROS 2 nodes on real rclpy | blocked | Not reached. |
-| 6. Perception on RTX frames | blocked | RTX frames exist in `results/gpu/seed_7/`; the camera-pose mismatch prevents a valid side-by-side perception evaluation. |
+| 4. Real Isaac Lab task + PPO | blocked | Not run. The 6.0 pip stack is available, but the remaining Runpod budget (~$0.4) could not cover an Isaac Lab + PPO run. No training numbers are claimed. |
+| 5. ROS 2 nodes on real rclpy | done | ROS 2 Jazzy installed in the 6.0 pod; ament package built; `/starter_lab_controller`, `/starter_lab_controller_bridge` and `/starter_lab_perception` ran on real `rclpy`. `/lab/joint_states` **60.0 Hz**, `/lab/rgb` **8.2 Hz**, `/lab/cmd_joint` **6.38 Hz** while active, perception latency **31.01 ms** mean / **35.48 ms** p95, bag **9.867 s / 1975 msgs**. Distributed seed 7 fails `TIMEOUT_HOME` at 181 ticks; the lockstep localbus succeeds. `results/gpu/ros2_transport.json`. |
+| 6. Perception on RTX frames | done | 200 DR-matched RTX frames rendered; RTX recall **95.51%**, precision **95.21%**, pixel mean **2.968 px**, 3D mean **12.073 mm** vs pinhole 100%/100%, 1.058 px, 3.607 mm. `results/gpu/rtx_perception.json`. |
 | 7. Restructure README | done | Restructured with committed CPU results only. |
 
 ## GPU attempt, 2026-11-12 (exact)
@@ -95,23 +95,30 @@ $0.89/hr (~$0.40; billing had not posted at teardown). All pods terminated;
   `centre_visible`, occlusion-aware matching); dataset hash `e112f454...`;
   analysis in `results/perception_fp_analysis.json`.
 - Phase 2 prep: `docker/Dockerfile.isaac` no longer replaces Isaac Sim's
-  `pxr`/`numpy`; `scripts/setup_isaac_nodocker.sh` adds the no-Docker route.
-  Both are unrun.
-- GPU attempts: see above. All GPU phases marked blocked.
+  `pxr`/`numpy`; it was built and pushed as
+  `madridista23/isaac-sim-60-root:latest`. `scripts/setup_isaac_nodocker.sh`
+  adds the no-Docker route and is unrun.
+- GPU attempts: see above. All GPU pods ran Isaac Sim 6.0 on driver 595.91.07.
+- Phase 2: seed-7 PhysX pick succeeds after the fixed jaw + single moving jaw;
+  `results/gpu/seed_7/`.
+- Phase 3: real 100-seed PhysX sweep 40/100; no tuning past the recorded run.
+- Phase 6: 200 RTX frames rendered from DR-matched USD; pinhole vs RTX gap
+  measured and written to `results/gpu/rtx_perception.json`.
+- Phase 5: ROS 2 Jazzy in the 6.0 pod; the ament package built, three nodes ran
+  on real `rclpy`, topic rates/latency/bag recorded in
+  `results/gpu/ros2_transport.json`. Distributed seed 7 fails `TIMEOUT_HOME`;
+  the explanation (wall-clock controller + DDS latency) is in that file.
 - Phase 7: README restructured, shorter, CPU logic check clearly labelled.
 
 ## To resume
 
 1. Use the committed `madridista23/isaac-sim-60-root:latest` image (Isaac Sim
    6.0 + root + openssh + rsync). It starts on driver 595.91.07.
-2. Fix the camera pose: the canonical `/World/Camera` USD transform does not
-   match the CPU look-at, so RTX back-projection is wrong. Either author the
-   correct USD camera matrix at runtime and recreate the render product, or
-   derive the controller pose from the actual rendered camera (the current
-   `camera_pose()` guess is not yet consistent). Validate by back-projecting a
-   known green cube pixel to its stage position.
-3. Then re-run the seed-7 episode; it should pass APPROACH and reach GRASP.
-4. Tune grasp friction/close speed, then the 100-seed PhysX sweep (Phase 3),
-   RTX perception (Phase 6), ROS 2 (Phase 5) and Isaac Lab (Phase 4).
-5. The runtime 7-DOF arm is implemented in `isaac_backend.py`; keep the
-   canonical `usd/tabletop_seed7.usda` and its hash untouched.
+2. Phase 4 (Isaac Lab + PPO) is the only open phase. Rent the same pod, install
+   Isaac Lab into the 6.0 Kit Python, build the `ManagerBasedRLEnv` task from
+   `src/isaac_starter_lab/isaac_lab/`, and run a short PPO training before any
+   throughput claim. Do not report a number without a real training log.
+3. The distributed ROS 2 pick fails `TIMEOUT_HOME`; the transport is fine. The
+   next step there is controller gains/latency compensation, not a transport
+   fix.
+4. Keep the canonical `usd/tabletop_seed7.usda` and its pinned hash untouched.

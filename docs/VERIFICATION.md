@@ -40,15 +40,15 @@ is exercised by the Docker image and by GitHub Actions (`ubuntu-latest`).
 
 ## GPU track status
 
-The GPU track was exercised on a Secure RTX 4090 pod (driver 595.91.07,
-75 GB disk; 100 GB was unavailable). It is **partially executed**:
+The GPU track was exercised on Secure and Community RTX 4090 / L40S pods
+(driver 595.91.07). It is **mostly executed**:
 
 | Component | Path | Status |
 | --- | --- | --- |
-| Isaac Sim backend | `src/isaac_starter_lab/sim/isaac_backend.py` | executed to APPROACH on Isaac Sim 6.0; runtime 7-DOF arm, RTX frames, HOME and LOCATE pass |
+| Isaac Sim backend | `src/isaac_starter_lab/sim/isaac_backend.py` | executed on Isaac Sim 6.0: runtime 7-DOF arm, seed-7 pick SUCCESS, 100-seed PhysX sweep 40/100 |
 | Isaac Lab task config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | unexecuted; dataclass validation is tested on CPU |
-| `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | unexecuted; only the missing-`rclpy` error path is tested |
-| ROS 2 ament package | `ros2_ws/src/starter_lab/` | unexecuted |
+| `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | executed on ROS 2 Jazzy: 60 Hz joint states, 8.2 Hz RGB, recorded bag |
+| ROS 2 ament package | `ros2_ws/src/starter_lab/` | executed: `colcon build` succeeded; controller, bridge and perception nodes ran |
 | GPU image | `docker/Dockerfile.isaac` | built and pushed as `madridista23/isaac-sim-60-root:latest`; starts on this driver |
 
 ### What failed, in order
@@ -64,7 +64,8 @@ The GPU track was exercised on a Secure RTX 4090 pod (driver 595.91.07,
 - **Isaac Sim 6.0** starts and renders on driver 595.91.07. The canonical arm
   reports 5 DOF but is unstable under drives (nested rigid bodies), so the
   backend now builds a flat runtime arm (`/World/RobotIsaac`): fixed base, five
-  revolute links, two prismatic fingers, self-collision off, 240 Hz physics.
+  revolute links, a fixed jaw and one moving jaw, self-collision off, 240 Hz
+  physics.
   The canonical green cube is at `(0.104,-0.053)` and the RTX detection at
   `(374,252)` matches it. With a fixed jaw and one moving jaw, the seed-7
   episode **succeeds**: state DONE, 272 ticks, 4.533 s, `Cube_01` at
@@ -84,7 +85,8 @@ The GPU track was exercised on a Secure RTX 4090 pod (driver 595.91.07,
 
 RTX artifacts from the seed-7 run (start/final frame, trajectory, summary) are
 committed under `results/gpu/seed_7/`; `summary.json` records
-`failure_reason: CUBE_NOT_IN_BIN`.
+`failure_reason: null` and `Cube_01` inside the bin at
+`(0.214, 0.113, 0.775)`.
 
 The Docker and no-Docker install paths were updated (`docker/Dockerfile.isaac`,
 `scripts/setup_isaac_nodocker.sh`) so they do not replace Isaac Sim's bundled
@@ -137,9 +139,26 @@ All CPU-track numbers below were produced by the commands shown and stored under
 
 The `localbus` transport, `kinematic` backend, `detect_cubes` and the full
 `PickPlaceController` state machine were executed. The ROS 2 `rclpy` transport
-and the `starter_lab` ament package were **not** executed on the Mac: there is no
-ROS 2 installation there. Only the missing-`rclpy` guard and package-file
-structure are tested. The Isaac backend is partially executed (see above).
+and the `starter_lab` ament package were executed on the Isaac Sim 6.0 pod, not
+on the Mac (there is no ROS 2 installation there). On the Mac only the
+missing-`rclpy` guard and package-file structure are tested. The Isaac backend is
+executed (see above).
+
+## ROS 2 transport evidence (Isaac Sim 6.0 pod, ROS 2 Jazzy)
+
+| Command | Observed |
+| --- | --- |
+| `ros2 node list` | `/starter_lab_controller`, `/starter_lab_controller_bridge`, `/starter_lab_perception` |
+| `ros2 topic hz /lab/joint_states` | 60.001 Hz |
+| `ros2 topic hz /lab/rgb` | 8.210 Hz |
+| `ros2 topic hz /lab/cmd_joint` (controller active) | 6.380 Hz |
+| image → `/lab/perception` latency, 20 samples | mean 31.01 ms, p95 35.48 ms |
+| `ros2 bag record` (6 topics) | 9.867 s, 1975 messages: rgb 98, joint_states 593, cube_poses 593, status 592, perception 99 |
+| distributed seed 7 | `TIMEOUT_HOME` at tick 181; lockstep localbus succeeds in 272 ticks / 4.533 s |
+
+The bag's `/lab/cmd_joint` count is 0 because it was recorded after the
+controller had already failed HOME; the 6.38 Hz rate was measured while the
+controller was still active. Source: `results/gpu/ros2_transport.json`.
 
 ## Guide tooling evidence
 

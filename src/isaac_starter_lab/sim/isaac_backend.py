@@ -484,7 +484,7 @@ class IsaacSimBackend:
     def apply_gripper(self, closure: float) -> None:
         self._gripper_command = float(np.clip(closure, 0.0, 1.0))
 
-    def step(self) -> None:
+    def step(self, render: bool = True) -> None:
         if self._articulation is None or self._sim is None:
             raise RuntimeError("start() must be called first")
         q = self._cpu_positions()
@@ -504,7 +504,7 @@ class IsaacSimBackend:
         target[5] = GRIPPER_OPEN * self._gripper_closure
         physical = target * JOINT_SIGNS
         self._articulation.set_joint_position_targets(physical.reshape(1, -1))
-        self._sim.step(render=True)
+        self._sim.step(render=render)
         self.tick += 1
         self.time_s = self.tick / 60.0
 
