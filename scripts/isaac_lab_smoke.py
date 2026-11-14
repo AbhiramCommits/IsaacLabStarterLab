@@ -58,6 +58,7 @@ def main() -> int:
     print(f"reset obs shape: {tuple(obs['policy'].shape)}")
     gripper_ids, gripper_names = env.scene["robot"].find_bodies("gripper")
     print(f"gripper body: {gripper_names} ids={gripper_ids}")
+    print("env_origin[0]=", [round(v, 4) for v in env.scene.env_origins[0].tolist()])
     print(
         "object_pos[0]=",
         [round(v, 4) for v in env.scene["object"].data.root_pos_w.torch[0].tolist()],

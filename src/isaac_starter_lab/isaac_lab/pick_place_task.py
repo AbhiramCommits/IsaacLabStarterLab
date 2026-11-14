@@ -74,16 +74,10 @@ JAW_JOINT = "jaw_joint"
 BIN_X = 0.25
 BIN_Y = 0.14
 BIN_Z = _SCENE.table_top + 0.04
-#: Home configuration in USD joint space (the CPU home pose times the backend's
-#: ``JOINT_SIGNS``), so actions are relative to the assembled start pose.
-HOME_Q = {
-    "joint_base_yaw": 0.0,
-    "joint_shoulder": -0.60,
-    "joint_elbow": 1.20,
-    "joint_wrist_pitch": 0.97,
-    "joint_wrist_roll": 0.0,
-    JAW_JOINT: 0.07,
-}
+#: Start pose: the assembled arm (all joints zero) with the jaw open, which is
+#: exactly where the PhysX backend starts before its controller takes over.
+START_Q = {name: 0.0 for name in ARM_JOINTS}
+START_Q[JAW_JOINT] = 0.07
 
 #: Object spawn on the table, in front of the arm.
 OBJECT_X = 0.14
@@ -168,7 +162,7 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
         spawn=UsdFileCfg(usd_path=ARM_USD),
         init_state=ArticulationCfg.InitialStateCfg(
             pos=(0.0, 0.0, 0.0),
-            joint_pos=dict(HOME_Q),
+            joint_pos=dict(START_Q),
             joint_vel={name: 0.0 for name in ARM_JOINTS + [JAW_JOINT]},
         ),
         actuators={
@@ -202,11 +196,10 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
 
 @configclass
 class ActionsCfg:
-    arm_action = mdp.JointPositionActionCfg(
+    arm_action = mdp.JointPositionToLimitsActionCfg(
         asset_name="robot",
         joint_names=ARM_JOINTS,
-        scale=1.0,
-        use_default_offset=True,
+        rescale_to_limits=True,
     )
     gripper_action = mdp.BinaryJointPositionActionCfg(
         asset_name="robot",
