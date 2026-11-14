@@ -9,7 +9,7 @@ phase so a new session can resume. Status values: **done**, **in progress**,
 | 1. Remove AI-agent tells and stale claims | done | Docs cleaned; owner cold run recorded (67 s, PASS 45). |
 | 2. Isaac Sim GPU track for real | done | Isaac Sim 6.0 seed-7 episode **SUCCESS**: a real 7-DOF PhysX arm with a fixed jaw + one moving jaw places green `Cube_01` in the bin in 272 ticks / 4.533 s. Artifacts in `results/gpu/seed_7/`. |
 | 3. Real physics (PhysX) instead of attach rule | done | Real 100-seed PhysX sweep: **40/100 (40%)**, cycle mean 4.744 s/p95 7.733 s. Failures: `TIMEOUT_DESCEND` 41, `TIMEOUT_TRANSFER` 11, `CUBE_NOT_IN_BIN` 7, `NO_DETECTION` 1. No further tuning; the numbers are in `results/gpu/isaac_sweep.json`. |
-| 4. Real Isaac Lab task + PPO | done (trains; does not solve) | Isaac Lab 3.0.0 on Isaac Sim 6.0.1, real `ManagerBasedRLEnv` task `IsaacLabStarterLab-PickPlace-v0` (our arm, table, bin and a 50 mm cube). PPO, 32 envs, **2,304,000 steps**, **986 steps/s**, 1500 iterations in 2346.69 s. Reaching reward **0.043 → 0.50** then plateau; lifting peaks 0.389 and returns to 0; success termination **0** for the whole run. `results/gpu/isaac_lab_ppo.json`. The policy does not learn pick-and-place; no success rate is claimed. |
+| 4. Real Isaac Lab task + PPO | done (trains; does not place) | Isaac Lab 3.0.0 on Isaac Sim 6.0.1, task `IsaacLabStarterLab-PickPlace-v0` built from our arm, table, bin and a 50 mm cube. Scripted grasp lifts the cube (z 0.775 → 0.851). PPO, 32 envs, **3,840,000 steps**, **882 steps/s**, 2500 iterations in 4394.21 s: reaching **0.048 → 0.72-0.87**, grasping **0.002 → 0.36**, lifting **0.012 → 0.46 (peak 4.71)**, placing **0**, success **0** for the whole run. The first run could not grasp because the binary gripper's open/close commands were swapped; that is fixed and recorded. `results/gpu/isaac_lab_ppo.json`. |
 | 5. ROS 2 nodes on real rclpy | done | ROS 2 Jazzy installed in the 6.0 pod; ament package built; `/starter_lab_controller`, `/starter_lab_controller_bridge` and `/starter_lab_perception` ran on real `rclpy`. `/lab/joint_states` **60.0 Hz**, `/lab/rgb` **8.2 Hz**, `/lab/cmd_joint` **6.38 Hz** while active, perception latency **31.01 ms** mean / **35.48 ms** p95, bag **9.867 s / 1975 msgs**. Distributed seed 7 fails `TIMEOUT_HOME` at 181 ticks; the lockstep localbus succeeds. `results/gpu/ros2_transport.json`. |
 | 6. Perception on RTX frames | done | 200 DR-matched RTX frames rendered; RTX recall **95.51%**, precision **95.21%**, pixel mean **2.968 px**, 3D mean **12.073 mm** vs pinhole 100%/100%, 1.058 px, 3.607 mm. `results/gpu/rtx_perception.json`. |
 | 7. Restructure README | done | Restructured with committed CPU results only. |
@@ -115,10 +115,14 @@ $0.89/hr (~$0.40; billing had not posted at teardown). All pods terminated;
   Nov-14 bucket may still settle; the $6.50 cap was waived by the owner for this
   run.
 - Phase 4: Isaac Lab 3.0.0-beta2 image, our arm exported to `usd/lab_arm.usda`,
-  task `IsaacLabStarterLab-PickPlace-v0`, 1500-iteration PPO run. NaNs under
-  random actions were fixed with 240 Hz physics, joint armature, extra solver
-  iterations and fingers-only collision geometry in the RL export. The policy
-  reaches but does not grasp; recorded as-is.
+  task `IsaacLabStarterLab-PickPlace-v0`. NaNs under random actions were fixed
+  with 240 Hz physics, joint armature, extra solver iterations and
+  fingers-only collision geometry in the RL export. The first 1500-iteration
+  PPO run could not grasp: the binary gripper's open/close commands were
+  swapped and the close travel was too short to pinch the cube. After fixing
+  the jaw geometry, the friction and the start pose (IK above the cube), a
+  2500-iteration run learns reach, grasp and lift but not placing; recorded
+  as-is with the scripted grasp proof.
 
 ## To resume
 

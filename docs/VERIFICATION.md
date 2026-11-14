@@ -46,7 +46,7 @@ The GPU track was exercised on Secure and Community RTX 4090 / L40S pods
 | Component | Path | Status |
 | --- | --- | --- |
 | Isaac Sim backend | `src/isaac_starter_lab/sim/isaac_backend.py` | executed on Isaac Sim 6.0: runtime 7-DOF arm, seed-7 pick SUCCESS, 100-seed PhysX sweep 40/100 |
-| Isaac Lab task | `src/isaac_starter_lab/isaac_lab/pick_place_task.py` | executed on Isaac Lab 3.0.0 / Isaac Sim 6.0.1: 1500 PPO iterations, 2,304,000 env steps |
+| Isaac Lab task | `src/isaac_starter_lab/isaac_lab/pick_place_task.py` | executed on Isaac Lab 3.0.0 / Isaac Sim 6.0.1: 2500 PPO iterations, 3,840,000 env steps |
 | Isaac Lab dataclass config | `src/isaac_starter_lab/isaac_lab/pick_place_env_cfg.py` | CPU-only mirror; validated on CPU, not used by the run |
 | `rclpy` transport | `src/isaac_starter_lab/bridge/ros2_bridge.py` | executed on ROS 2 Jazzy: 60 Hz joint states, 8.2 Hz RGB, recorded bag |
 | ROS 2 ament package | `ros2_ws/src/starter_lab/` | executed: `colcon build` succeeded; controller, bridge and perception nodes ran |
@@ -102,17 +102,22 @@ Isaac Lab 3.0.0, rsl_rl 5.0.1) on a Secure RTX 4090 (EU-RO-1).
 | Command | Observed |
 | --- | --- |
 | `scripts/isaac_lab_smoke.py --num_envs 32 --steps 2000 --random_actions` | `SMOKE_OK`; no NaN |
-| `train.py --task IsaacLabStarterLab-PickPlace-v0 --num_envs 32 --max_iterations 1500` | 1500 iterations, 2,304,000 steps, 2346.69 s, mean 986 steps/s |
-| reaching reward | 0.043 at iteration 0, 0.50 by ~iteration 200, ~0.50 at 1499 |
-| lifting reward | peaks 0.389, returns to 0.0 |
-| success termination | 0.0 for every iteration |
-| checkpoints | `model_{250,500,750,1000,1250,1499}.pt`, 1.1 MB each (not committed) |
+| `scripts/isaac_lab_grasp_check.py` | descend-close-lift lifts the cube z 0.7750 → 0.8513, jaw 0.052 m |
+| `train.py --task IsaacLabStarterLab-PickPlace-v0 --num_envs 32 --max_iterations 2500` | 2500 iterations, 3,840,000 steps, 4394.21 s, mean 882 steps/s |
+| reaching / grasping / lifting | 0.048 → 0.72–0.87 / 0.002 → 0.36 / 0.012 → 0.46 (peak 4.71) |
+| placing / success termination | 0.0 / 0.0 for every iteration |
+| checkpoints | `model_*.pt` every 250 iterations, 1.1 MB each (not committed) |
 
 The task uses our own arm (`usd/lab_arm.usda`) and table (`usd/lab_task_seed7.usda`),
 so it is the same robot as the PhysX sweep, with fingers-only collision geometry
 and joint armature added for multi-environment stability at 240 Hz.
-The policy learns to reach and does not learn to grasp or place; no success
-rate is claimed.
+
+The first 1500-iteration run could not grasp: the binary joint action's
+open/close commands were swapped and the close travel (q=0.026) left a 0.076 m
+gap around a 0.05 m cube. After fixing the commands (open q=0.0, close q=0.056),
+raising the jaw stiffness and giving the cube a 1.2 friction material, the
+scripted check lifts the cube and PPO learns reach, grasp and lift. Placing and
+success remain 0; no success rate is claimed.
 
 ## Scene determinism evidence
 

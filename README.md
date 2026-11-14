@@ -118,24 +118,34 @@ articulation is the same flat 7-DOF arm the PhysX episodes use
 (`usd/lab_arm.usda`, exported from `sim/arm_usd.py`), the table and bin come
 from `usd/lab_task_seed7.usda`, and one 50 mm cube is spawned as a rigid body.
 Actions are joint-position targets plus a binary gripper; observations are
-joint position/velocity, the cube position and the last action (21 dims).
+joint position/velocity, the cube position, the gripper-to-cube vector and the
+last action (24 dims). The arm starts with the tool tip 8.5 cm above the cube,
+solved with the repo's inverse kinematics.
 
 | Measurement | Result |
 | --- | --- |
 | Engine | Isaac Sim 6.0.1, Isaac Lab 3.0.0 (beta2 image), PhysX, rsl_rl 5.0.1 |
-| Environments / steps | 32 / 2,304,000 |
-| Throughput | mean 986 steps/s |
-| Run | 1500 PPO iterations, 2346.69 s |
-| Reaching reward | 0.043 → 0.50 (by ~iteration 200), then flat |
-| Episode length | 32.8 → 240 steps (the limit) |
-| Lifting reward | peaks at 0.389, returns to 0.0 |
-| Success termination | **0.0 for all 1500 iterations** |
+| Environments / steps | 32 / 3,840,000 |
+| Throughput | mean 882 steps/s |
+| Run | 2500 PPO iterations, 4394.21 s |
+| Reaching reward | 0.048 → 0.72–0.87 |
+| Grasping reward | 0.002 → 0.36 (peak 0.49) |
+| Lifting reward | 0.012 → 0.46 (peak 4.71) |
+| Placing reward | **0.0** |
+| Success termination | **0.0 for all 2500 iterations** |
 
-The policy learns to reach the cube and stops there. It never learns to grasp
-and place in this run, and the repository does not claim it does. Getting the
-multi-environment run stable took 240 Hz physics, joint armature for the
-5–100 g links, extra solver iterations and fingers-only collision geometry in
-the RL export; those changes are in the task and the arm builder.
+A scripted check proves the mechanics before any learning claim:
+`scripts/isaac_lab_grasp_check.py` descends, closes the jaw and lifts, and the
+cube rises from z=0.775 to z=0.851 with the jaw at 0.052 m.
+
+So PPO learns to reach, grasp and lift the cube, and does not learn to carry it
+to the bin: placing and success stay at zero across 3.84 M environment steps.
+That is the honest boundary of this run.
+
+An earlier 1500-iteration run could not grasp at all because the binary
+gripper's open/close joint commands were swapped and the close travel left a
+7.6 cm gap. That defect, the diagnosis and the fix are recorded in
+`results/gpu/isaac_lab_ppo.json` under `previous_run`.
 
 Source: `results/gpu/isaac_lab_ppo.json`.
 
@@ -155,14 +165,16 @@ Validated on the CPU track and the GPU pods:
 - The ROS 2 Jazzy transport: real nodes, 60 Hz joint states, 8.2 Hz RGB,
   ~31 ms perception latency and a recorded bag
   (`results/gpu/ros2_transport.json`).
-- The Isaac Lab 3.0 task `IsaacLabStarterLab-PickPlace-v0` and a 1500-iteration
-  PPO run on it at **986 steps/s** (`results/gpu/isaac_lab_ppo.json`).
+- The Isaac Lab 3.0 task `IsaacLabStarterLab-PickPlace-v0`, a 2500-iteration
+  PPO run at **882 steps/s**, and a scripted grasp that lifts the cube
+  (`results/gpu/isaac_lab_ppo.json`).
 
 Not validated:
 
-- Pick-and-place **learning**. PPO learns the reaching phase (reward 0.043 →
-  0.50) and plateaus; it does not learn to grasp and place (success 0 in 1500
-  iterations). No policy success rate is claimed.
+- Pick-and-place **learning**. PPO learns to reach, grasp and lift (grasping
+  0.36, lifting 0.46) but placing and success stay at 0 across 3.84 M steps.
+  No policy success rate is claimed; the scripted check proves the task is
+  mechanically solvable.
 - The distributed ROS 2 pick. The transport works, but the controller fails
   `TIMEOUT_HOME` (see above).
 - The GPU image in `docker/Dockerfile.isaac` beyond the pushed
