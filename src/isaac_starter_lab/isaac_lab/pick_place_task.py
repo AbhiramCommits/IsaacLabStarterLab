@@ -208,8 +208,8 @@ class ActionsCfg:
     gripper_action = mdp.BinaryJointPositionActionCfg(
         asset_name="robot",
         joint_names=[JAW_JOINT],
-        open_command=0.07,
-        close_command=0.0,
+        open_command_expr={JAW_JOINT: 0.07},
+        close_command_expr={JAW_JOINT: 0.0},
     )
 
 
