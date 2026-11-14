@@ -16,7 +16,6 @@ tool tip); the cube's motion is never attached to the gripper.
 
 from __future__ import annotations
 
-import math
 import os
 from collections.abc import Sequence
 from pathlib import Path
@@ -25,6 +24,14 @@ from typing import Any
 import numpy as np
 
 from ..config import LAB_SEED, ArmConfig, CameraIntrinsics, SceneConfig
+from .arm_usd import (
+    ARM_ROOT,
+    DRIVE_KD,
+    DRIVE_KP,
+    GRIPPER_OPEN,
+    build_runtime_arm,
+    make_physics_material,
+)
 from .schema import CubePoseArray, JointState, RgbFrame
 
 __all__ = ["IsaacSimBackend", "IsaacUnavailableError"]
@@ -41,14 +48,6 @@ DOCKER_RUN = (
     "isaac-starter-lab:gpu"
 )
 
-ARM_ROOT = "/World/RobotIsaac"
-CANONICAL_ROBOT = "/World/Robot"
-GRIPPER_OPEN = 0.07  # metres of travel of the moving jaw
-LINK_MASSES = (0.1, 0.02, 0.02, 0.01, 0.01)
-FINGER_Y = 0.055
-FINGER_THICKNESS = 0.008
-DRIVE_KP = 1.0e5
-DRIVE_KD = 2.0e3
 # USD +Y rotates a +X link downward; the CPU FK uses positive = lift.
 JOINT_SIGNS = np.array([1.0, -1.0, -1.0, -1.0, 1.0, 1.0])
 MAX_TARGET_STEP = 0.01
@@ -163,14 +162,9 @@ class IsaacSimBackend:
             camera_prim.GetAttribute("fStop").Set(64.0)
             camera_prim.GetAttribute("focusDistance").Set(1.0)
         # High-friction physics material so the parallel jaws can retain a cube.
-        from pxr import UsdPhysics as _UsdPhysics
         from pxr import UsdShade as _UsdShade
 
-        physics_mat = _UsdShade.Material.Define(self._stage, "/World/PhysicsMat")
-        pm = _UsdPhysics.MaterialAPI.Apply(physics_mat.GetPrim())
-        pm.CreateStaticFrictionAttr(1.2)
-        pm.CreateDynamicFrictionAttr(1.2)
-        pm.CreateRestitutionAttr(0.0)
+        physics_mat = make_physics_material(self._stage)
         self._physics_material = physics_mat
         for index in range(self.scene.n_cubes):
             prim = self._stage.GetPrimAtPath(f"/World/Cubes/Cube_{index:02d}")
@@ -182,129 +176,8 @@ class IsaacSimBackend:
     # runtime arm (canonical stage stays untouched)
     # ------------------------------------------------------------------
     def _build_arm(self) -> None:
-        from pxr import Gf, Sdf, UsdGeom, UsdPhysics  # type: ignore[import-not-found]
-
-        stage = self._stage
-        assert stage is not None
-        old = stage.GetPrimAtPath(CANONICAL_ROBOT)
-        if old:
-            old.SetActive(False)
-
-        root = UsdGeom.Xform.Define(stage, ARM_ROOT)
-        root.GetPrim().ApplyAPI(UsdPhysics.ArticulationRootAPI)
-        # Adjacent link colliders overlap at the joints; PhysX self-collision
-        # would make the stiff drives explode. Cubes still collide with the arm.
-        root.GetPrim().CreateAttribute(
-            "physxArticulation:enabledSelfCollisions", Sdf.ValueTypeNames.Bool, custom=True
-        ).Set(False)
-
-        def link(name: str, xyz: Sequence[float], mass: float):
-            xform = UsdGeom.Xform.Define(stage, f"{ARM_ROOT}/{name}")
-            UsdGeom.Xformable(xform).AddTranslateOp().Set(Gf.Vec3d(*[float(v) for v in xyz]))
-            prim = xform.GetPrim()
-            UsdPhysics.RigidBodyAPI.Apply(prim)
-            UsdPhysics.MassAPI.Apply(prim).CreateMassAttr(float(mass))
-            return prim
-
-        def collider(parent, name: str, offset: Sequence[float], size: Sequence[float]) -> None:
-            cube = UsdGeom.Cube.Define(stage, f"{parent.GetPath()}/{name}")
-            cube.CreateSizeAttr(1.0)
-            UsdGeom.Xformable(cube).AddTranslateOp().Set(
-                Gf.Vec3d(*[float(v) for v in offset])
-            )
-            UsdGeom.Xformable(cube).AddScaleOp().Set(
-                Gf.Vec3f(*[float(v) for v in size])
-            )
-            UsdPhysics.CollisionAPI.Apply(cube.GetPrim())
-
-        def revolute(name, body0, body1, axis, p0, p1, limits_rad):
-            joint = UsdPhysics.RevoluteJoint.Define(stage, f"{ARM_ROOT}/{name}")
-            joint.CreateAxisAttr(axis)
-            if body0 is not None:
-                joint.CreateBody0Rel().SetTargets([str(body0.GetPath())])
-            joint.CreateBody1Rel().SetTargets([str(body1.GetPath())])
-            joint.CreateLocalPos0Attr(Gf.Vec3f(*[float(v) for v in p0]))
-            joint.CreateLocalPos1Attr(Gf.Vec3f(*[float(v) for v in p1]))
-            # USD revolute limits are degrees.
-            joint.CreateLowerLimitAttr(float(math.degrees(limits_rad[0])))
-            joint.CreateUpperLimitAttr(float(math.degrees(limits_rad[1])))
-            drive = UsdPhysics.DriveAPI.Apply(joint.GetPrim(), "angular")
-            drive.CreateTypeAttr("force")
-            drive.CreateStiffnessAttr(DRIVE_KP)
-            drive.CreateDampingAttr(DRIVE_KD)
-            drive.CreateMaxForceAttr(200.0)
-            return joint
-
-        bx, by, bz = self.arm.base_position
-        shoulder = (bx, by, bz + self.arm.base_height)
-        l1, l2 = self.arm.link1_length, self.arm.link2_length
-        wrist_len, tool_len = self.arm.wrist_length, self.arm.tool_length
-
-        base = link("base", (bx, by, bz), 0.5)
-        # Visual column only: a collider here intersects link0 at the shoulder
-        # and jams the base yaw at ~39 degrees.
-        column = UsdGeom.Cube.Define(stage, f"{ARM_ROOT}/base/Column")
-        column.CreateSizeAttr(1.0)
-        UsdGeom.Xformable(column).AddTranslateOp().Set(
-            Gf.Vec3d(0.0, 0.0, self.arm.base_height / 2.0)
-        )
-        UsdGeom.Xformable(column).AddScaleOp().Set(
-            Gf.Vec3f(0.07, 0.07, self.arm.base_height)
-        )
-        anchor = UsdPhysics.FixedJoint.Define(stage, f"{ARM_ROOT}/anchor")
-        anchor.CreateBody1Rel().SetTargets([str(base.GetPath())])
-        anchor.CreateLocalPos0Attr(Gf.Vec3f(float(bx), float(by), float(bz)))
-        anchor.CreateLocalPos1Attr(Gf.Vec3f(0.0, 0.0, 0.0))
-
-        link0 = link("link0", shoulder, LINK_MASSES[0])
-        collider(link0, "Visual", (0.0, 0.0, 0.0), (0.06, 0.06, 0.06))
-        link1 = link("link1", shoulder, LINK_MASSES[1])
-        collider(link1, "Visual", (l1 / 2.0, 0.0, 0.0), (l1, 0.045, 0.045))
-        link2 = link("link2", (shoulder[0] + l1, shoulder[1], shoulder[2]), LINK_MASSES[2])
-        collider(link2, "Visual", (l2 / 2.0, 0.0, 0.0), (l2, 0.04, 0.04))
-        wrist = link("wrist", (shoulder[0] + l1 + l2, shoulder[1], shoulder[2]), LINK_MASSES[3])
-        collider(wrist, "Visual", (0.0, 0.0, 0.0), (0.06, 0.05, 0.05))
-        gripper = link(
-            "gripper",
-            (shoulder[0] + l1 + l2 + wrist_len, shoulder[1], shoulder[2]),
-            LINK_MASSES[4],
-        )
-        # The gripper body is visual only; the fingers are the contact surfaces.
-
-        limits = self.arm.joint_limits
-        revolute("joint_base_yaw", base, link0, "Z", (0.0, 0.0, self.arm.base_height), (0.0, 0.0, 0.0), limits[0])
-        revolute("joint_shoulder", link0, link1, "Y", (0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (-limits[1][1], -limits[1][0]))
-        revolute("joint_elbow", link1, link2, "Y", (l1, 0.0, 0.0), (0.0, 0.0, 0.0), (-limits[2][1], -limits[2][0]))
-        revolute("joint_wrist_pitch", link2, wrist, "Y", (l2, 0.0, 0.0), (0.0, 0.0, 0.0), (-limits[3][1], -limits[3][0]))
-        revolute("joint_wrist_roll", wrist, gripper, "X", (wrist_len, 0.0, 0.0), (0.0, 0.0, 0.0), limits[4])
-
-        tip_x = shoulder[0] + l1 + l2 + wrist_len + tool_len
-        # Fixed right jaw is part of the gripper body; one moving left jaw is
-        # the only gripper DOF, which makes its sign unambiguous.
-        collider(gripper, "FixedJaw", (tool_len, FINGER_Y, 0.0),
-                 (0.06, FINGER_THICKNESS, 0.03))
-        jaw = link("jaw", (tip_x, shoulder[1] - FINGER_Y, shoulder[2]), 0.005)
-        collider(jaw, "Visual", (0.0, 0.0, 0.0), (0.06, FINGER_THICKNESS, 0.03))
-        if self._physics_material is not None:
-            from pxr import UsdShade  # type: ignore[import-not-found]
-
-            for prim_path in (f"{gripper.GetPath()}/FixedJaw", f"{jaw.GetPath()}/Visual"):
-                UsdShade.MaterialBindingAPI.Apply(
-                    stage.GetPrimAtPath(prim_path)
-                ).Bind(self._physics_material, UsdShade.Tokens.weakerThanDescendants, "physics")
-        joint = UsdPhysics.PrismaticJoint.Define(stage, f"{ARM_ROOT}/jaw_joint")
-        joint.CreateAxisAttr("Y")
-        joint.CreateBody0Rel().SetTargets([str(gripper.GetPath())])
-        joint.CreateBody1Rel().SetTargets([str(jaw.GetPath())])
-        joint.CreateLocalPos0Attr(Gf.Vec3f(float(tool_len), float(-FINGER_Y), 0.0))
-        joint.CreateLocalPos1Attr(Gf.Vec3f(0.0, 0.0, 0.0))
-        joint.CreateLowerLimitAttr(0.0)
-        joint.CreateUpperLimitAttr(GRIPPER_OPEN)
-        drive = UsdPhysics.DriveAPI.Apply(joint.GetPrim(), "linear")
-        drive.CreateTypeAttr("force")
-        drive.CreateStiffnessAttr(DRIVE_KP)
-        drive.CreateDampingAttr(DRIVE_KD)
-        drive.CreateMaxForceAttr(50.0)
+        assert self._stage is not None
+        build_runtime_arm(self._stage, self.arm, self._physics_material)
 
     def _start_physics(self) -> None:
         from isaacsim.core.api import SimulationContext  # type: ignore[import-not-found]

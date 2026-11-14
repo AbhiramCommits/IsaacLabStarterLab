@@ -38,6 +38,7 @@ __all__ = [
     "CubePlacement",
     "SceneSamplingError",
     "build_stage",
+    "build_task_stage",
     "sample_cube_layout",
 ]
 
@@ -417,6 +418,54 @@ def _define_light(stage: Usd.Stage, cfg: SceneConfig) -> None:
     light.GetPrim().CreateAttribute(
         "lab:lightDirection", Sdf.ValueTypeNames.Double3, custom=True
     ).Set(Gf.Vec3d(0.3, 0.4, 0.85))
+
+
+def build_task_stage(
+    cfg: SceneConfig,
+    seed: int,
+    intrinsics: CameraIntrinsics | None = None,
+    with_cubes: bool = False,
+) -> Usd.Stage:
+    """Build the tabletop stage **without** the canonical robot.
+
+    The Isaac Lab task spawns its own articulated arm (``usd/lab_arm.usda``),
+    so it must not also inherit the nested visual chain.  Table, bin, cubes,
+    lights, camera and the ``lab:placements`` metadata are identical to
+    :func:`build_stage`.
+    """
+    if seed < 0:
+        raise ValueError("seed must be non-negative")
+    intrinsics = intrinsics or CameraIntrinsics()
+    placements = sample_cube_layout(cfg, seed)
+
+    stage = Usd.Stage.CreateInMemory()
+    UsdGeom.SetStageMetersPerUnit(stage, 1.0)
+    UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
+    world = UsdGeom.Xform.Define(stage, "/World")
+    stage.SetDefaultPrim(world.GetPrim())
+    world.GetPrim().CreateAttribute("lab:seed", Sdf.ValueTypeNames.Int, custom=True).Set(
+        int(seed)
+    )
+    world.GetPrim().CreateAttribute(
+        "lab:cubeSize", Sdf.ValueTypeNames.Double, custom=True
+    ).Set(float(cfg.cube_size))
+    UsdGeom.Xform.Define(stage, "/World/Lights")
+
+    _define_table(stage, cfg)
+    _define_bin(stage, cfg)
+    if with_cubes:
+        _define_cubes(stage, cfg, placements)
+    _define_camera(stage, cfg, intrinsics)
+    _define_light(stage, cfg)
+
+    if with_cubes:
+        metadata = UsdGeom.Xform.Define(stage, "/World/LabMetadata")
+        metadata.GetPrim().CreateAttribute(
+            "lab:placements", Sdf.ValueTypeNames.StringArray, custom=True
+        ).Set(
+            [f"{p.name}:{p.color_name}:{p.position[0]:.6f},{p.position[1]:.6f}" for p in placements]
+        )
+    return stage
 
 
 def build_stage(
