@@ -174,15 +174,15 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
             # tracking, not for random policy actions, where it diverges.
             "arm": ImplicitActuatorCfg(
                 joint_names_expr=ARM_JOINTS,
-                stiffness=200.0,
+                stiffness=100.0,
                 damping=10.0,
-                effort_limit_sim=50.0,
+                effort_limit_sim=20.0,
             ),
             "gripper": ImplicitActuatorCfg(
                 joint_names_expr=[JAW_JOINT],
-                stiffness=200.0,
-                damping=10.0,
-                effort_limit_sim=20.0,
+                stiffness=50.0,
+                damping=5.0,
+                effort_limit_sim=2.0,
             ),
         },
     )
@@ -205,7 +205,7 @@ class ActionsCfg:
     arm_action = mdp.JointPositionActionCfg(
         asset_name="robot",
         joint_names=ARM_JOINTS,
-        scale=1.5,
+        scale=0.5,
         use_default_offset=True,
     )
     gripper_action = mdp.BinaryJointPositionActionCfg(
@@ -303,11 +303,19 @@ class PickPlaceTaskCfg(ManagerBasedRLEnvCfg):
     events: EventCfg = EventCfg()
 
     def __post_init__(self):
-        self.decimation = 4
+        self.decimation = 8
         self.episode_length_s = 8.0
-        self.sim.dt = 1.0 / 120.0
+        self.sim.dt = 1.0 / 240.0
         self.sim.render_interval = self.decimation
-        self.sim.physics = PhysxCfg()
+        # Random policy actions can drive the arm into the table; extra
+        # position iterations and per-iteration external forces keep the
+        # contact solve stable instead of diverging into NaNs.
+        self.sim.physics = PhysxCfg(
+            enable_external_forces_every_iteration=True,
+            min_position_iteration_count=4,
+            bounce_threshold_velocity=0.2,
+            solve_articulation_contact_last=True,
+        )
         self.viewer.eye = (2.0, -1.5, 1.5)
         self.viewer.lookat = (0.0, 0.0, 0.8)
 
