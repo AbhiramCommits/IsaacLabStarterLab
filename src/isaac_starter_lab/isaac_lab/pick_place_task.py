@@ -169,17 +169,19 @@ class PickPlaceSceneCfg(InteractiveSceneCfg):
             joint_vel={name: 0.0 for name in ARM_JOINTS + [JAW_JOINT]},
         ),
         actuators={
+            # RL gains: the backend's 1e5 drive is for slew-limited position
+            # tracking, not for random policy actions, where it diverges.
             "arm": ImplicitActuatorCfg(
                 joint_names_expr=ARM_JOINTS,
-                stiffness=1.0e5,
-                damping=2.0e3,
-                effort_limit_sim=200.0,
+                stiffness=200.0,
+                damping=10.0,
+                effort_limit_sim=50.0,
             ),
             "gripper": ImplicitActuatorCfg(
                 joint_names_expr=[JAW_JOINT],
-                stiffness=1.0e5,
-                damping=2.0e3,
-                effort_limit_sim=50.0,
+                stiffness=200.0,
+                damping=10.0,
+                effort_limit_sim=20.0,
             ),
         },
     )
@@ -314,6 +316,7 @@ class LabPpoAgentCfg(RslRlOnPolicyRunnerCfg):
     """PPO/rsl_rl runner configuration for the lab task."""
 
     seed = 7
+    clip_actions = 1.0
     num_steps_per_env = 48
     max_iterations = 300
     save_interval = 100
