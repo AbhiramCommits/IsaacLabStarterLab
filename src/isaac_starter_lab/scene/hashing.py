@@ -20,7 +20,10 @@ import hashlib
 import re
 from pathlib import Path
 
-from pxr import Usd
+try:  # pxr is provided by Kit after SimulationApp starts on the GPU track
+    from pxr import Usd
+except ImportError:  # pragma: no cover - GPU host before the app starts
+    Usd = None
 
 __all__ = [
     "HASH_ALGORITHM",

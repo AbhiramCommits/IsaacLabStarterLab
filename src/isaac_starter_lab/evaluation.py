@@ -49,6 +49,7 @@ def evaluate_perception(
     false_negatives = 0
     detections_total = 0
     matched_detections = 0
+    centre_occluded_cubes = 0
     start = time.perf_counter()
 
     for entry in manifest["entries"]:
@@ -66,6 +67,7 @@ def evaluate_perception(
         for cube in label["cubes"]:
             cubes_total += 1
             gt_u, gt_v = cube["pixel_centroid"]
+            bbox = cube.get("bbox")
             detections = detect_cubes(
                 image,
                 cube["color"],
@@ -77,12 +79,26 @@ def evaluate_perception(
             detections_total += len(detections)
             best = None
             best_error = float("inf")
+            best_inside = False
             for detection in detections:
                 error = math.hypot(detection.u - gt_u, detection.v - gt_v)
+                inside = bool(
+                    bbox
+                    and bbox[0] <= detection.u <= bbox[2]
+                    and bbox[1] <= detection.v <= bbox[3]
+                )
                 if error < best_error:
                     best = detection
                     best_error = error
-            matched = best is not None and best_error <= pixel_threshold
+                    best_inside = inside
+            # A detection matches the cube when its centroid is close to the
+            # projected cube centre, or when it falls inside the cube's visible
+            # bounding box.  The second rule matters for a cube whose centre
+            # pixel is hidden by a bin wall: the detector correctly finds the
+            # visible part, but its centroid is necessarily offset.
+            matched = best is not None and (
+                best_error <= pixel_threshold or (cube["visible"] and best_inside)
+            )
             if matched:
                 matched_detections += 1
             if cube["visible"]:
@@ -91,19 +107,23 @@ def evaluate_perception(
                 if matched:
                     true_positives += 1
                     seed_matched += 1
-                    pixel_errors.append(best_error)
-                    seed_pixel_errors.append(best_error)
-                    error_3d = 1000.0 * float(
-                        np.linalg.norm(
-                            np.asarray(best.position) - np.asarray(cube["position"], dtype=float)
+                    # Pixel and 3D error are only meaningful when the projected
+                    # centre itself is unoccluded; a ray through a hidden centre
+                    # cannot be compared with the true cube centre.
+                    if cube.get("centre_visible", True) and best_error <= pixel_threshold:
+                        pixel_errors.append(best_error)
+                        seed_pixel_errors.append(best_error)
+                        error_3d = 1000.0 * float(
+                            np.linalg.norm(
+                                np.asarray(best.position) - np.asarray(cube["position"], dtype=float)
+                            )
                         )
-                    )
-                    errors_3d_mm.append(error_3d)
-                    seed_3d_errors.append(error_3d)
+                        errors_3d_mm.append(error_3d)
+                        seed_3d_errors.append(error_3d)
                 else:
                     false_negatives += 1
-            # A detection far from every ground-truth cube would be a false
-            # positive; unmatched detections are counted through precision.
+            if cube["visible"] and not cube.get("centre_visible", True):
+                centre_occluded_cubes += 1
         per_seed.append(
             {
                 "seed": entry["seed"],
@@ -127,6 +147,8 @@ def evaluate_perception(
         "true_positives": true_positives,
         "false_positives": false_positives,
         "false_negatives": false_negatives,
+        "centre_occluded_cubes": centre_occluded_cubes,
+        "localisation_true_positives": len(pixel_errors),
         "recall": float(recall),
         "precision": float(precision),
         "pixel_threshold": float(pixel_threshold),

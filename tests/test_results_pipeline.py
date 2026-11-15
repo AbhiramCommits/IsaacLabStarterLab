@@ -98,7 +98,7 @@ def test_collect_results_injects_readme(tmp_path, monkeypatch):
     assert "before" in readme and "after" in readme
     assert "608 artifacts" in readme
     assert "88.20%" in readme
-    assert "1 cold runs, 1 issues filed, 1 fixed" in readme
+    assert "1 cold run, 1 issue filed, 1 fixed" in readme
     summary = json.loads((tmp_path / "results/summary.json").read_text())
     assert summary["determinism"]["artifacts_identical"] is True
 

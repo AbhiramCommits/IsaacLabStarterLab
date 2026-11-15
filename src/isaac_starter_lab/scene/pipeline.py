@@ -6,7 +6,10 @@ import argparse
 import json
 from pathlib import Path
 
-from pxr import Usd
+try:  # pxr is provided by Kit after SimulationApp starts on the GPU track
+    from pxr import Usd
+except ImportError:  # pragma: no cover - GPU host before the app starts
+    Usd = None
 
 from ..config import CameraIntrinsics, SceneConfig
 from .build_scene import CubePlacement, build_stage, sample_cube_layout

@@ -1,0 +1,66 @@
+{
+  "bag": {
+    "counts": {
+      "/lab/cmd_joint": 0,
+      "/lab/cube_poses": 593,
+      "/lab/joint_states": 593,
+      "/lab/perception": 99,
+      "/lab/rgb": 98,
+      "/lab/status": 592
+    },
+    "duration_s": 9.867,
+    "messages": 1975,
+    "note": "The bag was recorded after the distributed controller had already hit its HOME timeout, so /lab/cmd_joint is empty in it; the 6.38 Hz command rate was measured while the controller was active.",
+    "path": "/workspace/lab_bag"
+  },
+  "engine": "ROS 2 Jazzy, real rclpy, Isaac Sim 6.0 ROS 2 bridge",
+  "nodes": [
+    "/starter_lab_controller",
+    "/starter_lab_controller_bridge",
+    "/starter_lab_perception"
+  ],
+  "outcome": {
+    "explanation": "The controller node runs on a wall-clock 60 Hz timer while the simulator loop and DDS add latency. The same fixed controller gains that are stable in lockstep localbus overshoot over ROS 2 and hit the HOME state timeout; the transport itself is healthy (60 Hz joint states, ~8 Hz RGB, ~32 ms perception).",
+    "localbus_seed7": {
+      "cycle_time_s": 4.533,
+      "result": "SUCCESS",
+      "ticks": 272
+    },
+    "ros2_seed7": {
+      "result": "TIMEOUT_HOME",
+      "ticks": 181
+    }
+  },
+  "perception_latency_ms": {
+    "mean": 31.01,
+    "p95": 35.48,
+    "values": [
+      0.31,
+      9.27,
+      33.08,
+      34.36,
+      34.79,
+      34.39,
+      34.19,
+      34.81,
+      34.55,
+      34.76,
+      33.86,
+      40.36,
+      35.48,
+      32.45,
+      31.48,
+      31.82,
+      31.98,
+      33.42,
+      32.82,
+      31.92
+    ]
+  },
+  "schema": "isaac_starter_lab.ros2_transport.v1",
+  "topic_hz": {
+    "cmd_joint_active": 6.38,
+    "joint_states": 60.001,
+    "rgb": 8.21
+  }
+}

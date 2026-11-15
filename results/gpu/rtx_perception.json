@@ -1,0 +1,89 @@
+{
+  "frames": 200,
+  "note": "Same DR labels, camera and cube layout; pinhole uses the CPU ray caster, RTX uses Isaac Sim 6.0.",
+  "pinhole": {
+    "detections": 979,
+    "error_3d_mm": {
+      "count": 840,
+      "max": 29.5952638717007,
+      "mean": 3.606955303982105,
+      "p95": 12.88542558845835
+    },
+    "false_negatives": 0,
+    "false_positives": 0,
+    "pixel_error": {
+      "count": 840,
+      "max": 4.990311869929114,
+      "mean": 1.0577881379599667,
+      "p95": 3.576671743283856
+    },
+    "precision": 1.0,
+    "recall": 1.0,
+    "seeds": 200,
+    "true_positives": 979,
+    "visible_cubes": 979
+  },
+  "rtx": {
+    "centre_occluded_cubes": 105,
+    "cubes_evaluated": 1000,
+    "dataset": "/var/folders/6b/7vg7v5l54b57_g4dn2nvvcqm0000gn/T/tmp43ojy028",
+    "dataset_hash": null,
+    "detections": 982,
+    "elapsed_s": 13.63298612498329,
+    "error_3d_mm": {
+      "count": 336,
+      "max": 27.252723288877593,
+      "mean": 12.073112198872264,
+      "p95": 21.856024950764045
+    },
+    "false_negatives": 44,
+    "false_positives": 47,
+    "localisation_true_positives": 336,
+    "pixel_error": {
+      "count": 336,
+      "max": 4.993211817299595,
+      "mean": 2.9680469452697134,
+      "p95": 4.767391099287187
+    },
+    "pixel_threshold": 5.0,
+    "precision": 0.9521384928716904,
+    "recall": 0.9550561797752809,
+    "schema": "isaac_starter_lab.perception_eval.v1",
+    "seeds": 200,
+    "true_positives": 935,
+    "visible_cubes": 979,
+    "worst_seeds": [
+      {
+        "matched_visible": 5,
+        "mean_pixel_error": 4.993211817299595,
+        "seed": 84,
+        "visible_cubes": 5
+      },
+      {
+        "matched_visible": 5,
+        "mean_pixel_error": 4.935715382027664,
+        "seed": 26,
+        "visible_cubes": 5
+      },
+      {
+        "matched_visible": 4,
+        "mean_pixel_error": 4.917672466547202,
+        "seed": 122,
+        "visible_cubes": 5
+      },
+      {
+        "matched_visible": 5,
+        "mean_pixel_error": 4.896058324625111,
+        "seed": 58,
+        "visible_cubes": 5
+      },
+      {
+        "matched_visible": 5,
+        "mean_pixel_error": 4.807427473037203,
+        "seed": 11,
+        "visible_cubes": 5
+      }
+    ]
+  },
+  "schema": "isaac_starter_lab.rtx_perception.v1"
+}
