@@ -12,7 +12,7 @@ phase so a new session can resume. Status values: **done**, **in progress**,
 | 4. Real Isaac Lab task + PPO | done (trains; does not place) | Isaac Lab 3.0.0 on Isaac Sim 6.0.1, task `IsaacLabStarterLab-PickPlace-v0` built from our arm, table, bin and a 50 mm cube. Scripted grasp lifts the cube (z 0.775 → 0.851). PPO, 32 envs, **3,840,000 steps**, **882 steps/s**, 2500 iterations in 4394.21 s: reaching **0.048 → 0.72-0.87**, grasping **0.002 → 0.36**, lifting **0.012 → 0.46 (peak 4.71)**, placing **0**, success **0** for the whole run. The first run could not grasp because the binary gripper's open/close commands were swapped; that is fixed and recorded. `results/gpu/isaac_lab_ppo.json`. |
 | 5. ROS 2 nodes on real rclpy | done | ROS 2 Jazzy installed in the 6.0 pod; ament package built; `/starter_lab_controller`, `/starter_lab_controller_bridge` and `/starter_lab_perception` ran on real `rclpy`. `/lab/joint_states` **60.0 Hz**, `/lab/rgb` **8.2 Hz**, `/lab/cmd_joint` **6.38 Hz** while active, perception latency **31.01 ms** mean / **35.48 ms** p95, bag **9.867 s / 1975 msgs**. Distributed seed 7 fails `TIMEOUT_HOME` at 181 ticks; the lockstep localbus succeeds. `results/gpu/ros2_transport.json`. |
 | 6. Perception on RTX frames | done | 200 DR-matched RTX frames rendered; RTX recall **95.51%**, precision **95.21%**, pixel mean **2.968 px**, 3D mean **12.073 mm** vs pinhole 100%/100%, 1.058 px, 3.607 mm. `results/gpu/rtx_perception.json`. |
-| 7. Restructure README | done | Restructured with committed CPU results only. |
+| 7. Restructure README | done | Restructured; leads with the real PhysX, RTX and Isaac Lab numbers and labels the CPU 100/100 as a logic check. |
 
 ## GPU attempt, 2026-11-12 (exact)
 
